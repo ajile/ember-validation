@@ -2,5 +2,11 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-validation'
+
+  name: 'ember-validation',
+
+  isDevelopingAddon: function() {
+    return true;
+  }
+
 };
