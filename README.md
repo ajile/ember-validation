@@ -28,9 +28,9 @@ Yet another one ember validation.
 validationScheme: {
   имя_аттрибута: {
     options: validationProperties,
-    validators: {
-      имя_валидатора: validationProperties
-    }
+    validators: [
+      { name: имя_валидатора, options: validationProperties }
+    ]
   }
 }
 ```
@@ -108,8 +108,8 @@ var User = DS.Model.extend(ModelValidationMixin, {
         condition: computed("ageRestricted")
       },
       validators: {
-        required: true,
-        number: { min: 18, max: 100 }
+        { name: "required", options: { message: "field_is_required" } },
+        { name: "number", options: { min: 18, max: 100, message: "age_is_wrong" } }
       }
     }
   },
