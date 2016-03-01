@@ -1,15 +1,29 @@
 import Ember from 'ember';
-import Base from 'ember-validation/validators/base';
+import Base from 'ember-validation/core/validator';
 
-const { RSVP, get } = Ember;
+const { RSVP: {resolve, reject}, get, isBlank } = Ember;
 
 export default Base.extend({
 
-  validate: function (attributeName, context) {
-    const deferred = RSVP.defer();
+  /**
+    The flag means that blank values should be validated as well.
+    @property blankValue
+    @type Boolean
+  */
+  blankValue: true,
+
+  /**
+    @method _validate
+    @param {String} attributeName
+    @param {Ember.Object} context
+    @param {Ember.Object} context
+    @abstract
+    @private
+    @return Ember.RSVP.Promise
+  */
+  _validate: function (attributeName, context) {
     const value = get(context, attributeName);
-    Ember.isBlank(value) ? deferred.reject(this.message) : deferred.resolve();
-    return deferred.promise;
+    return isBlank(value) ? reject(this.get("message")) : resolve();
   }
 
 });

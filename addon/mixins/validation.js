@@ -1,34 +1,13 @@
 import Ember from 'ember';
+import ValidatableMixin from 'ember-validation/mixins/validatable';
+import AttributeMediator from 'ember-validation/mediator/attribute';
+import ValidatorMediator from 'ember-validation/mediator/validator';
+import lookup from 'ember-validation/utils/lookup';
 
 const { get, getWithDefault, getProperties } = Ember;
 const { RSVP, computed, keys } = Ember;
-const { observer } = Ember;
 
-export var lookupValidator = function(name) {
-  var validator = get(this, 'container').lookupFactory('validator:' + name);
-  Ember.assert("Validator named '" + name + "' is not found", validator);
-  return validator
-};
-
-export var ValidatorMediator = Ember.Object.extend(Ember.Evented, {
-
-  conditionDidChange: observer("condition", function() {
-    this.validate();
-  }),
-
-  validate() {
-    if (!Ember.isNone(this.condition) && !this.get('condition')) {
-      this.trigger("passed")
-      return;
-    }
-    let promise = this.get("validator").validate(this.get("attribute"), this);
-    promise.catch((message) => this.trigger("failed", message));
-    promise.then(() => this.trigger("passed"));
-  }
-
-});
-
-export default Ember.Mixin.create({
+export default Ember.Mixin.create(ValidatableMixin, {
 
   /**
     A collection that contains all validators of the class instance that
@@ -68,64 +47,65 @@ export default Ember.Mixin.create({
   },
 
   /**
-    Method creates validators from the `validationScheme`. Validator age gets
-    from the registry by name. Default name space for them is `validator:`, that
-    means that they are should be placed in the `validators/` directory.
+    Method creates validators for every object's attribute from the
+    `validationScheme`. Validators are gets from the registry by names. Default
+    namespace for them is `validator:`, that means that they are should be
+    placed in the `validators/` project directory.
+
+    Validators creates and wrappes by an attribute mediator. It has the same
+    interface as they are. The mediators triggers events every time when they
+    called.
+
     @method initValidation
     @private
   */
   initValidation() {
 
-    const validationScheme = this.get("validationScheme");
-    const mediators = this.get("mediators");
+    const validationScheme = this.get("validationScheme"),
+          mediators = this.get("mediators");
 
     Ember.assert("You should define `validationScheme` property", validationScheme);
 
-    var attributes = [];
+    // Getting the object's properties that should have validation.
+    const attributes = Ember.A(keys(validationScheme));
 
-    // Getting object's properties that should have validation.
-    attributes = Ember.A(keys(validationScheme));
     attributes.forEach((attribute) => {
 
+      // Instruction to create validators for the attribute
       let validation = get(validationScheme, attribute);
 
-      // Attribute validators list.
+      Ember.assert("Every validation should contain validators", validation);
+
+      // A list of the validator instances
       let validatorObjects = this._createValidators(attribute, validation);
 
-      let Mediator = ValidatorMediator.extend(getWithDefault(validation, "options", {}));
+      let options = getWithDefault(validation, "options", {});
+      let attributeMediator = this._createAttributeMediator(attribute, options);
 
+      // Iterating over the attribute's validators and wrap each of them by a
+      // mediator, that has the same interface then they are.
       validatorObjects.forEach((validator) => {
-        let mediator = Mediator.create({ context: this, attribute, validator });
-        mediator.on("failed", (message) => {
-          console.log("failed");
-          this.get("errors").add(attribute, message);
-        });
-        mediator.on("passed", () => {
-          console.log("passed");
-          this.get("errors").remove(attribute);
-        });
-        mediators.pushObject(mediator)
+        let options = Ember.getMeta(validator, "options");
+        let validatorMediator = this._createValidatorMediator(attribute, validator, options);
+        attributeMediator.pushObject(validatorMediator);
       });
+
+
+      attributeMediator.on("failed", (message) => {
+        console.log("Validator %s has failed", attribute, message, arguments);
+        this.get("errors").add(attribute, message);
+      });
+
+      attributeMediator.on("passed", () => {
+        console.log("Validator %s has passed", attribute);
+        this.get("errors").remove(attribute);
+      });
+
+
+      mediators.pushObject(attributeMediator);
+
     });
 
-  },
-
-  /**
-    @method _createValidators
-    @param {String} attribute
-    @param {Object} validation
-    @return Ember.Array
-  */
-  _createValidators(attribute, validation) {
-    Ember.assert("Every validation should contain validators", validation);
-
-    let validators = get(validation, "validators");
-
-    return Ember.A(validators).map((description) => {
-      let { name, options } = getProperties(description, ["name", "options"]);
-      let Validator = lookupValidator.call(this, name);
-      return Validator.create({ context: this, attribute: attribute }).reopen(options);
-    });
   },
 
   /**
@@ -141,14 +121,52 @@ export default Ember.Mixin.create({
     // each of them to fill object by errors.
     var promises = this.get("mediators").map((mediator) => {
       return mediator.validate();
-      // let { validator, attribute } = mediator;
-      // let validationPromise = validator.validate(attribute, this);
-      // validationPromise.catch((message) => {
-      //   this.get("errors").add(attribute, message);
-      // });
-      // return validationPromise;
     });
+
+    promises = promises.reduce((previousValue, item) => {
+      previousValue = previousValue.concat(item)
+      return previousValue;
+    }, Ember.A());
+
     return RSVP.all(promises);
+  },
+
+  /**
+    @method _createValidators
+    @param {String} attribute
+    @param {Object} validation
+    @return Ember.Array
+  */
+  _createValidators(attribute, validation) {
+    return Ember.A( get(validation, "validators") ).map((description) => {
+      let { name, options } = getProperties(description, ["name", "options"]);
+      let Validator = lookup(name, get(this, "container"));
+      let validator = Validator.extend(options || {}).create();
+      Ember.setMeta(validator, "options", options || {});
+      return validator;
+    });
+  },
+
+  /**
+    @method _createAttributeMediator
+    @param {String} attribute
+    @param {Object} options
+    @param {Object} context
+    @return Ember.Array
+  */
+  _createAttributeMediator(attribute, options={}, context=this) {
+    return AttributeMediator.extend(options).create({ context, attribute });
+  },
+
+  /**
+    @method _createValidatorMediator
+    @param {Validator} validator
+    @param {Object} options
+    @param {Object} context
+    @return Ember.Array
+  */
+  _createValidatorMediator(attribute, validator, options={}, context=this) {
+    return ValidatorMediator.extend(options).create({ context, attribute, validator });
   },
 
 });
