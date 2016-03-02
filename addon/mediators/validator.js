@@ -28,6 +28,7 @@ export default BaseMediator.extend({
       });
 
     @method getSnapshot
+    @protected
     @return {Ember.ObjectProxy|Ember.Object}
   */
   getSnapshot() {
@@ -36,7 +37,7 @@ export default BaseMediator.extend({
 
   /**
     @method _validate
-    @private
+    @protected
     @return Ember.RSVP.Promise
   */
   _validate() {

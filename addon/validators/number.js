@@ -9,9 +9,8 @@ export default Base.extend({
     @method _validate
     @param {String} attributeName
     @param {Ember.Object} context
-    @param {Ember.Object} context
-    @abstract
-    @private
+    @protected
+    @final
     @return Ember.RSVP.Promise
   */
   _validate: function (attributeName, context) {

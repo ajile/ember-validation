@@ -16,7 +16,8 @@ export default DS.Model.extend(ValidationMixin, {
   /**
     @property _validationScheme
     @type Object
-    @private
+    @protected
+    @final
   */
   validationScheme: {
 

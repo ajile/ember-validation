@@ -16,6 +16,7 @@ export default Ember.Object.extend(ValidatableMixin, {
     The flag means that blank values should be validated as well.
     @property blankValue
     @type Boolean
+    @default false
   */
   blankValue: false,
 
@@ -36,8 +37,8 @@ export default Ember.Object.extend(ValidatableMixin, {
     @param {String} attributeName
     @param {Ember.Object} context
     @param {Ember.Object} context
+    @protected
     @abstract
-    @private
     @return Ember.RSVP.Promise
   */
   _validate() {

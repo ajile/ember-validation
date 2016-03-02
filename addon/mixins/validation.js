@@ -34,7 +34,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
     @property validationScheme
     @type Object
-    @private
+    @protected
   */
   validationScheme: {},
 

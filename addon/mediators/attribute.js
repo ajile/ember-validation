@@ -31,7 +31,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
 
   /**
     @method _validate
-    @private
+    @protected
     @return Ember.RSVP.Promise
   */
   _validate() {

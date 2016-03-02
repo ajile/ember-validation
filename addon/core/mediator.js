@@ -49,7 +49,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
   /**
     @method _validate
-    @private
+    @protected
     @return Ember.RSVP.Promise
   */
   _validate: () => RSVP.resolve()
