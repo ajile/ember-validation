@@ -1,5 +1,4 @@
 {
-  "maxlen": 80,
   "predef": [
     "document",
     "window",

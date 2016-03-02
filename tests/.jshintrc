@@ -12,6 +12,7 @@
     "exists",
     "fillIn",
     "click",
+    "expect",
     "keyEvent",
     "triggerEvent",
     "find",
