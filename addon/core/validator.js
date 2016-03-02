@@ -40,7 +40,7 @@ export default Ember.Object.extend(ValidatableMixin, {
     @private
     @return Ember.RSVP.Promise
   */
-  _validate(attributeName, context) {
+  _validate() {
     Ember.assert("Validators should implement `_validate` method");
   }
 

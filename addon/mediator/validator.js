@@ -1,6 +1,7 @@
+import Ember from 'ember';
 import BaseMediator from 'ember-validation/core/mediator';
 
-const { get, RSVP } = Ember;
+const { get } = Ember;
 
 /**
   @class ValidatorMediator

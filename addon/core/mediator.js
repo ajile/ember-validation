@@ -42,8 +42,8 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
       return RSVP.resolve();
     }
     const promise = this._validate();
-    promise.catch((message) => { this.trigger("failed", message) });
-    promise.then(() => { this.trigger("passed") });
+    promise.catch((message) => { this.trigger("failed", message); });
+    promise.then(() => { this.trigger("passed"); });
     return promise;
   },
 

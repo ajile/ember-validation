@@ -1,4 +1,5 @@
 {
+  "maxlen": 80,
   "predef": [
     "document",
     "window",
@@ -20,7 +21,7 @@
   "nonew": false,
   "nomen": false,
   "onevar": false,
-  "plusplus": false,
+  "plusplus": true,
   "regexp": false,
   "undef": true,
   "sub": true,
@@ -28,5 +29,6 @@
   "white": false,
   "eqnull": true,
   "esnext": true,
-  "unused": true
+  "unused": true,
+  "expr": true
 }

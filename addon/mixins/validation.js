@@ -124,7 +124,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     });
 
     promises = promises.reduce((previousValue, item) => {
-      previousValue = previousValue.concat(item)
+      previousValue = previousValue.concat(item);
       return previousValue;
     }, Ember.A());
 
