@@ -1,14 +1,16 @@
-import BaseMediator from 'ember-validation/core/mediator';
+import Ember from 'ember';
+import ValidatorMediator from 'ember-validation/mediator/validator';
 
-const { get, RSVP } = Ember;
+const { get, computed, RSVP } = Ember;
 
 /**
   @class ValidatorMediator
   @module ember-validation/mediator
-  @extends BaseMediator
+  @extends ValidatorMediator
+  @uses Ember.MutableArray
   @public
 */
-export default BaseMediator.extend({
+export default ValidatorMediator.extend({
 
   /**
     Returns snapshot of the context object. This method should useful if you'd
@@ -30,18 +32,8 @@ export default BaseMediator.extend({
     @return {Ember.ObjectProxy|Ember.Object}
   */
   getSnapshot() {
-    return get(this, "context");
-  },
-
-  /**
-    @method _validate
-    @private
-    @return Ember.RSVP.Promise
-  */
-  _validate() {
-    const attribute = get(this, "attribute"),
-          context = this.getSnapshot("context");
-    return this.get("validator").validate(attribute, context);
+    const content = this.get("context")._createSnapshot();
+    return Ember.ObjectProxy.create({ content });
   }
 
 });
