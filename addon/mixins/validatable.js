@@ -4,7 +4,7 @@ const { computed } = Ember;
 
 /**
   @class Validatable
-  @module ember-validation/validation/mediator
+  @module ember-validation/validation/mediators
   @public
 */
 export default Ember.Mixin.create({

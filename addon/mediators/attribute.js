@@ -5,7 +5,7 @@ const { get, computed, RSVP } = Ember;
 
 /**
   @class AttributeMediator
-  @module ember-validation/mediator
+  @module ember-validation/mediators
   @extends BaseMediator
   @uses Ember.MutableArray
   @public

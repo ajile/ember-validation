@@ -1,6 +1,6 @@
 import Ember from "ember";
 import ValidationMixin from "ember-validation/mixins/validation";
-import ModelValidatorMediator from 'ember-validation/mediator/model-validator';
+import ModelValidatorMediator from 'ember-validation/mediators/model-validator';
 
 export default Ember.Mixin.create(ValidationMixin, {
 

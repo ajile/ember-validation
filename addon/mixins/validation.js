@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import ValidatableMixin from 'ember-validation/mixins/validatable';
-import AttributeMediator from 'ember-validation/mediator/attribute';
-import ValidatorMediator from 'ember-validation/mediator/validator';
+import AttributeMediator from 'ember-validation/mediators/attribute';
+import ValidatorMediator from 'ember-validation/mediators/validator';
 import lookup from 'ember-validation/utils/lookup';
 
 const { get, getWithDefault, getProperties } = Ember;
