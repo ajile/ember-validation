@@ -23,25 +23,25 @@ export default DS.Model.extend(ValidationMixin, {
 
     first_name: {
       validators: [
-        { name: "required", options: { message: "first_name_required" } }
+        { name: "required", options: { messages: {default: "first_name_required"} } }
       ]
     },
 
     last_name: {
       validators: [
-        { name: "required", options: { message: "last_name_required" } }
+        { name: "required", options: { messages: {default: "last_name_required"} } }
       ]
     },
 
     full_name: {
       validators: [
-        { name: "required", options: { message: "full_name_required" } }
+        { name: "required", options: { messages: {default: "full_name_required"} } }
       ]
     },
 
     gender: {
       validators: [
-        { name: "required", options: { message: "gender_is_required" } }
+        { name: "required", options: { messages: {default: "gender_is_required"} } }
       ]
     },
 
@@ -51,8 +51,8 @@ export default DS.Model.extend(ValidationMixin, {
         condition: computed.not("isUnknown")
       },
       validators: [
-        { name: "number", options: { min: 21, max: 65, message: "age_is_wrong_for_male", condition: computed.equal("context.gender", GENDERS.MALE) } },
-        { name: "number", options: { min: 18, max: 55, message: "age_is_wrong_for_female", condition: computed.equal("context.gender", GENDERS.FEMALE) } }
+        { name: "number", options: { min: 21, max: 65, messages: {default: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) } },
+        { name: "number", options: { min: 18, max: 55, messages: {default: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) } }
       ]
     }
 

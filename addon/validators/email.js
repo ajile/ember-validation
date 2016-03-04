@@ -6,11 +6,13 @@ const { RSVP, get } = Ember;
 export default Base.extend({
 
   /**
-    Default error message. It will be shown in common case.
-    @property message
-    @type String
+    Error messages. It should be redefined in child classes.
+    @property messages
+    @type Object
   */
-  message: "email_invalid",
+  messages: {
+    default: "email_invalid"
+  },
 
   /**
     @method _validate
@@ -24,7 +26,7 @@ export default Base.extend({
     const deferred = RSVP.defer();
     const value = get(context, attributeName);
     if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
-    value.search(/@/) === -1 ? deferred.reject(this.message) : deferred.resolve();
+    value.search(/@/) === -1 ? deferred.reject(this.get("messages.default")) : deferred.resolve();
     return deferred.promise;
   }
 

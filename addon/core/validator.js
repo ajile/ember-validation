@@ -6,11 +6,13 @@ const { RSVP, get } = Ember;
 export default Ember.Object.extend(ValidatableMixin, {
 
   /**
-    Default error message. It should be redefined in child classes.
-    @property message
-    @type String
+    Error messages. It should be redefined in child classes.
+    @property messages
+    @type Object
   */
-  message: "VALIDATION_ERROR",
+  messages: {
+    default: "VALIDATION_ERROR"
+  },
 
   /**
     The flag means that blank values should be validated as well.
@@ -24,7 +26,9 @@ export default Ember.Object.extend(ValidatableMixin, {
     @method validate
     @abstract
   */
-  validate(attributeName, context) {
+  validate(attributeName, context, options) {
+    Ember.assert("You should provide an attribute name", attributeName);
+    Ember.assert("You should provide a context", context);
     const value = get(context, attributeName);
     if (Ember.isBlank(value) && !this.get("blankValue")) {
       return RSVP.resolve();

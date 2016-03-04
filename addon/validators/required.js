@@ -22,7 +22,7 @@ export default Base.extend({
   */
   _validate: function (attributeName, context) {
     const value = get(context, attributeName);
-    return isBlank(value) ? reject(this.get("message")) : resolve();
+    return isBlank(value) ? reject(this.get("messages.default")) : resolve();
   }
 
 });
