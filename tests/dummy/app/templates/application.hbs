@@ -1,45 +1,7 @@
-<h2 id="title">Ember Validation</h2>
+{{partial "partials/navigation"}}
 
-{{outlet}}
-
-<div>
-  isValid: {{model.isValid}}
+<div class="container container-fluid">
+  <div class="row">
+  {{outlet}}
+  </div>
 </div>
-
-<div>
-  first_name: {{input value=model.first_name}}
-  <ul>{{#each model.errors.first_name as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div>
-  last_name: {{input value=model.last_name}}
-  <ul>{{#each model.errors.last_name as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div>
-  full_name: {{input value=model.full_name}}
-  <ul>{{#each model.errors.full_name as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div>
-  gender: {{input value=model.gender}}
-  <ul>{{#each model.errors.gender as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div>
-  age: {{input value=model.age}}
-  <ul>{{#each model.errors.age as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div>
-  email: {{input value=model.email}}
-  <ul>{{#each model.errors.email as |error|}}<li>{{error.message}}</li>{{/each}}</ul>
-</div>
-
-
-<div><button {{action "validate"}}>Validate</button></div>

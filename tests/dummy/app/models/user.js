@@ -8,7 +8,7 @@ const { attr } = DS;
 const GENDERS = {
   MALE: "male",
   FEMALE: "female",
-  UNKNOWN: "unknown",
+  UNKNOWN: "",
 };
 
 export default DS.Model.extend(ValidationMixin, {
@@ -54,22 +54,18 @@ export default DS.Model.extend(ValidationMixin, {
         { name: "number", options: { min: 21, max: 65, message: "age_is_wrong_for_male", condition: computed.equal("context.gender", GENDERS.MALE) } },
         { name: "number", options: { min: 18, max: 55, message: "age_is_wrong_for_female", condition: computed.equal("context.gender", GENDERS.FEMALE) } }
       ]
-    },
-
-    email: {
-      validators: [
-        { name: "required", options: { message: "this_field_is_required" } },
-        { name: "email", options: {} },
-      ]
-    },
+    }
 
   },
 
   first_name: attr("string"),
   last_name: attr("string"),
-  full_name: attr("string"),
   gender: attr("string", { defaultValue: GENDERS.UNKNOWN }),
   age: attr("number"),
-  email: attr("string")
+  email: attr("string"),
+
+  full_name: computed("first_name", "last_name", function() {
+    return [this.get("first_name"), this.get("last_name")].join(" ");
+  })
 
 });

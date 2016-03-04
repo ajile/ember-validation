@@ -29,7 +29,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @method conditionDidChange
   */
   conditionDidChange: observer("condition", function() {
-    // this.validate();
+    this.validate();
   }),
 
   /**
