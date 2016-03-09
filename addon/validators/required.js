@@ -6,6 +6,15 @@ const { RSVP: {resolve, reject}, get, isBlank } = Ember;
 export default Base.extend({
 
   /**
+    Error messages. It should be redefined in child classes.
+    @property messages
+    @type Object
+  */
+  messages: {
+    default: "required"
+  },
+
+  /**
     The flag means that blank values should be validated as well.
     @property blankValue
     @type Boolean

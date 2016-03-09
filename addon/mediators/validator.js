@@ -42,8 +42,12 @@ export default BaseMediator.extend({
   */
   _validate() {
     const attribute = get(this, "attribute"),
+          options = get(this, "options"),
           context = this.getSnapshot("context");
-    return this.get("validator").validate(attribute, context);
+
+    console.log("Validator mediator calls validator %o (for %s)", this.get("validator"), attribute);
+
+    return this.get("validator").validate(attribute, context, options);
   }
 
 });

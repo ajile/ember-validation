@@ -14,6 +14,10 @@ const { RSVP, observer } = Ember;
 */
 export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
+  context: Ember.Object.create(),
+
+  options: Ember.Object.create(),
+
   /**
     Validation will be executed only if it's `true`. The property sets by
     outside when mediator creates.
@@ -29,7 +33,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @method conditionDidChange
   */
   conditionDidChange: observer("condition", function() {
-    this.validate();
+    // Ember.run.scheduleOnce("sync", this, () => this.validate());
   }),
 
   /**
@@ -37,11 +41,12 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @return Ember.RSVP.Promise
   */
   validate() {
+    console.log(arguments);
     if (!Ember.isNone(this.condition) && !this.get('condition')) {
       this.trigger("passed");
       return RSVP.resolve();
     }
-    const promise = this._validate();
+    const promise = this._validate(...arguments);
     promise.catch((message) => { this.trigger("failed", message); });
     promise.then(() => { this.trigger("passed"); });
     return promise;
@@ -52,6 +57,6 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @protected
     @return Ember.RSVP.Promise
   */
-  _validate: () => RSVP.resolve()
+  _validate: () => { return RSVP.resolve(); }
 
 });

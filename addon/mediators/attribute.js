@@ -35,7 +35,10 @@ export default BaseMediator.extend(Ember.MutableArray, {
     @return Ember.RSVP.Promise
   */
   _validate() {
-    const promises = get(this, "content").map((validator) => validator.validate());
+    const promises = get(this, "content").map((validator) => {
+      console.log("Attribute mediator calls validator mediator %o", validator);
+      return validator.validate();
+    });
     return RSVP.all(promises);
   }
 

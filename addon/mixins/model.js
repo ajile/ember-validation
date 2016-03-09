@@ -12,7 +12,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     @return Ember.Array
   */
   _createValidatorMediator(attribute, validator, options={}, context=this) {
-    return ModelValidatorMediator.extend(options).create({ context, attribute, validator });
+    return ModelValidatorMediator.extend(options).create({ context, attribute, validator, options });
   }
 
 });

@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Base from 'ember-validation/core/validator';
 
-const { RSVP: { defer }, get, getProperties, options } = Ember;
+const { RSVP: { defer }, get, getProperties } = Ember;
 
 var Validator = Base.extend({
 
@@ -14,6 +14,7 @@ var Validator = Base.extend({
     @method _validate
     @param {String} attributeName
     @param {Ember.Object} context
+    @param {Object} options  Validation additional options
     @protected
     @final
     @return Ember.RSVP.Promise
@@ -21,16 +22,21 @@ var Validator = Base.extend({
   _validate(attributeName, context, options={}) {
     const deferred = defer();
     const value = get(context, attributeName);
-    console.log("value", value);
     const { min, max } = getProperties(options, "min", "max");
 
     if (!Validator.isNumber(value)) {
       return deferred.reject(this.get("messages.not_number")), deferred.promise;
     }
 
-    if ((!Ember.isNone(min) || !Ember.isNone(max)) && !Validator.isInRange(value, min, max)) {
-      deferred.reject(this.get("messages.out_of_range")), deferred.promise;
+    if (!Ember.isNone(min) && value < min) {
+      return deferred.reject(this.get("messages.out_of_range")), deferred.promise;
     }
+
+    if (!Ember.isNone(max) && value > max) {
+      return deferred.reject(this.get("messages.out_of_range")), deferred.promise;
+    }
+
+    deferred.resolve();
 
     return deferred.promise;
   }
@@ -38,6 +44,5 @@ var Validator = Base.extend({
 });
 
 Validator.isNumber = (data) => !isNaN(parseFloat(data));
-Validator.isInRange = (data, min, max) => (min && data < min) || (max && data > max);
 
 export default Validator;

@@ -1,0 +1,67 @@
+<h3>Conditional model</h3>
+<formset>
+  <legend>Condition on attribute</legend>
+  <form {{action 'validateModel1' on='submit'}}>
+    {{#if model.model_1.isValid}}
+      <div class="alert alert-success">
+        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        The model is valid
+      </div>
+    {{else}}
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Some fields of the model invalid
+      </div>
+    {{/if}}
+
+    <div class="form-group {{if model.model_1.errors.age 'has-error' 'has-success'}}">
+      <label class="control-label">Age</label>
+      {{input value=model.model_1.age class="form-control"}}
+      {{error-list errors=model.model_1.errors.age}}
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Validate age</label>
+      {{input type="checkbox" checked=model.model_1.validateAge}}
+    </div>
+
+    <button type="submit" class="btn btn-default">Validate</button>
+  </form>
+</formset>
+
+<hr />
+
+<formset>
+  <legend>Condition on validator</legend>
+  <form {{action 'validateModel2' on='submit'}}>
+    {{#if model.model_2.isValid}}
+      <div class="alert alert-success">
+        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        The model is valid
+      </div>
+    {{else}}
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Some fields of the model invalid
+      </div>
+    {{/if}}
+
+    <div class="form-group {{if model.model_2.errors.gender 'has-error' 'has-success'}}">
+      <label class="control-label">Gender</label>
+      <select class="form-control" onchange={{action "setGender" value="target.value"}}>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      {{error-list errors=model.model_2.errors.gender}}
+    </div>
+
+    <div class="form-group {{if model.model_2.errors.age 'has-error' 'has-success'}}">
+      <label class="control-label">Age</label>
+      {{input value=model.model_2.age class="form-control"}}
+      <span id="helpBlock2" class="help-block">For men range is: [10, 20]. For women range is: [15, 25].</span>
+      {{error-list errors=model.model_2.errors.age}}
+    </div>
+
+    <button type="submit" class="btn btn-default">Validate</button>
+  </form>
+</formset>
