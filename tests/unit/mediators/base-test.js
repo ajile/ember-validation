@@ -37,9 +37,7 @@ test('it fires events', function(assert) {
   });
 
   Ember.run(function() {
-    var Mediator = BaseMediator.extend({
-      _validate: () => { return RSVP.reject(); }
-    });
+    var Mediator = BaseMediator.extend({ _validate: () => RSVP.reject() });
     var mediator = Mediator.create();
     mediator.on("failed", () => {
       assert.ok(true, "Mediators triggers `failed` event when validation failed");
