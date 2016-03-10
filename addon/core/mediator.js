@@ -14,8 +14,22 @@ const { RSVP, observer } = Ember;
 */
 export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
+  /**
+    An object contains attribute that should be validated. Validators should
+    get an attribute name and context where this attribute can be found by name,
+    to validate its value.
+    @property context
+    @type Object
+  */
   context: Ember.Object.create(),
 
+  /**
+    This is the validation options that passes into the validator. Options
+    influence to validation behaviour. For example `number` validator mey get
+    following options: `min`, `max`, `float`, `int`, `positive` and so on.
+    @property options
+    @type Object
+  */
   options: Ember.Object.create(),
 
   /**
@@ -41,7 +55,6 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @return Ember.RSVP.Promise
   */
   validate() {
-    console.log(arguments);
     if (!Ember.isNone(this.condition) && !this.get('condition')) {
       this.trigger("passed");
       return RSVP.resolve();
@@ -53,10 +66,28 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
   },
 
   /**
+    @method check
+    @return Ember.RSVP.Promise
+  */
+  check() {
+    if (!Ember.isNone(this.condition) && !this.get('condition')) {
+      return RSVP.resolve();
+    }
+    return this._check(...arguments);
+  },
+
+  /**
     @method _validate
     @protected
     @return Ember.RSVP.Promise
   */
-  _validate: () => { return RSVP.resolve(); }
+  _validate: () => RSVP.resolve(),
+
+  /**
+    @method _check
+    @protected
+    @return Ember.RSVP.Promise
+  */
+  _check: () => RSVP.resolve()
 
 });

@@ -1,7 +1,13 @@
 <h3>Simple model</h3>
 <formset>
   <legend>On demand</legend>
-  <form {{action 'simpleValidate' on='submit'}}>
+  <form {{action 'validate' on='submit'}}>
+    {{#if controller.validationResult}}
+      <div class="alert alert-info">
+        {{controller.validationResult}}
+      </div>
+    {{/if}}
+
     {{#if user.isValid}}
       <div class="alert alert-success">
         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
@@ -18,17 +24,20 @@
       <label class="control-label">First name</label>
       {{input value=user.first_name class="form-control"}}
       {{error-list errors=user.errors.first_name}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'first_name'}}>Validate field</a>
     </div>
 
     <div class="form-group {{if user.errors.last_name 'has-error'}}">
       <label class="control-label">Last name</label>
       {{input value=user.last_name class="form-control"}}
       {{error-list errors=user.errors.last_name}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'last_name'}}>Validate field</a>
     </div>
     <div class="form-group {{if user.errors.full_name 'has-error'}}">
       <label class="control-label">Last name</label>
       {{input value=user.full_name class="form-control" disabled=true}}
       {{error-list errors=user.errors.full_name}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'full_name'}}>Validate field</a>
     </div>
 
     <div class="form-group {{if user.errors.gender 'has-error'}}">
@@ -39,8 +48,10 @@
         <option value="female">Female</option>
       </select>
       {{error-list errors=user.errors.gender}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'gender'}}>Validate field</a>
     </div>
 
     <button type="submit" class="btn btn-default">Validate</button>
+    <button type="button" class="btn btn-default" {{action 'check'}}>Check</button>
   </form>
 </formset>

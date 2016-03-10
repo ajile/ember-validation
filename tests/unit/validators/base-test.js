@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import { module, test } from 'qunit';
 import BaseValidator from 'ember-validation/core/validator';
 
@@ -30,9 +31,9 @@ test('it has interface', function(assert) {
 
 });
 
-test('it returns a result', function(assert) {
+test('it fires events', function(assert) {
 
-  expect(4);
+  expect(2);
 
   resolvesValidator = ResolvesValidator.create();
   Ember.run(function() {
@@ -50,6 +51,11 @@ test('it returns a result', function(assert) {
     rejectsValidator.validate("a", {a: 1});
   });
 
+});
+
+test('it returns a promise', function(assert) {
+
+  expect(2);
 
   resolvesValidator = ResolvesValidator.create();
   Ember.run(function() {

@@ -4,8 +4,22 @@ import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
 import lookup from 'ember-validation/utils/lookup';
 
-const { get, getWithDefault, getProperties } = Ember;
+const { get, getWithDefault, getProperties, tryInvoke } = Ember;
 const { RSVP, computed, keys } = Ember;
+
+var findMediators = function(...names) {
+    Ember.assert("You should provide at least one attribute name", !Ember.isEmpty(names));
+
+    // Iterating over the names (of attributes) and getting mediators.
+    const mediators = Ember.A(names).map((name) => {
+      let mediator = this.get("mediators").findBy("attribute", name);
+      Ember.assert("Mediator for attribute named `" + name + "` not found", mediator);
+      return mediator;
+    });
+
+    return mediators;
+};
+
 
 export default Ember.Mixin.create(ValidatableMixin, {
 
@@ -92,12 +106,12 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
 
       attributeMediator.on("failed", (message) => {
-        console.log("Validator %s has failed", attribute, message, arguments);
+        console.log("Attribute %s is valid", attribute, message, arguments);
         this.get("errors").add(attribute, message);
       });
 
       attributeMediator.on("passed", () => {
-        console.log("Validator %s has passed", attribute);
+        console.log("Attribute %s is invalid", attribute);
         this.get("errors").remove(attribute);
       });
 
@@ -116,19 +130,85 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @return {Ember.RSVP.Promise}
   */
   validate() {
+    if (Ember.isEmpty(arguments)) {
+      return this._runMediators("validate", this.get("mediators"));
+    } else {
+      Ember.warn('You probably want to call `validateByName`', Ember.isEmpty(arguments));
+      return this.validateByName(...arguments);
+    }
+  },
 
-    // Iterating over the validators in collection and calling validate method
-    // each of them to fill object by errors.
-    var promises = this.get("mediators").map((mediator) => {
-      return mediator.validate();
-    });
+  /**
+    This method the same as `validate`, only difference is that the `validate`
+    fills errors of the object. This method may be helpful to you, if you want
+    to check the object validation, but do not want fill it with errors.
+    @method check
+    @return {Ember.RSVP.Promise}
+  */
+  check() {
+    if (Ember.isEmpty(arguments)) {
+      return this._runMediators("check", this.get("mediators"));
+    } else {
+      Ember.warn('You probably want to call `checkByName`', Ember.isEmpty(arguments));
+      return this.validateByName(...arguments);
+    }
+  },
 
+  /**
+    Method searching mediators by name and executes validation on each of them.
+    May be helpful if you'd like to validate just few attributes of the object,
+    not all of them.
+
+    @example:
+      // Validate only one field
+      var promise = user.validateByName("firstName");
+
+      // Validate few fields
+      var promise = user.validateByName("firstName", "lastName", "birthday");
+
+    @method validateByName
+    @param {String[]} names
+    @return {Ember.RSVP.Promise}
+  */
+  validateByName(...names) {
+    return this._runMediators("validate", findMediators.call(this, ...names));
+  },
+
+  /**
+    Method searching mediators by name and executes check method on each of them.
+    May be helpful if you'd like to check just few attributes of the object,
+    not all of them.
+
+    @example:
+      // Validate field
+      var promise = user.checkByName("firstName", "lastName");
+
+    @method checkByName
+    @param {String[]} names
+    @return {Ember.RSVP.Promise}
+  */
+  checkByName(...names) {
+    return this._runMediators("check", findMediators.call(this, ...names));
+  },
+
+  /**
+    Iterating over the validators in collection and calling validate method
+    each of them to fill object by errors.
+    @method _runMediators
+    @params {Array} mediators
+    @private
+    @return {Ember.RSVP.Promise}
+  */
+  _runMediators(method, mediators) {
+    let promises = mediators.map((mediator) => tryInvoke(mediator, method));
     promises = promises.reduce((previousValue, item) => {
       previousValue = previousValue.concat(item);
       return previousValue;
     }, Ember.A());
-
-    return RSVP.all(promises);
+    const result = RSVP.all(promises);
+    result.then(() => console.log("✓ Validation has been passed"));
+    result.catch(() => console.log("✘ Validation has been failed"));
+    return result;
   },
 
   /**
@@ -139,9 +219,9 @@ export default Ember.Mixin.create(ValidatableMixin, {
   */
   _createValidators(attribute, validation) {
     return Ember.A( get(validation, "validators") ).map((description) => {
-      let { name, options } = getProperties(description, ["name", "options"]);
-      let Validator = lookup(name, get(this, "container"));
-      let validator = Validator.extend(options || {}).create();
+      const { name, options } = getProperties(description, ["name", "options"]);
+      const Validator = lookup(name, get(this, "container"));
+      const validator = Validator.extend(options || {}).create();
       Ember.setMeta(validator, "options", options || {});
       return validator;
     });

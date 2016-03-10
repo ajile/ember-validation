@@ -40,6 +40,19 @@ export default BaseMediator.extend(Ember.MutableArray, {
       return validator.validate();
     });
     return RSVP.all(promises);
+  },
+
+  /**
+    @method _check
+    @protected
+    @return Ember.RSVP.Promise
+  */
+  _check() {
+    const promises = get(this, "content").map((validator) => {
+      console.log("Attribute mediator calls check on validator mediator %o", validator);
+      return validator.validate();
+    });
+    return RSVP.all(promises);
   }
 
 });

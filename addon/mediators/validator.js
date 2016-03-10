@@ -45,7 +45,7 @@ export default BaseMediator.extend({
           options = get(this, "options"),
           context = this.getSnapshot("context");
 
-    console.log("Validator mediator calls validator %o (for %s)", this.get("validator"), attribute);
+    console.log("Validator mediator calls validate on validator %o (for %s)", this.get("validator"), attribute);
 
     return this.get("validator").validate(attribute, context, options);
   }
