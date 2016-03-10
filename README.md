@@ -1,4 +1,4 @@
-# Ember validation
+# Ember Validation [![Build Status](https://travis-ci.org/ajile/ember-validation.svg?branch=master)](https://travis-ci.org/ajile/ember-validation)
 
 Yet another one ember validation.
 
