@@ -2,9 +2,9 @@
 <formset>
   <legend>On demand</legend>
   <form {{action 'validate' on='submit'}}>
-    {{#if controller.validationResult}}
+    {{#if validationResult}}
       <div class="alert alert-info">
-        {{controller.validationResult}}
+        {{validationResult}}
       </div>
     {{/if}}
 
