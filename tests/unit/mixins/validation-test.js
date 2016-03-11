@@ -29,6 +29,8 @@ test('it has interface', function(assert) {
 
   assert.ok(subject.get("isValidatable"), "It's validatable");
   assert.ok(Ember.typeOf(subject.validateByName) === "function", "It can run validation on attribute");
+  assert.ok(Ember.typeOf(subject.check) === "function", "It can run check on object");
+  assert.ok(Ember.typeOf(subject.checkByName) === "function", "It can run check on attribute");
 });
 
 test('is can run validation on attribute', function(assert) {
@@ -42,8 +44,7 @@ test('is can run validation on attribute', function(assert) {
 test('is creates mediators', function(assert) {
   const app = this.app;
   const container = app.__container__;
-
-  var ValidationObject = Ember.Object.extend(ValidationMixin, {
+  const ValidationObject = Ember.Object.extend(ValidationMixin, {
     container: container,
     validationScheme: {
       number: {
@@ -57,10 +58,8 @@ test('is creates mediators', function(assert) {
       }
     }
   });
-
   const subject = ValidationObject.create();
   const mediators = subject.get("mediators");
-
 
   assert.equal(mediators.length, 1, "Should be exactly 1 attribute mediator");
 
@@ -86,9 +85,19 @@ test('is creates mediators', function(assert) {
   assert.ok(validatorMediator.get("testOption"), "The object declared in the validator `options` of the validationScheme should be mixed into the validator mediator");
   assert.ok(validatorMediator.get("validator") instanceof RequiredValidator, "First validator mediator should contain `required` validator");
 
+
+  const ValidationObject_1 = Ember.Object.extend(ValidationMixin, {
+    container: container
+  });
+
+  const subject_1 = ValidationObject_1.create();
+  const mediators_1 = subject_1.get("mediators");
+
+  assert.equal(mediators_1.length, 0, "Object without validationScheme doesn't have mediators");
+
 });
 
-test('it works with errors', function(assert) {
+test('it works with object\'s errors', function(assert) {
 
   expect(5);
 
@@ -106,7 +115,6 @@ test('it works with errors', function(assert) {
       }
     },
     flag: true,
-    // attribute: "A value of the attribute"
     attribute: ""
   });
 
@@ -134,10 +142,75 @@ test('it works with errors', function(assert) {
     subject.set("flag", false);
  });
 
- // Ember.run(() => {
- //   subject.on("changed", () => {});
- //   subject.set("flag", true);
- //   assert.ok(false, "When attribute validation condition changes it flushed field's errors");
- // });
+});
 
+test('it validates', function(assert) {
+  assert.ok(true);
+});
+
+test('it checks', function(assert) {
+  assert.ok(true);
+});
+
+test('it\'s inheritable', function(assert) {
+  const app = this.app;
+  const container = app.__container__;
+  const User = Ember.Object.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      name: {
+        validators: [
+          { "name": "required" }
+        ]
+      },
+      age: {
+        validators: [
+          { "name": "required" }
+        ]
+      }
+    },
+    name: ""
+  });
+
+  const Driver = User.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      phone: {
+        validators: [
+          { "name": "required" }
+        ]
+      }
+    },
+    phone: ""
+  });
+
+
+  const Employee = User.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      age: {
+        validators: [
+          { "name": "number" }
+        ]
+      }
+    },
+    phone: ""
+  });
+
+
+  const user = User.create();
+  const driver = Driver.create();
+  const employee = Employee.create();
+
+  const userMediators = user.get("mediators");
+  const driverMediators = driver.get("mediators");
+  const employeeMediators = employee.get("mediators");
+
+  assert.equal(userMediators.get("length"), 2, "The user has 2 mediators");
+  assert.equal(driverMediators.get("length"), 3, "The driver has 2 mediators from user and 1 its own, in total 3");
+  assert.equal(employeeMediators.get("length"), 2, "The employee has 2 mediators");
+});
+
+test('it validates', function(assert) {
+  assert.ok(true);
 });

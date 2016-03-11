@@ -25,6 +25,16 @@ var findMediators = function(...names) {
 export default Ember.Mixin.create(ValidatableMixin, {
 
   /**
+    Defines the properties that will be merged from the superclass
+    (instead of overridden).
+    @property mergedProperties
+    @type Array
+    @default null
+    @public
+  */
+  mergedProperties: ["validationScheme"],
+
+  /**
     A collection that contains all validators of the class instance that
     implements current mixin. The property fills up by the `initValidation`
     method from `validationScheme` (contains instruction to create validators).
