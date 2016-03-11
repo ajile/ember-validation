@@ -128,6 +128,10 @@ test('it works with object\'s errors', function(assert) {
     assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
   });
 
+  assert.ok(false, "Errors length equal 0 after clearErrors");
+  assert.ok(false, "Object become valid after clearErrors");
+  assert.ok(false, "Attribute's errors length equal 0 after clearErrorsByName");
+
   const mediators = subject.get("mediators");
   const attributeMediator = mediators.get("firstObject");
 
@@ -145,11 +149,22 @@ test('it works with object\'s errors', function(assert) {
 });
 
 test('it validates', function(assert) {
-  assert.ok(true);
+  assert.ok(false, "Validate on object calls validate on every mediator");
+  assert.ok(false, "Validate method returns promise");
+  assert.ok(false, "Validating promise resolves if all validators passes");
+  assert.ok(false, "Validating promise rejects if some validators failed");
+  assert.ok(false, "Object become invalid if validation failed");
+  assert.ok(false, "Object become valid if validation passed");
 });
 
 test('it checks', function(assert) {
-  assert.ok(true);
+  assert.ok(false, "Check on object calls validate on every mediator");
+  assert.ok(false, "Check doesn't occures an error on a field");
+  assert.ok(false, "Check method returns promise");
+  assert.ok(false, "Check promise resolves if all validators passes");
+  assert.ok(false, "Check promise rejects if some validators failed");
+  assert.ok(false, "Object do not become invalid if checking failed");
+  assert.ok(false, "Object do not become valid if checking passed");
 });
 
 test('it\'s inheritable', function(assert) {
@@ -211,6 +226,3 @@ test('it\'s inheritable', function(assert) {
   assert.equal(employeeMediators.get("length"), 2, "The employee has 2 mediators");
 });
 
-test('it validates', function(assert) {
-  assert.ok(true);
-});
