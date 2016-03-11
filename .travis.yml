@@ -12,6 +12,8 @@ cache:
 env:
   - EMBER_TRY_SCENARIO=default
   - EMBER_TRY_SCENARIO=ember-release
+  - EMBER_TRY_SCENARIO=wheely-partners
+  - EMBER_TRY_SCENARIO=wheely-business
 
 matrix:
   fast_finish: true
