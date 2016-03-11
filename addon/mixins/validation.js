@@ -2,6 +2,7 @@ import Ember from 'ember';
 import ValidatableMixin from 'ember-validation/mixins/validatable';
 import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
+import Errors from 'ember-validation/core/errors';
 import lookup from 'ember-validation/utils/lookup';
 
 const { get, getWithDefault, getProperties, tryInvoke } = Ember;
@@ -56,8 +57,13 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @constructor
   */
   init() {
+    this.initErrors();
     this.initValidation();
     return this._super(...arguments);
+  },
+
+  initErrors() {
+    Ember.isArray(this.get("errors")) || this.set("errors", Errors.create());
   },
 
   /**
@@ -106,15 +112,19 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
 
       attributeMediator.on("failed", (message) => {
-        console.log("Attribute %s is valid", attribute, message, arguments);
+        // console.log("Attribute %s is valid", attribute, message, arguments);
         this.get("errors").add(attribute, message);
       });
 
       attributeMediator.on("passed", () => {
-        console.log("Attribute %s is invalid", attribute);
+        // console.log("Attribute %s is invalid", attribute);
         this.get("errors").remove(attribute);
       });
 
+      attributeMediator.on("conditionChanged", () => {
+        console.log("Condition of attribute %s changed", attribute);
+        this.get("errors").remove(attribute);
+      });
 
       mediators.pushObject(attributeMediator);
 
@@ -206,8 +216,8 @@ export default Ember.Mixin.create(ValidatableMixin, {
       return previousValue;
     }, Ember.A());
     const result = RSVP.all(promises);
-    result.then(() => console.log("✓ Validation has been passed"));
-    result.catch(() => console.log("✘ Validation has been failed"));
+    // result.then(() => console.log("✓ Validation has been passed"));
+    // result.catch(() => console.log("✘ Validation has been failed"));
     return result;
   },
 

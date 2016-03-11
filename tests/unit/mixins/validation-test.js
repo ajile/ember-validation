@@ -1,5 +1,9 @@
 import Ember from 'ember';
 import ValidationMixin from 'ember-validation/mixins/validation';
+import AttributeMediator from 'ember-validation/mediators/attribute';
+import ValidatorMediator from 'ember-validation/mediators/validator';
+import RequiredValidator from 'ember-validation/validators/required';
+import Errors from 'ember-validation/core/errors';
 import startApp from '../../helpers/start-app';
 import { module, test } from 'qunit';
 
@@ -43,22 +47,97 @@ test('is creates mediators', function(assert) {
     container: container,
     validationScheme: {
       number: {
+        options: {
+          testOption: true
+        },
         validators: [
-          { "name": "number" }
+          { "name": "required", options: { testOption: true } },
+          { "name": "number", options: { testOption: true } }
         ]
       }
     }
   });
 
-  var subject = ValidationObject.create();
-  var mediators = subject.get("mediators");
+  const subject = ValidationObject.create();
+  const mediators = subject.get("mediators");
+
 
   assert.equal(mediators.length, 1, "Should be exactly 1 attribute mediator");
 
   const attributeMediator = mediators.get("firstObject");
-
+  assert.ok(attributeMediator instanceof AttributeMediator, "Object contains in validation object's mediator collection is a AttributeMediator");
   assert.ok(attributeMediator.get("options"), "Attribute mediator should have options the same as they were declared");
-  assert.ok(false, "Attribute mediator should have context the same as they were declared");
-  assert.ok(false, "Attribute mediator should have attribute name");
+  assert.ok(attributeMediator.get("context"), "Attribute mediator should have context");
+  assert.equal(attributeMediator.get("context"), subject, "Attribute mediator's context should be object self");
+  assert.ok(attributeMediator.get("attribute"), "Attribute mediator should have attribute name");
+
+  assert.ok(attributeMediator.get("testOption"), "The object declared in the attr `options` of the validationScheme should be mixed into the attribute mediator");
+  assert.equal(Ember.typeOf(attributeMediator.pushObject), "function", "Attribute mediator should be enum object");
+  assert.ok(attributeMediator.get("content"), "Attribute mediator should have content");
+  assert.equal(attributeMediator.get("length"), 2, "Attribute mediator should contain exactly 2 validators");
+
+  const validatorMediator = attributeMediator.get("firstObject");
+  assert.ok(validatorMediator instanceof ValidatorMediator, "Object contains in validation object's mediator collection is a AttributeMediator");
+  assert.ok(validatorMediator.get("options"), "Validator mediator should have options the same as they were declared");
+  assert.ok(validatorMediator.get("context"), "Validator mediator should have context");
+  assert.equal(validatorMediator.get("context"), subject, "Validator mediator's context should be object self");
+  assert.ok(validatorMediator.get("attribute"), "Validator mediator should have attribute name");
+
+  assert.ok(validatorMediator.get("testOption"), "The object declared in the validator `options` of the validationScheme should be mixed into the validator mediator");
+  assert.ok(validatorMediator.get("validator") instanceof RequiredValidator, "First validator mediator should contain `required` validator");
+
+});
+
+test('it works with errors', function(assert) {
+
+  expect(5);
+
+  const app = this.app;
+  const container = app.__container__;
+
+  var ValidationObject = Ember.Object.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      attribute: {
+        options: { condition: Ember.computed.alias("context.flag") },
+        validators: [
+          { "name": "required" }
+        ]
+      }
+    },
+    flag: true,
+    // attribute: "A value of the attribute"
+    attribute: ""
+  });
+
+  var subject = ValidationObject.create();
+
+  assert.ok(subject.get("errors") instanceof Errors, "Error collection should be added if object doesn't have its own");
+
+  assert.equal(subject.get("errors").get("length"), 0, "Subject doesn't have errors before validation");
+
+  subject.validate().catch(() => {
+    assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
+  });
+
+  const mediators = subject.get("mediators");
+  const attributeMediator = mediators.get("firstObject");
+
+  subject.validate().catch(() => {
+    assert.equal(subject.get("errors.length"), 1, "The object should contain only 1 error");
+    attributeMediator.on("conditionChanged", () => {
+      Ember.run.scheduleOnce("actions", this, () => {
+        assert.equal(subject.get("errors.length"), 0, "When attribute validation condition changes it flushed field's errors");
+      });
+   });
+
+    subject.set("flag", false);
+ });
+
+ // Ember.run(() => {
+ //   subject.on("changed", () => {});
+ //   subject.set("flag", true);
+ //   assert.ok(false, "When attribute validation condition changes it flushed field's errors");
+ // });
 
 });

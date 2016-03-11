@@ -16,6 +16,7 @@ test('it has interface', function(assert) {
 
   assert.ok(mediator.get("isValidatable"), "Mediators are validatable");
   assert.ok(Ember.typeOf(mediator.trigger) === "function", "Mediators are evented");
+  assert.ok(Ember.typeOf(mediator.check) === "function", "Mediators has check method");
   assert.ok(mediator.hasObserverFor("condition"), "Mediators has observer for condition");
   assert.ok(mediator.options, "Mediators has options");
   assert.ok(mediator.context, "Mediators has context");
@@ -25,7 +26,7 @@ test('it has interface', function(assert) {
 
 test('it fires events', function(assert) {
 
-  expect(2);
+  expect(3);
 
   Ember.run(function() {
     var Mediator = BaseMediator.extend();
@@ -43,6 +44,15 @@ test('it fires events', function(assert) {
       assert.ok(true, "Mediators triggers `failed` event when validation failed");
     });
     mediator.validate();
+  });
+
+  Ember.run(function() {
+    var Mediator = BaseMediator.extend();
+    var mediator = Mediator.create();
+    mediator.on("conditionChanged", () => {
+      assert.ok(true, "Mediators triggers `conditionChanged` event when condition changed");
+    });
+    mediator.set("condition", true);
   });
 
 });
@@ -79,5 +89,5 @@ test('it returns promise', function(assert) {
     });
   });
 
-
 });
+

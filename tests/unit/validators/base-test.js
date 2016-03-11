@@ -73,3 +73,4 @@ test('it returns a promise', function(assert) {
   });
 
 });
+

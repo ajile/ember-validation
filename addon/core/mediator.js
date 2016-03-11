@@ -47,7 +47,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     @method conditionDidChange
   */
   conditionDidChange: observer("condition", function() {
-    // Ember.run.scheduleOnce("sync", this, () => this.validate());
+    this.trigger("conditionChanged");
   }),
 
   /**
