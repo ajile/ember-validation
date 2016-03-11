@@ -30,6 +30,15 @@ export default BaseMediator.extend(Ember.MutableArray, {
   content: computed(() => Ember.A()),
 
   /**
+    @property length
+    @type Number
+  */
+  length: computed("content", "content.length", function() {
+    var content = get(this, 'content');
+    return content ? get(content, 'length') : 0;
+  }),
+
+  /**
     @method replace
     @param {Any} idx
     @param {Object} amt
@@ -38,11 +47,6 @@ export default BaseMediator.extend(Ember.MutableArray, {
   replace(idx, amt, objects) {
     get(this, 'content') && get(this, 'content').replace(idx, amt, objects);
   },
-
-  length: computed("content", "content.length", function() {
-    var content = get(this, 'content');
-    return content ? get(content, 'length') : 0;
-  }),
 
   /**
     Should actually retrieve the object at the specified index from the
@@ -69,7 +73,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
   */
   _validate() {
     const promises = get(this, "content").map((validator) => {
-      // console.log("Attribute mediator calls validator mediator %o", validator);
+      console.log("Attribute mediator calls validator mediator %o", validator);
       return validator.validate();
     });
     return RSVP.all(promises);

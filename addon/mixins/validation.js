@@ -69,7 +69,22 @@ export default Ember.Mixin.create(ValidatableMixin, {
   init() {
     this.initErrors();
     this.initValidation();
+    this.initStates();
     return this._super(...arguments);
+  },
+
+  initStates() {
+      // The class already has a state, it means that the class has isValid and
+      // isInvalid states as well.
+      if (this.get("currentState")) {
+          return;
+      }
+
+      Ember.defineProperty(this, "isValid", computed("errors.length", () => {
+        return this.get("errors.length") === 0;
+      }));
+
+      Ember.defineProperty(this, "isInvalid", computed.not("isValid"));
   },
 
   initErrors() {
@@ -122,17 +137,19 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
 
       attributeMediator.on("failed", (message) => {
-        // console.log("Attribute %s is valid", attribute, message, arguments);
+        console.log("Attribute '%s' is invalid with message '%s'", attribute, message);
+        console.log("    " + attribute);
+        console.log("    " + message);
         this.get("errors").add(attribute, message);
       });
 
       attributeMediator.on("passed", () => {
-        // console.log("Attribute %s is invalid", attribute);
+        console.log("Attribute %s is valid", attribute);
         this.get("errors").remove(attribute);
       });
 
       attributeMediator.on("conditionChanged", () => {
-        console.log("Condition of attribute %s changed", attribute);
+        // console.log("Condition of attribute %s changed", attribute);
         this.get("errors").remove(attribute);
       });
 
@@ -209,6 +226,23 @@ export default Ember.Mixin.create(ValidatableMixin, {
   */
   checkByName(...names) {
     return this._runMediators("check", findMediators.call(this, ...names));
+  },
+
+  /**
+    Method searching mediators by name and executes check method on each of them.
+    May be helpful if you'd like to check just few attributes of the object,
+    not all of them.
+
+    @example:
+      // Validate field
+      var promise = user.checkByName("firstName", "lastName");
+
+    @method checkByName
+    @param {String[]} names
+    @return {Ember.RSVP.Promise}
+  */
+  clearErrors() {
+    this.get("errors").clear();
   },
 
   /**

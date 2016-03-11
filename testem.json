@@ -7,7 +7,6 @@
   ],
   "launch_in_dev": [
     "PhantomJS",
-    "Chrome",
-    "Firefox"
+    "Chrome"
   ]
 }

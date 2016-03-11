@@ -5,12 +5,16 @@ import ValidatorMediator from 'ember-validation/mediators/validator';
 import RequiredValidator from 'ember-validation/validators/required';
 import Errors from 'ember-validation/core/errors';
 import startApp from '../../helpers/start-app';
+import { FailValidator } from '../../helpers/validators';
 import { module, test } from 'qunit';
+
+const { RSVP } = Ember;
 
 module('Unit | Mixin | validation', {
   integration: true,
   setup: function () {
     this.app = startApp();
+    this.app.__container__._registry.register("validator:fail", FailValidator);
   },
   teardown: function () {
     Ember.run(this.app, 'destroy');
@@ -99,7 +103,7 @@ test('is creates mediators', function(assert) {
 
 test('it works with object\'s errors', function(assert) {
 
-  expect(5);
+  expect(8);
 
   const app = this.app;
   const container = app.__container__;
@@ -107,14 +111,13 @@ test('it works with object\'s errors', function(assert) {
   var ValidationObject = Ember.Object.extend(ValidationMixin, {
     container: container,
     validationScheme: {
-      attribute: {
-        options: { condition: Ember.computed.alias("context.flag") },
+      someAttributeName: {
         validators: [
-          { "name": "required" }
+          { "name": "required" },
+          { "name": "fail" }
         ]
       }
     },
-    flag: true,
     attribute: ""
   });
 
@@ -125,12 +128,14 @@ test('it works with object\'s errors', function(assert) {
   assert.equal(subject.get("errors").get("length"), 0, "Subject doesn't have errors before validation");
 
   subject.validate().catch(() => {
-    assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
-  });
 
-  assert.ok(false, "Errors length equal 0 after clearErrors");
-  assert.ok(false, "Object become valid after clearErrors");
-  assert.ok(false, "Attribute's errors length equal 0 after clearErrorsByName");
+    console.log(subject.get("errors.length"));
+    assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
+    subject.clearErrors();
+    assert.equal(subject.get("errors.length"), 0, "Errors length equal 0 after clearErrors");
+    assert.ok(subject.get("isValid"), "Object become valid after clearErrors");
+    assert.ok(false, "Attribute's errors length equal 0 after clearErrorsByName");
+  });
 
   const mediators = subject.get("mediators");
   const attributeMediator = mediators.get("firstObject");
@@ -141,16 +146,59 @@ test('it works with object\'s errors', function(assert) {
       Ember.run.scheduleOnce("actions", this, () => {
         assert.equal(subject.get("errors.length"), 0, "When attribute validation condition changes it flushed field's errors");
       });
-   });
-
-    subject.set("flag", false);
- });
+    });
+  });
 
 });
 
 test('it validates', function(assert) {
-  assert.ok(false, "Validate on object calls validate on every mediator");
-  assert.ok(false, "Validate method returns promise");
+  const app = this.app;
+  const container = app.__container__;
+  let validationCounter = 0;
+  const ValidationObject = Ember.Object.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      name: {
+        options: {
+          testOption: true
+        },
+        validators: [
+          { "name": "required", options: { testOption: true } },
+        ]
+      },
+      number: {
+        options: {
+          testOption: true
+        },
+        validators: [
+          { "name": "required", options: { testOption: true } },
+          { "name": "number", options: { testOption: true } }
+        ]
+      }
+    },
+    _createAttributeMediator() {
+      const mediator = this._super(...arguments);
+      mediator.reopen({
+        _validate() {
+          validationCounter++;
+          return this._super(...arguments);
+        }
+      });
+      return mediator;
+    },
+  });
+
+  const subject = ValidationObject.create();
+  // const mediators = subject.get("mediators");
+
+  var result = subject.validate();
+
+  result.finally(() => {
+    assert.equal(validationCounter, 2, "Validate on object calls validate on every attribute mediator");
+  });
+
+  assert.ok(result instanceof RSVP.Promise, "Validate method returns promise");
+
   assert.ok(false, "Validating promise resolves if all validators passes");
   assert.ok(false, "Validating promise rejects if some validators failed");
   assert.ok(false, "Object become invalid if validation failed");
@@ -200,29 +248,46 @@ test('it\'s inheritable', function(assert) {
   });
 
 
+  const Kid = User.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      age: {
+        validators: [
+          { "name": "number", "options": { max: 18 } }
+        ]
+      }
+    },
+  });
+
+
   const Employee = User.extend(ValidationMixin, {
     container: container,
     validationScheme: {
       age: {
         validators: [
-          { "name": "number" }
+          { "name": "number", "options": { min: 18 } }
         ]
       }
     },
-    phone: ""
   });
 
 
   const user = User.create();
   const driver = Driver.create();
   const employee = Employee.create();
+  const kid = Kid.create();
 
   const userMediators = user.get("mediators");
   const driverMediators = driver.get("mediators");
   const employeeMediators = employee.get("mediators");
+  const kidMediators = kid.get("mediators");
 
   assert.equal(userMediators.get("length"), 2, "The user has 2 mediators");
   assert.equal(driverMediators.get("length"), 3, "The driver has 2 mediators from user and 1 its own, in total 3");
   assert.equal(employeeMediators.get("length"), 2, "The employee has 2 mediators");
+  assert.equal(kidMediators.get("length"), 2, "The kid has 2 mediators");
+
+  assert.ok(false, "Attribute age should have only 1 NumberValidator");
+  assert.ok(false, "Attribute age should have only 1 NumberValidator");
 });
 
