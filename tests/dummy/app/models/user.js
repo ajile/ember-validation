@@ -54,6 +54,15 @@ export default DS.Model.extend(ValidationMixin, {
         { name: "number", options: { min: 21, max: 65, messages: {default: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) } },
         { name: "number", options: { min: 18, max: 55, messages: {default: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) } }
       ]
+    },
+
+    phone : {
+      options: {condition : computed.not('context.email')},
+      validators : [{name : 'required'}]
+    },
+    email : {
+      options: {condition : computed.not('context.phone')},
+      validators : [{name : 'required'}]
     }
 
   },
@@ -63,7 +72,7 @@ export default DS.Model.extend(ValidationMixin, {
   gender: attr("string", { defaultValue: GENDERS.UNKNOWN }),
   age: attr("number"),
   email: attr("string"),
-
+  phone: attr("string"),
   full_name: computed("first_name", "last_name", function() {
     return [this.get("first_name"), this.get("last_name")].join(" ");
   })

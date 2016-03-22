@@ -1,0 +1,28 @@
+<h3>Form-validation component</h3>
+<div class="row">
+  <div class="col-xs-3">
+    <div class="alert alert-success" {{action "setUser" "new"}}>New user</div>
+  </div>
+  <div class="col-xs-3">
+    <div class="alert alert-info" {{action "setUser" "edit"}}>Edit user</div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-6">
+    {{#form-validation context=model bla=model as |formView|}}
+      isValid: {{formView.isValid}}<br>
+      errors.length: {{formView.errors.length}}<br>{{formView.context}}
+      <div class="form-group {{if model.errors.first_name 'has-error'}}">
+        <label class="control-label">First name</label>
+        {{input value=model.first_name class="form-control" valid-path="first_name"}}
+        {{error-list errors=model.errors.first_name}}
+      </div>
+
+      <div class="form-group {{if model.errors.last_name 'has-error'}}">
+        <label class="control-label">Last name</label>
+        {{input value=model.last_name class="form-control" valid-path="last_name"}}
+        {{error-list errors=model.errors.last_name}} {{model.errors.last_name}}
+      </div>
+    {{/form-validation}}
+  </div>
+</div>
