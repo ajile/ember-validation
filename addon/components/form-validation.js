@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import FormVaidation from 'ember-validation/mixins/form';
+import ComponentVaidation from 'ember-validation/mixins/component';
 import layout from '../templates/components/form-validation';
 
-export default Ember.Component.extend(FormVaidation, {
+export default Ember.Component.extend(ComponentVaidation, {
   layout: layout, // "{{yield this}}",
   tagName: 'form',
 

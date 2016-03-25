@@ -67,14 +67,18 @@ export default DS.Model.extend(ValidationMixin, {
 
   },
 
-  first_name: attr("string"),
-  last_name: attr("string"),
+  first_name: attr("string", {defaultValue:''}),
+  last_name: attr("string", {defaultValue:''}),
   gender: attr("string", { defaultValue: GENDERS.UNKNOWN }),
   age: attr("number"),
-  email: attr("string"),
-  phone: attr("string"),
+  email: attr("string", {defaultValue:''}),
+  phone: attr("string", {defaultValue:''}),
   full_name: computed("first_name", "last_name", function() {
     return [this.get("first_name"), this.get("last_name")].join(" ");
+  }),
+
+  _t: Ember.observer('first_name', function () {
+    console.log('first_name did change', this.get('first_name'))
   })
 
 });

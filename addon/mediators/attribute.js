@@ -73,7 +73,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
   */
   _validate() {
     const promises = get(this, "content").map((validator) => {
-      console.log("Attribute mediator calls validator mediator %o", validator);
+      // console.log("Attribute mediator calls validator mediator %o", validator);
       return validator.validate();
     });
     return RSVP.all(promises);

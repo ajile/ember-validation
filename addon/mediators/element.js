@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import BaseMediator from 'ember-validation/core/mediator';
 
-const { RSVP } = Ember;
+const { RSVP, run, get, Logger } = Ember;
 
 /**
   @class ElementMediator
@@ -10,38 +10,62 @@ const { RSVP } = Ember;
 */
 export default BaseMediator.extend({
 
-  element : null,
+  view : null,
 
-  validPath : '',
+  /**
+    Attach events handlers to view event
 
-  addEventHandlers: Ember.on('init', function () {
-    console.log(this.get('element').$())
+    @method _addEventHandlers
+    @on init
+    @private
+    @return undefined
+  */
+  _addEventHandlers: Ember.on('init', function () {
+    this.get('view')
+      .on('focusIn', this, this._onFocusIn)
+      .on('focusOut', this, this._onFocusOut);
 
-    this._onFocusIn = this._onFocusIn.bind(this)
-    this._onFocusOut = this._onFocusOut.bind(this)
-
-    this.get('element').$()
-      .on('focusin', this._onFocusIn)
-      .on('focusout', this._onFocusOut);
+    Logger.info('Validation : Mediator : Element : created : ', get(this, 'validate-path'));
   }),
 
+  /**
+    Remove events handlers from view before destroy
+
+    @method willDestroy
+    @public
+    @return undefined
+  */
   willDestroy() {
-    this.get('element').$()
-      .off('focusin', this._onFocusIn)
-      .off('focusout', this._onFocusOut);
-
+    this.get('view')
+      .off('focusIn', this, this._onFocusIn)
+      .off('focusOut', this, this._onFocusOut);
   },
 
+  /**
+    Trigger `focusIn` event
+
+    @method _onFocusIn
+    @private
+    @return undefined
+  */
   _onFocusIn : function () {
-    console.log('focusin', this.get('validPath'))
-
-    this.trigger('focusin');
+    this.trigger('focusIn', get(this, 'view.validate-path'), get(this, 'view'));
   },
 
+  /**
+    Call `validate` and trigger `focusOut` event
+
+    @method _onFocusOut
+    @private
+    @return undefined
+  */
   _onFocusOut : function () {
-    console.log('focusout', this.get('validPath'))
-    Ember.tryInvoke(this.get('context'), 'validate', [this.get('validPath')]);
-    this.trigger('focusout');
+    var view = get(this, 'view'),
+        path = get(this, 'view.validate-path');
+
+    this._validate().then(() => this.trigger('passed', path, view), (message) => this.trigger('failed', path, message, view));
+
+    this.trigger('focusOut', path, view);
   },
 
   /**
@@ -50,7 +74,8 @@ export default BaseMediator.extend({
     @return Ember.RSVP.Promise
   */
   _validate() {
-    return RSVP.resolve();
+    Logger.info('Validation : Mediator : Element : validate : ', get(this, 'view.validate-path'));
+    return Ember.tryInvoke(this.get('context'), 'validate', [this.get('view.validate-path')]) || RSVP.resolve();
   }
 
 });
