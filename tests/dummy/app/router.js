@@ -10,6 +10,7 @@ Router.map(function() {
     this.route('simple');
     this.route('conditional');
     this.route('composition');
+    this.route('form');
   });
 });
 
