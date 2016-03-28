@@ -128,13 +128,16 @@ test('it works with object\'s errors', function(assert) {
   assert.equal(subject.get("errors").get("length"), 0, "Subject doesn't have errors before validation");
 
   subject.validate().catch(() => {
-
-    console.log(subject.get("errors.length"));
     assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
     subject.clearErrors();
     assert.equal(subject.get("errors.length"), 0, "Errors length equal 0 after clearErrors");
     assert.ok(subject.get("isValid"), "Object become valid after clearErrors");
-    assert.ok(false, "Attribute's errors length equal 0 after clearErrorsByName");
+
+    subject.validate().catch(() => {
+      assert.equal(subject.get("errors.someAttributeName.length"), 1, "Attribute someAttributeName has errors");
+      subject.clearErrorsByName("someAttributeName");
+      assert.ok(!subject.get("errors.someAttributeName.length"), "Errors length of someAttributeName attr equal 0 after clearErrorsByName");
+    });
   });
 
   const mediators = subject.get("mediators");

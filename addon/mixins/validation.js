@@ -229,20 +229,23 @@ export default Ember.Mixin.create(ValidatableMixin, {
   },
 
   /**
-    Method searching mediators by name and executes check method on each of them.
-    May be helpful if you'd like to check just few attributes of the object,
-    not all of them.
-
-    @example:
-      // Validate field
-      var promise = user.checkByName("firstName", "lastName");
-
-    @method checkByName
-    @param {String[]} names
-    @return {Ember.RSVP.Promise}
+    @method clearErrors
   */
   clearErrors() {
     this.get("errors").clear();
+  },
+
+  /**
+    @method clearErrorsByName
+    @param {String} name
+  */
+  clearErrorsByName(name) {
+    const attributeErrors = this.get("errors").filterBy("attribute", name);
+    var errors = this.get("errors");
+    attributeErrors.forEach((attr) => {
+      errors = errors.without(attr);
+    });
+    this.set("errors", errors);
   },
 
   /**
