@@ -2,7 +2,7 @@
 
 module.exports = function(/* environment, appConfig */) {
   return {
-    baseURL: process.env.BASE_URL || '1/',
+    baseURL: process.env.BASE_URL || '/',
     LOG_VALIDATION: true
   };
 };
