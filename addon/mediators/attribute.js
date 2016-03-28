@@ -3,7 +3,6 @@ import BaseMediator from 'ember-validation/core/mediator';
 
 const { get, computed, RSVP } = Ember;
 
-
 export function objectAt(content, idx) {
   if (content.objectAt) {
     return content.objectAt(idx);
@@ -73,7 +72,6 @@ export default BaseMediator.extend(Ember.MutableArray, {
   */
   _validate() {
     const promises = get(this, "content").map((validator) => {
-      // console.log("Attribute mediator calls validator mediator %o", validator);
       return validator.validate();
     });
     return RSVP.all(promises);
@@ -85,11 +83,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
     @return Ember.RSVP.Promise
   */
   _check() {
-    const promises = get(this, "content").map((validator) => {
-      // console.log("Attribute mediator calls check on validator mediator %o", validator);
-      return validator.validate();
-    });
-    return RSVP.all(promises);
+    return this._validate(...arguments);
   }
 
 });

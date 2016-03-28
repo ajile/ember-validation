@@ -6,15 +6,15 @@ import Errors from 'ember-validation/core/errors';
 import lookup from 'ember-validation/utils/lookup';
 
 const { get, getWithDefault, getProperties, tryInvoke } = Ember;
-const { RSVP, computed, keys } = Ember;
+const { RSVP, computed, keys, assert } = Ember;
 
 var findMediators = function(...names) {
-    Ember.assert("You should provide at least one attribute name", !Ember.isEmpty(names));
+    assert("You should provide at least one attribute name", !Ember.isEmpty(names));
 
     // Iterating over the names (of attributes) and getting mediators.
     const mediators = Ember.A(names).map((name) => {
       let mediator = this.get("mediators").findBy("attribute", name);
-      Ember.assert("Mediator for attribute named `" + name + "` not found", mediator);
+      assert("Mediator for attribute named `" + name + "` not found", mediator);
       return mediator;
     });
 
@@ -109,7 +109,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     const validationScheme = this.get("validationScheme"),
           mediators = this.get("mediators");
 
-    Ember.assert("You should define `validationScheme` property", validationScheme);
+    assert("You should define `validationScheme` property", validationScheme);
 
     // Getting the object's properties that should have validation.
     const attributes = Ember.A(keys(validationScheme));
@@ -119,7 +119,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
       // Instruction to create validators for the attribute
       let validation = get(validationScheme, attribute);
 
-      Ember.assert("Every validation should contain validators", validation);
+      assert("Every validation should contain validators", validation);
 
       // A list of the validator instances
       let validatorObjects = this._createValidators(attribute, validation);
@@ -262,10 +262,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
       previousValue = previousValue.concat(item);
       return previousValue;
     }, Ember.A());
-    const result = RSVP.all(promises);
-    // result.then(() => console.log("✓ Validation has been passed"));
-    // result.catch(() => console.log("✘ Validation has been failed"));
-    return result;
+    return RSVP.all(promises);
   },
 
   /**

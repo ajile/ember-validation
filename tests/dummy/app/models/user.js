@@ -78,7 +78,7 @@ export default DS.Model.extend(ValidationMixin, {
   }),
 
   _t: Ember.observer('first_name', function () {
-    console.log('first_name did change', this.get('first_name'))
+    console.log('first_name did change', this.get('first_name'));
   })
 
 });

@@ -40,7 +40,7 @@ export default Ember.Object.extend(Ember.Evented, ValidatableMixin, {
     }
     const promise = this._validate(...arguments);
     promise.then(() => { this.trigger("passed"); });
-    promise.catch(() => { this.trigger("failed"); });
+    promise.catch(() => { this.trigger("failed", ...arguments); });
     return promise;
   },
 
