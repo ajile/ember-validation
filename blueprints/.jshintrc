@@ -1,6 +1,7 @@
 {
   "predef": [
-    "console"
+    "console",
+    "Prism"
   ],
   "strict": false
 }
