@@ -3,6 +3,11 @@ import Base from 'ember-validation/core/validator';
 
 const { RSVP: {resolve, reject}, get, isBlank } = Ember;
 
+/**
+  @module
+  @augments module:addon/core/validator
+  @public
+*/
 export default Base.extend({
 
   /**

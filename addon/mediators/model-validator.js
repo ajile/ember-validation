@@ -5,9 +5,8 @@ import ValidatorMediator from 'ember-validation/mediators/validator';
 const { get, assert } = Ember;
 
 /**
-  @class ModelValidatorMediator
   @module
-  @augments ember-validation/mediators/ValidatorMediator
+  @augments module:addon/mediators/validator
   @uses Ember.MutableArray
   @public
 */

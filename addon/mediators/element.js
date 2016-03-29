@@ -4,8 +4,8 @@ import BaseMediator from 'ember-validation/core/mediator';
 const { RSVP, run, get, Logger } = Ember;
 
 /**
-  @class ElementMediator
-  @extends BaseMediator
+  @module
+  @augments module:addon/core/mediator
   @public
 */
 export default BaseMediator.extend({

@@ -1,14 +1,19 @@
 import Ember from 'ember';
 import ValidationMixin from 'ember-validation/mixins/validation';
 import ElementMediator from 'ember-validation/mediators/element';
-// import lookup from 'ember-validation/utils/lookup';
 
 const { get, computed, observer, A, isArray, Instrumentation, on, Logger } = Ember;
 
+/**
+  @module
+  @augments module:ember/ArrayProxy
+  @public
+*/
 var ErrorsProxy = Ember.ArrayProxy.extend({
 
   /**
-    @property _content
+    @type Array
+    @private
   */
   _content: Ember.A(),
 
@@ -111,6 +116,13 @@ function isChild(parent, child) {
 
 }
 
+
+/**
+  @module
+  @augments module:ember/Mixin
+  @augments module:addon/mixins/validation
+  @public
+*/
 export default Ember.Mixin.create(ValidationMixin, {
 
   /**

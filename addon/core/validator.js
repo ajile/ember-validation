@@ -3,11 +3,17 @@ import ValidatableMixin from 'ember-validation/mixins/validatable';
 
 const { RSVP, get } = Ember;
 
+/**
+  @module
+  @augments module:ember/Object
+  @augments module:ember/Evented
+  @augments module:addon/core/validator
+  @public
+*/
 export default Ember.Object.extend(Ember.Evented, ValidatableMixin, {
 
   /**
     Error messages. It should be redefined in child classes.
-    @property messages
     @type Object
   */
   messages: {
@@ -16,7 +22,6 @@ export default Ember.Object.extend(Ember.Evented, ValidatableMixin, {
 
   /**
     The flag means that blank values should be validated as well.
-    @property blankValue
     @type Boolean
     @default false
   */

@@ -22,12 +22,17 @@ var findMediators = function(...names) {
 };
 
 
+/**
+  @module
+  @augments module:ember/Mixin
+  @augments module:addon/mixins/validatable
+  @public
+*/
 export default Ember.Mixin.create(ValidatableMixin, {
 
   /**
     Defines the properties that will be merged from the superclass
     (instead of overridden).
-    @property mergedProperties
     @type Array
     @default null
     @public
@@ -38,8 +43,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     A collection that contains all validators of the class instance that
     implements current mixin. The property fills up by the `initValidation`
     method from `validationScheme` (contains instruction to create validators).
-    @property validators
-    @type Ember.Array
+    @type {Array}
   */
   mediators: computed(() => Ember.A()),
 
@@ -57,15 +61,11 @@ export default Ember.Mixin.create(ValidatableMixin, {
     The method fills `validators` collection by validators and invoke each of
     them on `validate` method.
 
-    @property validationScheme
     @type Object
     @protected
   */
   validationScheme: {},
 
-  /**
-    @constructor
-  */
   init() {
     this.initErrors();
     this.initValidation();
@@ -269,7 +269,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @method _createValidators
     @param {String} attribute
     @param {Object} validation
-    @return Ember.Array
+    @return {Array}
   */
   _createValidators(attribute, validation) {
     return Ember.A( get(validation, "validators") ).map((description) => {
@@ -286,7 +286,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @param {String} attribute
     @param {Object} options
     @param {Object} context
-    @return Ember.Array
+    @return {Array}
   */
   _createAttributeMediator(attribute, options={}, context=this) {
     return AttributeMediator.extend(options).create({ context, attribute, options });
@@ -297,7 +297,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @param {Validator} validator
     @param {Object} options
     @param {Object} context
-    @return Ember.Array
+    @return {Array}
   */
   _createValidatorMediator(attribute, validator, options={}, context=this) {
     return ValidatorMediator.extend(options).create({ context, attribute, validator, options });

@@ -18,10 +18,10 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tutorial <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Миксины</a></li>
-            <li><a href="#">Медиаторы</a></li>
-            <li><a href="#">Валидаторы</a></li>
-            <li><a href="#">Формы</a></li>
+            <li>{{#link-to 'tutorial.validators'}}Валидаторы{{/link-to}}</li>
+            <li>{{#link-to 'tutorial.mixins'}}Миксины{{/link-to}}</li>
+            <li>{{#link-to 'tutorial.mediators'}}Медиаторы{{/link-to}}</li>
+            <li>{{#link-to 'tutorial.components'}}Копоненты{{/link-to}}</li>
           </ul>
         </li>
         <li class="dropdown">
@@ -40,6 +40,7 @@
             <li>{{#link-to 'examples.form'}}Форма{{/link-to}}</li>
           </ul>
         </li>
+        <li><a href="docs/index.html">API</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

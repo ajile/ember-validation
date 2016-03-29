@@ -12,9 +12,8 @@ export function objectAt(content, idx) {
 }
 
 /**
-  @class AttributeMediator
-  @module ember-validation/mediators
-  @extends BaseMediator
+  @module
+  @augments module:addon/core/mediator
   @uses Ember.MutableArray
   @public
 */
@@ -22,15 +21,14 @@ export default BaseMediator.extend(Ember.MutableArray, {
 
   /**
     The list of the validators.
-    @property content
-    @type Ember.Array
+    @type {Array}
+    @default Array
     @private
   */
   content: computed(() => Ember.A()),
 
   /**
-    @property length
-    @type Number
+    @type {module:addon/mediators/attribute~content}
   */
   length: computed("content", "content.length", function() {
     var content = get(this, 'content');
@@ -38,7 +36,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
   }),
 
   /**
-    @method replace
+    @function
     @param {Any} idx
     @param {Object} amt
     @param {Object} objects
@@ -52,7 +50,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
     content. You can override this method in subclasses to transform the
     content item to something new.
     This method will only be called if content is non-`null`.
-    @method objectAtContent
+    @function
     @param {Number} idx The index to retrieve.
     @return {Object} the value or undefined if none found
     @private
@@ -66,7 +64,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
   },
 
   /**
-    @method _validate
+    @function
     @protected
     @return Ember.RSVP.Promise
   */
@@ -78,7 +76,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
   },
 
   /**
-    @method _check
+    @function
     @protected
     @return Ember.RSVP.Promise
   */

@@ -3,6 +3,11 @@ import Base from 'ember-validation/core/validator';
 
 const { RSVP: { defer }, get, getProperties } = Ember;
 
+/**
+  @module
+  @augments module:addon/core/validator
+  @public
+*/
 var Validator = Base.extend({
 
   messages: {

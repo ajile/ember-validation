@@ -4,12 +4,12 @@ import ValidatableMixin from 'ember-validation/mixins/validatable';
 const { RSVP, observer } = Ember;
 
 /**
-  @class BaseMediator
-  @module ember-validation/core
-  @uses ValidatableMixin
-  @uses Ember.Evented
-  @event passed
-  @event failed
+  @module
+  @augments module:ember/Object
+  @augments module:ember/Evented
+  @augments module:addon/mediators/validator
+  @fires addon/mixins/validatable#passed
+  @fires addon/mixins/validatable#failed
   @public
 */
 export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {

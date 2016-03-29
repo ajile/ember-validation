@@ -16,7 +16,12 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('quick-start');
-  this.route('tutorial');
+  this.route('tutorial', function() {
+    this.route('mixins');
+    this.route('mediators');
+    this.route('validators');
+    this.route('components');
+  });
   this.route('examples', function() {
     this.route('simple');
     this.route('conditional');

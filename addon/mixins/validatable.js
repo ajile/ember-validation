@@ -3,21 +3,19 @@ import Ember from 'ember';
 const { computed } = Ember;
 
 /**
-  @class Validatable
-  @module ember-validation/validation/mediators
+  @module
   @public
 */
 export default Ember.Mixin.create({
 
   /**
-    @property isValidatable
     @type Boolean
     @readOnly
   */
   isValidatable: computed(() => true).readOnly(),
 
   /**
-    @method validate
+    @method
     @abstract
   */
   validate() {

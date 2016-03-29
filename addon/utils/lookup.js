@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 /**
   Method looking validator by name.
+  @module
   @function lookup
   @param {String} name
   @param {Ember.Container} container
