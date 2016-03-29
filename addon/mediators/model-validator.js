@@ -6,8 +6,8 @@ const { get, assert } = Ember;
 
 /**
   @class ModelValidatorMediator
-  @module ember-validation/mediators
-  @extends ValidatorMediator
+  @module
+  @augments ember-validation/mediators/ValidatorMediator
   @uses Ember.MutableArray
   @public
 */
@@ -18,13 +18,15 @@ export default ValidatorMediator.extend({
     like to use decorators for model or component or...
 
     Creating snapshot for a model:
-    @example
-      ...
-      return this.get("context")._createSnapshot();
-      ...
+    @example:
+        ...
+        return this.get("context")._createSnapshot();
+        ...
+
 
     Creating snapshot for a component:
-    @example
+
+    @example:
       return Ember.ObjectProxy.create({
         content: this.get("context.model").toJSON();
       });
