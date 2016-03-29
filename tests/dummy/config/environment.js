@@ -15,11 +15,11 @@ module.exports = function(environment) {
 
     contentSecurityPolicy: {
       'default-src': "'none'",
-      'script-src': "'self' 127.0.0.1:33730 maxcdn.bootstrapcdn.com",
+      'script-src': "'self' 'unsafe-eval' 'unsafe-inline' 127.0.0.1:33730 maxcdn.bootstrapcdn.com cdnjs.cloudflare.com",
       'font-src': "'self' maxcdn.bootstrapcdn.com",
       'connect-src': "'self' ws://127.0.0.1:33730/",
       'img-src': "'self'",
-      'style-src': "'self' maxcdn.bootstrapcdn.com",
+      'style-src': "'self' maxcdn.bootstrapcdn.com cdnjs.cloudflare.com",
       'media-src': "'self'"
     },
 

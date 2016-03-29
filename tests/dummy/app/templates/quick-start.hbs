@@ -1,0 +1,34 @@
+<h1>Quick Start</h1>
+
+<p>Этот материал позволит вам быстро имплементировать валидацию в ваш проект.</p>
+
+<p>Здесь описаны следующие шаги:</p>
+
+<ol>
+  <li>Подключение аддона к проекту</li>
+  <li>Создание объекта и правила валидации</li>
+  <li>Написание формы</li>
+  <li>Проверка и сохранение объекта</li>
+</ol>
+
+<h2>Install Ember Validation</h2>
+
+<p>Вы можете подключить аддон к вашему проекту всего одной командой:</p>
+
+<pre data-src="/examples/quick-start/install-addon.sh"></pre>
+
+<h2>Create a New Validatable Object</h2>
+
+<p>Чтобы сделать объект валидируемым нужно расширить его специальным миксином <code>ValidationMixin</code>, а также описать правила валидации объекта. Они описываются в свойстве <code>validationScheme</code>. По этой схеме создаются специальные объекты-медиаторы (своего рода обертка над валидаторами).</p>
+
+<p>К примеру, создадим класс <code>user</code>, который сделаем валидируемым:</p>
+
+<pre data-src="/examples/quick-start/declare-object.js" class="line-numbers"></pre>
+
+<p>Так выглядит проверка валидности данных объекта:</p>
+
+<pre data-src="/examples/quick-start/validate-object.js" class="line-numbers"></pre>
+
+<h2>Create a UI Component</h2>
+
+<pre data-src="/examples/quick-start/form.handlebars" class="line-numbers"></pre>
