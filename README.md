@@ -1,6 +1,6 @@
 # Ember Validation [![Build Status](https://travis-ci.org/ajile/ember-validation.svg?branch=master)](https://travis-ci.org/ajile/ember-validation)
 
-Yet another one ember validation ([Documentation](http://ajile.github.io/ember-validation/)).
+Yet another one ember validation ([Documentation](http://ajile.github.io/ember-validation/#/quick-start)).
 
 <img src="https://raw.githubusercontent.com/ajile/ember-validation/master/files/uml.png" width="100%" />
 
