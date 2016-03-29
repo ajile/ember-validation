@@ -1,5 +1,7 @@
 #!/bin/bash
 BASE_URL="ember-validation" LOCATION_TYPE="hash" ember build --environment=production --output-path=gh-pages
+ember ember-cli-jsdoc
+mv docs gh-pages/
 cd gh-pages
 git init
 git remote add docs git@github.com:ajile/ember-validation.git

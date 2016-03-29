@@ -2,7 +2,7 @@
 
 Yet another one ember validation ([Documentation](http://ajile.github.io/ember-validation/)).
 
-![](https://raw.githubusercontent.com/ajile/ember-validation/master/files/uml.png)
+<img src="https://raw.githubusercontent.com/ajile/ember-validation/master/files/uml.png" width="100%" />
 
 ## Введение
 
