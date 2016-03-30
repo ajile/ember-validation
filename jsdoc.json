@@ -30,7 +30,8 @@
   },
   "opts": {
     "encoding": "utf8",
-    "template": "node_modules/ember-cli-jsdoc/jsdocTemplates/default",
+    // "template": "node_modules/ember-cli-jsdoc/jsdocTemplates/default",
+    "template": "node_modules/minami",
     "destination": "docs",
     "recurse": true,
     "access": "all",

@@ -1,7 +1,11 @@
 import DS from 'ember-data';
 
 /**
-  @module
-  @augments module:ember-data/Errors
-*/
+ * Base error list.
+ *
+ * The list containes errors - as a result of validation.
+ *
+ * @module
+ * @augments module:ember-data/Errors
+ */
 export default DS.Errors.extend();

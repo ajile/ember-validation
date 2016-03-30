@@ -9,7 +9,9 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember try:testall"
+    "test": "ember try:testall",
+    "docs": "ember ember-cli-jsdoc",
+    "run-docs-server": "http-server docs"
   },
   "repository": "",
   "engines": {
@@ -37,7 +39,8 @@
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.3",
     "ember-truth-helpers": "1.2.0",
-    "ember-try": "0.0.6"
+    "ember-try": "0.0.6",
+    "minami": "^1.1.1"
   },
   "keywords": [
     "ember-addon"

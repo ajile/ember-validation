@@ -11,6 +11,14 @@ const { get } = Ember;
 export default BaseMediator.extend({
 
   /**
+   * This is the validation options that passes into the validator. Options
+   * influence to validation behaviour. For example `number` validator mey get
+   * following options: `min`, `max`, `float`, `int`, `positive` and so on.
+   * @type {Object}
+   */
+  options: Ember.Object.create(),
+
+  /**
     Returns snapshot of the context object. This method should useful if you'd
     like to use decorators for model or component or...
 
