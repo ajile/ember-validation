@@ -38,9 +38,9 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    *   username: ""
    *
    * @type {Boolean|ember/Computed}
-   * @default null
+   * @default true
    */
-  condition: null,
+  condition: true,
 
   /**
    * An observer for the `condition` property. The property defines in the
@@ -58,7 +58,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @returns Ember.RSVP.Promise
    */
   validate() {
-    if (!Ember.isNone(this.condition) && !this.get('condition')) {
+    if (this.get('condition')) {
       this.trigger("passed");
       return RSVP.resolve();
     }
@@ -73,7 +73,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @returns Ember.RSVP.Promise
    */
   check() {
-    if (!Ember.isNone(this.condition) && !this.get('condition')) {
+    if (this.get('condition')) {
       return RSVP.resolve();
     }
     return this._check(...arguments);
