@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import ValidationMixin from 'ember-validation/mixins/validation';
 import ElementMediator from 'ember-validation/mediators/element';
+import ElementProxyMediator from 'ember-validation/mediators/element-proxy';
 
-const { get, computed, observer, A, isArray, Instrumentation, on, Logger } = Ember;
+const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 
 /**
   @module
@@ -24,7 +25,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     @param {(Array|String)} messages
     @method remove
   */
-  add(attribute, messages) {
+  add(attribute, message) {
     var item = this._find(attribute);
 
     if (!item) {
@@ -32,9 +33,9 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
       this.get('_content').addObject(item);
     }
 
-    item.messages.addObjects(isArray(messages) ? messages : [messages]);
-    item.messages.uniq();
-
+    if (!item.messages.findBy('message', message)) {
+      item.messages.addObject({message})
+    }
   },
 
   /**
@@ -58,7 +59,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   */
   clear() {
     this.get('_content').clear();
-    this.clear();
+    this._super();
   },
 
   /**
@@ -89,7 +90,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   }
 });
 
-const loggerSubject = 'Validation : Mixin : Component : ';
 
 /**
   Return true if `child` is child view for `parent` view
@@ -99,23 +99,39 @@ const loggerSubject = 'Validation : Mixin : Component : ';
 */
 function isChild(parent, child) {
   var parents;
-
-  if (Ember.isEqual(child.parentView, parent)) {
+  // console.log('isNested', get(parent, 'isNested'), 'child', child.element, 'parent', parent.element)
+  // console.log('child', child.element, 'parent', parent.element)
+  if (Ember.isEqual(child.parentView, parent)) {//console.log('OK')
     return true;
   }
-  if (typeof child.get('validate') === 'function' || child.get('validate-path')) {
+
+  if (child.get('isValidatable') || child.get('validate-path')) {
     parents = Ember.A();
 
     while (child.parentView) {
+      if (child.parentView.get('isValidatable')) {
+        console.log('nested validation', child.parentView.element)
+        return Ember.isEqual(child.parentView, parent);
+      }
+      // console.log(child.parentView)
       parents.pushObject(child.parentView)
       child = child.parentView;
     }
-
+    // parents.indexOf(parent) !== -1 && console.log('OK')
     return parents.indexOf(parent) !== -1;
   }
 
 }
 
+
+
+function onMediatorFocusIn() {
+  this.trigger('focusIn', this);
+}
+
+function onMediatorFocusOut() {
+  this.trigger('focusOut', this);
+}
 
 /**
   @module
@@ -133,7 +149,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     @default {}
     @public
   */
-  'validation-context' : computed(() => { return {}; }),
+  'validation-context' : computed(() => {return {};}),
 
   /**
     Hash with visible/hidden errors names
@@ -143,10 +159,12 @@ export default Ember.Mixin.create(ValidationMixin, {
     @default {}
     @public
   */
-  visibleErrors: computed(() => { return {}; }),
+  visibleErrors: computed(() => {return {};}),
+
+  elementsMediators: computed(() => {return A();}),
 
   /**
-    Store Instrumentation.subscribe() result to unsibscribe at the end
+    Store Instrumentation.subscribe() result to unsibscribe on `willDestroyElement`
 
     @property subscriber
     @type Object
@@ -163,9 +181,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     @return undefined
   */
   initErrors() {
-    this.set('errors', ErrorsProxy.create({content: this.get('validation-context.errors') || []}));
-
-    this.get('validation-context').validate().then(() => {}, () => {});
+    this.set('errors', ErrorsProxy.create({content: this.get('validation-context.errors') || A()}));
   },
 
   /**
@@ -176,14 +192,41 @@ export default Ember.Mixin.create(ValidationMixin, {
     @public
     @return undefined
   */
-  initValidation: on('didInsertElement', function () {
+  initValidation() {
+    var mediators;
 
     if (this.get('element')) {
-      this.get('mediators').slice().forEach((mediator) => this.unregisterView(get(mediator, 'view')));
-      this.get('childViews').forEach((view) => this.registerView(view));
+      mediators = this.get('mediators');
+
+      this.get('childViews').forEach((view) => {
+        if (isChild(this, view)) {
+          this._addMediatorForView(view);
+        }
+
+      });
+      this._super();
+      console.log('mediators.length', this.get('mediators.length'), this.get('mediators'))
     }
 
-    this._super();
+
+  },
+
+  clearValidation() {
+    this.get('mediators').slice().forEach((mediator) => { this.removeMediator(mediator); });
+  },
+
+  resetValidation() {
+    this.clearValidation();
+    this.initValidation();
+  },
+
+  resetErrors() {
+    this.clearErrors();
+    this.initErrors();
+  },
+
+  _onDidInsertElement : on('didInsertElement', function () {
+    this.initValidation();
   }),
 
   /**
@@ -194,71 +237,120 @@ export default Ember.Mixin.create(ValidationMixin, {
     @private
     @return undefined
   */
-  contextDidChange: observer('validation-context', function () {
-    this.initErrors();
-    this.initValidation();
+  _onContextDidChange: observer('validation-context', function () {
+    this.resetErrors();
+    this.resetValidation();
   }),
 
-  /**
-    Register view for validation
+  _onMediatorDidCreate: on('mediatorDidCreate', function (mediator) {
+    var view = get(mediator, 'view'),
+        selector = get(mediator, 'options.selector');
 
-    @method registerView
-    @param Ember.Component view
-    @return Boolean
-    @private
-  */
-  registerView(view) {
-    var mediators = this.get('mediators'),
-        path = get(view, 'validate-path'),
-        mediator;
-
-    if (mediators.findBy('view', view) || !(get(view, 'isValidatable') || path)) {
-      return;
+    if (selector) {
+      if (this.get('element')) {
+        this._bindMediatorToElement(mediator, selector)
+      } else {
+        this.on('didInsertElement', () => { this._bindMediatorToElement(mediator, selector); })
+      }
     }
 
-    mediator = ElementMediator.create({context : this.get('validation-context'), view})
-      .on('focusIn', this, this.hideError)
-      .on('focusOut', this, this.showError)
-      .on('passed', this, this.triggerValidatePassed)
-      .on('failed', this, this.triggerValidateFailed);
+    if (view || selector) {
+      mediator
+        .on('passed', this, this.triggerValidatePassed)
+        .on('failed', this, this.triggerValidateFailed)
+        .on('focusIn', this, this._hideErrors)
+        .on('focusOut', this, this._runMediator);
+    }
 
-    view.on('willDestroyElement', this, () => this.unregisterView(view));
+    if (view) {
+      view
+        .on('focusIn', mediator, onMediatorFocusIn)
+        .on('focusOut', mediator, onMediatorFocusOut)
+        .on('willDestroyElement', () => { get(mediator, 'view') && this.removeMediator(mediator); });
+    }
 
-    mediators.addObject(mediator);
+  }),
 
-    Logger.info(loggerSubject, 'register view :', path, view);
+  _onMediatorWillDestroy: on('mediatorWillRemove', function (mediator) {
+    let view = get(mediator, 'view'),
+        attribute = mediator.get('attribute');
 
-    return true;
+    if (view) {
+      mediator
+        .on('passed', this, this.triggerValidatePassed)
+        .on('failed', this, this.triggerValidateFailed)
+        .on('focusIn', this, this._hideErrors)
+        .on('focusOut', this, this._runMediator);
+
+      view
+        .off('focusIn', mediator, onMediatorFocusIn)
+        .off('focusOut', mediator, onMediatorFocusOut);
+
+      // let attribute = mediator.get('attribute');
+      attribute && this.set('visibleErrors.' + attribute, false);
+
+      mediator.set('view', null);
+    }
+
+  }),
+
+  _bindMediatorToElement(mediator, selector) {
+    var element = this.$(selector),
+        view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
+
+    if (view) {
+      view
+        .on('focusIn', mediator, onMediatorFocusIn)
+        .on('focusOut', mediator, onMediatorFocusOut);
+
+      mediator.set('view', view);
+    }
   },
 
-  /**
-    Unregister view for validation
+  _hideErrors(mediator) {
+    this.set('visibleErrors.' + get(mediator, 'attribute'), false);
+  },
 
-    @method unregisterView
-    @param Ember.Component view
-    @return undefined
-    @private
-  */
-  unregisterView(view) {
-    var mediators = this.get('mediators'),
-        mediator = mediators.findBy('view', view),
-        path = get(view, 'validate-path');
+  _runMediator(mediator) {
+    var attribute = get(mediator, 'attribute'),
+        promise = mediator.validate();
 
-    if (mediator) {
-      mediator
-        .off('focusIn', this, this.hideError)
-        .off('focusOut', this, this.showError)
-        .off('passed', this, this.triggerValidatePassed)
-        .off('failed', this, this.triggerValidateFailed)
-        .destroy();
+    if (attribute) {
+      if (mediator instanceof ElementProxyMediator) {
+        promise.then(() => { this.get('errors').remove(attribute); }, () => {})
+        promise.catch((error) => { this.get('errors').add(attribute, error); });
 
-      delete view.mediator;
+      }
 
-      mediators.removeObject(mediator);
+      promise.finally(() => {
+        this.set('visibleErrors.' + attribute, true);
+        this.get('errors').notifyPropertyChange(attribute);
+      });
+    }
 
-      this.set('visibleErrors.' + path, false);
+  },
 
-      Logger.info(loggerSubject, 'unregister view :', path, view);
+  _createElementMediator(view) {
+    var attribute = get(view, 'validate-path'),
+        mediator;
+
+    if (attribute) {
+      mediator = ElementMediator.create({context : this.get('validation-context'), attribute, view});
+    } else if (view.isValidatable) {
+      mediator = ElementProxyMediator.create({view}); console.log('ElementProxyMediator')
+    }
+
+    return mediator;
+  },
+
+
+  _addMediatorForView(view) {
+    var mediator;
+
+    if (!this.get('mediators').findBy('view', view) && (mediator = this._createElementMediator(view))) {
+      console.log('_addMediatorForView', view.element, 'isNested', this.get('isNested'))
+      this.addMediator(mediator);
+      return true;
     }
   },
 
@@ -278,7 +370,7 @@ export default Ember.Mixin.create(ValidationMixin, {
         var view = payload.view;
 
         if (Ember.typeOf(view) === "instance" && isChild(this, view)) {
-          this.registerView(view);
+          // this._addMediatorForView(view);
         }
 
       }
@@ -300,54 +392,30 @@ export default Ember.Mixin.create(ValidationMixin, {
   }),
 
   /**
-    Hide error for given path
-
-    @method hideError
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  hideError(path) {
-    this.set('visibleErrors.' + path, false);
-  },
-
-  /**
-    Show error for given path
-
-    @method showError
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  showError(path) {
-    this.set('visibleErrors.' + path, true);
-  },
-
-  /**
     Trigger 'passed' event for given path
 
     @method triggerValidatePassed
     @param String path
+    @param Ember.View view
     @return undefined
     @private
   */
-  triggerValidatePassed(path /*,view*/) {
-    this.trigger('passed', path);
+  triggerValidatePassed(mediator) { console.log('triggerValidatePassed', get(mediator, 'attribute'))
+    this.trigger('passed', mediator);
   },
 
   /**
     Trigger 'failed' event for given path
 
     @method triggerValidatePassed
+    @param Array error
     @param String path
-    @param String error
+    @param Ember.View view
     @return undefined
     @private
   */
-  triggerValidateFailed(path, error /*,view*/) {
-    this.trigger('failed', path, error);
+  triggerValidateFailed(error, mediator) { console.log('triggerValidateFailed', get(mediator, 'attribute'), error)
+    this.trigger('failed', error, mediator);
   }
 
 });
