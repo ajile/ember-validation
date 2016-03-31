@@ -69,7 +69,6 @@ test('is creates mediators', function(assert) {
 
   const attributeMediator = mediators.get("firstObject");
   assert.ok(attributeMediator instanceof AttributeMediator, "Object contains in validation object's mediator collection is a AttributeMediator");
-  assert.ok(attributeMediator.get("options"), "Attribute mediator should have options the same as they were declared");
   assert.ok(attributeMediator.get("context"), "Attribute mediator should have context");
   assert.equal(attributeMediator.get("context"), subject, "Attribute mediator's context should be object self");
   assert.ok(attributeMediator.get("attribute"), "Attribute mediator should have attribute name");

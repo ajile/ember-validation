@@ -4,18 +4,18 @@ import ValidatableMixin from 'ember-validation/mixins/validatable';
 const { RSVP, observer } = Ember;
 
 /**
-  @module
-  @augments module:ember/Object
-  @augments module:ember/Evented
-  @augments module:addon/mediators/validator
-  @public
-*/
+ * @module
+ * @augments module:ember/Object
+ * @augments module:ember/Evented
+ * @augments module:addon/mixins/validatable
+ * @public
+ */
 export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
   /**
-   * An object contains attribute, for which mediator has been created. Wrapped validatable object
-   * calling with an attribute name and context. The object gets a value for validation from the
-   * context by provided name of attribute.
+   * An object contains attribute, for which mediator has been created. Wrapped
+   * [validatable object]{@link module:addon/mixins/validatable} calling with an attribute name and
+   * context. The object gets a value for validation from the context by provided name of attribute.
    * @type {Object}
    */
   context: Ember.Object.create(),
@@ -23,7 +23,8 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
   /**
    * Validation will be executed only if it is `true`. The property sets from the outside, when
    * mediator creates. For example to add a condition from the validation object, you should define
-   * it in the `validationScheme` property like that:
+   * it in the [validationScheme]{@link module:addon/mixins/validation~validationScheme} property
+   * like that:
    *
    * @example
    *   validationScheme: {
@@ -40,17 +41,37 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @type {Boolean|ember/Computed}
    * @default true
    */
-  condition: true,
+  condition: null,
 
   /**
    * An observer for the `condition` property. The property defines in the
    * object's validation scheme.
    * @function
-   * @fires module:addon/core/mediator#conditionChanged
+   * @fires module:addon/core/mediator~conditionChanged
    */
   conditionDidChange: observer("condition", function() {
-    this.trigger("conditionChanged");
+    console.log(123);
+    this.trigger("conditionChanged", this.get("condition"), this.get("context"), this);
   }),
+
+  /**
+   * @event
+   * @property {boolean} condition - The property's value
+   * @property {module:addon/mixins/validatable} context - An object contain the mediator
+   * @property {module:addon/core/mediator} mediator - Mediator itself
+   */
+  conditionChanged: Ember.K,
+
+  /**
+   * @event
+   */
+  passed: Ember.K,
+
+  /**
+   * @event
+   * @property {String} message - The error message
+   */
+  failed: Ember.K,
 
   /**
    * @function
@@ -58,7 +79,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @returns Ember.RSVP.Promise
    */
   validate() {
-    if (this.get('condition')) {
+    if (!Ember.isNone(this.condition) && !this.get('condition')) {
       this.trigger("passed");
       return RSVP.resolve();
     }
@@ -73,7 +94,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @returns Ember.RSVP.Promise
    */
   check() {
-    if (this.get('condition')) {
+    if (!Ember.isNone(this.condition) && !this.get('condition')) {
       return RSVP.resolve();
     }
     return this._check(...arguments);

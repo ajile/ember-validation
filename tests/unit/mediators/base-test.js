@@ -18,7 +18,6 @@ test('it has interface', function(assert) {
   assert.ok(Ember.typeOf(mediator.trigger) === "function", "Mediators are evented");
   assert.ok(Ember.typeOf(mediator.check) === "function", "Mediators has check method");
   assert.ok(mediator.hasObserverFor("condition"), "Mediators has observer for condition");
-  assert.ok(mediator.options, "Mediators has options");
   assert.ok(mediator.context, "Mediators has context");
 
 });

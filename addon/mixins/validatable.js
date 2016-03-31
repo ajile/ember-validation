@@ -10,6 +10,7 @@ export default Ember.Mixin.create({
 
   /**
     @type Boolean
+    @default true
     @readOnly
   */
   isValidatable: computed(() => true).readOnly(),
