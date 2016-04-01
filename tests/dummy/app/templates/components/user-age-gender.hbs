@@ -1,4 +1,4 @@
-{{input value=context.gender class="form-control" validate-path="gender"}}
-{{!-- {{input value=age class="form-control" validate-path="age"}} --}}
+{{input value=context.gender name="gender" class="form-control"}}
+{{input value=age name="age" class="form-control"}}
 error inside {{errors-list errors=errors.gender show=visibleErrors.gender}}
 {{errors-list errors=errors.age show=visibleErrors.age}}

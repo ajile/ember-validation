@@ -11,11 +11,12 @@ const GENDERS = {
 };
 
 export default Ember.Component.extend(ComponentVaidation, {
-  // layout: layout
-  isNested: true,
 
   validationScheme: {
     gender: {
+      options:{
+        selector: '[name="gender"]'
+      },
       validators: [
         { name: "required", options: { messages: {default: "gender_is_required"} } }
       ]
@@ -24,26 +25,15 @@ export default Ember.Component.extend(ComponentVaidation, {
     age: {
       options: {
         isUnknown: computed.equal("context.gender", GENDERS.UNKNOWN),
-        condition: computed.not("isUnknown")
+        condition: computed.not("isUnknown"),
+        selector: '[name="age"]'
       },
       validators: [
-        { name: "number", options: { min: 21, max: 65, messages: {default: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) } },
-        { name: "number", options: { min: 18, max: 55, messages: {default: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) } }
+        { name: "number", options: { min: 21, max: 65, messages: {not_number: "age_is_wrong_for_male", out_of_range: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) } },
+        { name: "number", options: { min: 18, max: 55, messages: {not_number: "age_is_wrong_for_female", out_of_range: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) } }
       ]
     },
   },
 
-  // age: computed.alias('validation-context.age'),
-
-  // gender: computed.alias('validation-context.gender'),
-
-  initValidation() {
-    var mediators;
-
-    if (this.get('element')) {
-      this._super();
-      console.log('nested mediators.length', this.get('mediators.length'))
-    }
-  }
 });
 
