@@ -1,42 +1,14 @@
 import Ember from 'ember';
-import Base from 'ember-validation/core/validator';
 
 const { RSVP: {resolve, reject}, get, isBlank } = Ember;
 
 /**
   @module
-  @augments module:addon/core/validator
   @public
 */
-export default Base.extend({
+function validate(attributeName, context, options) {
+  const value = get(context, attributeName);
+  return isBlank(value) ? reject(get(options, "messages.default")) : resolve();
+};
 
-  /**
-    Error messages. It should be redefined in child classes.
-    @property messages
-    @type Object
-  */
-  messages: {
-    default: "required"
-  },
-
-  /**
-    The flag means that blank values should be validated as well.
-    @property blankValue
-    @type Boolean
-  */
-  blankValue: true,
-
-  /**
-    @method _validate
-    @param {String} attributeName
-    @param {Ember.Object} context
-    @protected
-    @final
-    @return Ember.RSVP.Promise
-  */
-  _validate: function (attributeName, context) {
-    const value = get(context, attributeName);
-    return isBlank(value) ? reject(this.get("messages.default")) : resolve();
-  }
-
-});
+export default validate;

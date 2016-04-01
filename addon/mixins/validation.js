@@ -274,8 +274,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
   _createValidators(attribute, validation) {
     return Ember.A( get(validation, "validators") ).map((description) => {
       const { name, options } = getProperties(description, ["name", "options"]);
-      const Validator = lookup(name, get(this, "container"));
-      const validator = Validator.extend(options || {}).create();
+      const validator = lookup(name, get(this, "container"));
       Ember.setMeta(validator, "options", options || {});
       return validator;
     });

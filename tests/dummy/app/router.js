@@ -21,7 +21,9 @@ Router.map(function() {
   this.route('tutorial', function() {
     this.route('mixins');
     this.route('mediators');
-    this.route('validators');
+    this.route('validators', function() {
+      this.route('creating');
+    });
     this.route('components');
   });
   this.route('examples', function() {

@@ -12,7 +12,9 @@ export default function(name, container) {
   let validator = null;
   Ember.assert("An application container should be provided", container);
   Ember.assert("Provide a validator name", !Ember.isEmpty(name));
-  validator = container.lookupFactory('validator:' + name);
-  Ember.assert("Validator named '" + name + "' is not found", validator);
+  validator = container.lookup('validator:' + name);
+  Ember.assert(`Validator "${name}" is not found. You should put it into the validators directory.` +
+               `See http://ajile.github.io/ember-validation/#/tutorial/validators/creating`,
+               Ember.typeOf(validator) === "function");
   return validator;
 }
