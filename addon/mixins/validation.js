@@ -163,12 +163,12 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
     @method addMediator
     @param Mediator
-    @trigger mediatorDidCreate
+    @trigger mediatorDidAdd
     @return undefined
   */
   addMediator(mediator) {
     this.get("mediators").pushObject(mediator);
-    this.trigger('mediatorDidCreate', mediator);
+    this.trigger('mediatorDidAdd', mediator);
     Logger.info('Validation : mixin : Validation : addMediator : ', mediator);
   },
 

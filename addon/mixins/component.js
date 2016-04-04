@@ -160,16 +160,34 @@ export default Ember.Mixin.create(ValidationMixin, {
     this.get('mediators').slice().forEach((mediator) => { this.removeMediator(mediator); });
   },
 
+  /**
+   * Reset validation
+   *
+   * @function
+   * @returns {undefined}
+   */
   resetValidation() {
     this.clearValidation();
     this.initValidation();
   },
 
+  /**
+   * Reset errors
+   *
+   * @function
+   * @returns {undefined}
+   */
   resetErrors() {
     this.clearErrors();
     this.initErrors();
   },
 
+  /**
+   * Return true if view is validable child
+   *
+   * @function
+   * @returns {Boolean}
+   */
   isChild(view) {
 
     if (this.get('childViews').indexOf(view) === -1) {
@@ -184,28 +202,35 @@ export default Ember.Mixin.create(ValidationMixin, {
     }
   },
 
-  isViewValidable(view) {
-
-  },
-
+  /**
+   * Init validation on `didInsertElement`
+   *
+   * @function
+   * @returns {undefined}
+   */
   _onDidInsertElement : on('didInsertElement', function () {
     this.initValidation();
   }),
 
   /**
-    Crete new errors and validation
-
-    @method contextDidChange
-    @observes validation-context
-    @private
-    @return undefined
-  */
+   * Reset validation and errors on context did change
+   *
+   * @function
+   * @returns {undefined}
+   */
   _onContextDidChange: observer('validation-context', function () {
     this.resetErrors();
     this.resetValidation();
   }),
 
-  _onMediatorDidCreate: on('mediatorDidCreate', function (mediator) {
+  /**
+   * Do some initilaze stuffs for some types of mediators
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _onmediatorDidAdd: on('mediatorDidAdd', function (mediator) {
     var view = get(mediator, 'view'),
         selector = get(mediator, 'options.selector');
 
@@ -221,21 +246,28 @@ export default Ember.Mixin.create(ValidationMixin, {
 
     if (view || selector) {
       mediator
-        .on('passed', this, this.triggerValidatePassed)
-        .on('failed', this, this.triggerValidateFailed)
+        .on('passed', this, this._triggerValidatePassed)
+        .on('failed', this, this._triggerValidateFailed)
         .on('focusIn', this, this._hideErrors)
         .on('focusOut', this, this._runMediator);
     }
 
   }),
 
+  /**
+   * Do some stuffs before mediator will destroy
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
   _onMediatorWillDestroy: on('mediatorWillRemove', function (mediator) {
     let view = get(mediator, 'view');
 
     if (view) {
       mediator
-        .on('passed', this, this.triggerValidatePassed)
-        .on('failed', this, this.triggerValidateFailed)
+        .on('passed', this, this._triggerValidatePassed)
+        .on('failed', this, this._triggerValidateFailed)
         .on('focusIn', this, this._hideErrors)
         .on('focusOut', this, this._runMediator);
 
@@ -250,6 +282,14 @@ export default Ember.Mixin.create(ValidationMixin, {
 
   }),
 
+  /**
+   * Connect mediator to view using events
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @param {String} selector
+   * @returns {undefined}
+   */
   _bindMediatorToElement(mediator, selector) {
     var element = this.$(selector),
         view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
@@ -260,6 +300,14 @@ export default Ember.Mixin.create(ValidationMixin, {
     }
   },
 
+  /**
+   * Add `focusin`, `focusout`, `willDestroyElement` events listeners to view
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @param {String} selector
+   * @returns {undefined}
+   */
   _addViewEventsHadlers(view, mediator) {
     view
       .on('focusIn', mediator, onMediatorFocusIn)
@@ -267,11 +315,25 @@ export default Ember.Mixin.create(ValidationMixin, {
       .on('willDestroyElement', () => { get(mediator, 'view') && this.removeMediator(mediator); });
   },
 
+  /**
+   * Hide errors for for given mediator
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
   _hideErrors(mediator) {
     let errorsName = mediator.get('attribute') || get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name');
     this.set('visibleErrors.' + errorsName, false);
   },
 
+  /**
+   * Call mediator `validate` method
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
   _runMediator(mediator) {
     var errorsName = get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name'),
         attribute = errorsName || get(mediator, 'attribute'),
@@ -294,6 +356,13 @@ export default Ember.Mixin.create(ValidationMixin, {
 
   },
 
+  /**
+   * Create mediator for given view
+   *
+   * @function
+   * @param {Ember/View} view
+   * @returns {undefined}
+   */
   _createElementMediator(view) {
     var attribute = get(view, 'validate-path'),
         mediator;
@@ -307,7 +376,13 @@ export default Ember.Mixin.create(ValidationMixin, {
     return mediator;
   },
 
-
+  /**
+   * Add mediator for given view if not exits
+   *
+   * @function
+   * @param {Ember/View} view
+   * @returns {undefined}
+   */
   _addMediatorForView(view) {
     var mediator;
 
@@ -318,14 +393,12 @@ export default Ember.Mixin.create(ValidationMixin, {
   },
 
   /**
-    Check new rendered childs views to be registered for validation
-
-    @method subscribe
-    @on didInsertElement
-    @return undefined
-    @private
-  */
-  subscribe: on('didInsertElement', function () {
+   * Check new rendered childs views to be registered for validation
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _subscribe: on('didInsertElement', function () {
     var subscriber = Instrumentation.subscribe('render', {
       before: Ember.K,
 
@@ -344,41 +417,35 @@ export default Ember.Mixin.create(ValidationMixin, {
   }),
 
   /**
-    Unsubscribe from listening new rendered child nodes
-
-    @method unsubscribe
-    @on willDestroyElement
-    @return undefined
-    @private
-  */
-  unsubscribe: Ember.on('willDestroyElement', function () {
+   * Unsubscribe from listening new rendered child nodes
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _unsubscribe: Ember.on('willDestroyElement', function () {
     Instrumentation.unsubscribe(this.get('subscriber'));
   }),
 
   /**
-    Trigger 'passed' event for given path
-
-    @method triggerValidatePassed
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  triggerValidatePassed(mediator) {
+   * Trigger 'passed' event for given mediator
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _triggerValidatePassed(mediator) {
     this.trigger('passed', mediator);
   },
 
   /**
-    Trigger 'failed' event for given path
-
-    @method triggerValidatePassed
-    @param Array error
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  triggerValidateFailed(error, mediator) {
+   * Trigger 'failed' event for given path
+   *
+   * @function
+   * @param {String} eoor
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _triggerValidateFailed(error, mediator) {
     this.trigger('failed', error, mediator);
   }
 

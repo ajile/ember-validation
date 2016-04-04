@@ -4,18 +4,17 @@ import BaseMediator from 'ember-validation/core/mediator';
 const { RSVP, computed, tryInvoke, Logger } = Ember;
 
 /**
-  @class ElementProxyMediator
-  @extends BaseMediator
-  @public
+* @module
+* @augments ember-validation/BaseMediator
 */
 export default BaseMediator.extend({
-
+  /** @type {Ember.Component} */
   attribute: computed.alias('view.errors-name'),
 
   /**
-    @method _validate
-    @protected
-    @return Ember.RSVP.Promise
+  * Validate
+  * @function
+  *@returns {undefined}
   */
   _validate() {
     Logger.info('Validation : Mediator : ElementProxy : validate : ', this.get('attribute'), this.get('view.element'));
