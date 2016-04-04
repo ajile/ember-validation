@@ -5,8 +5,7 @@ import ValidatorMediator from 'ember-validation/mediators/validator';
 import Errors from 'ember-validation/core/errors';
 import lookup from 'ember-validation/utils/lookup';
 
-const { get, getWithDefault, getProperties, tryInvoke } = Ember;
-const { RSVP, computed, keys, assert } = Ember;
+const { RSVP, computed, get, keys, assert, Logger, getWithDefault, getProperties, tryInvoke } = Ember;
 
 var findMediators = function(...names) {
     assert("You should provide at least one attribute name", !Ember.isEmpty(names));
@@ -106,8 +105,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
   */
   initValidation() {
 
-    const validationScheme = this.get("validationScheme"),
-          mediators = this.get("mediators");
+    const validationScheme = this.get("validationScheme");
 
     assert("You should define `validationScheme` property", validationScheme);
 
@@ -141,6 +139,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
         console.log("    " + attribute);
         console.log("    " + message);
         this.get("errors").add(attribute, message);
+        this.get("errors").arrayContentDidChange();
       });
 
       attributeMediator.on("passed", () => {
@@ -153,10 +152,43 @@ export default Ember.Mixin.create(ValidatableMixin, {
         this.get("errors").remove(attribute);
       });
 
-      mediators.pushObject(attributeMediator);
-
+      // mediators.pushObject(attributeMediator);
+      this.addMediator(attributeMediator);
     });
 
+  },
+
+  /**
+    Add mediator to mediators list and fire event
+
+    @method addMediator
+    @param Mediator
+    @trigger mediatorDidAdd
+    @return undefined
+  */
+  addMediator(mediator) {
+    this.get("mediators").pushObject(mediator);
+    this.trigger('mediatorDidAdd', mediator);
+    Logger.info('Validation : mixin : Validation : addMediator : ', mediator);
+  },
+
+  /**
+    remove mediator from mediators list and fire event
+
+    @method removeMediator
+    @param Mediator
+    @trigger mediatorWillRemove
+    @return undefined
+  */
+  removeMediator(mediator) {
+    let mediators = this.get("mediators");
+
+    if (mediators.indexOf(mediator) !== -1) {
+      this.trigger('mediatorWillRemove', mediator);
+      mediators.removeObject(mediator);
+      mediator.destroy();
+      Logger.info('Validation : mixin : Validation : removeMediator : ', mediator);
+    }
   },
 
   /**
@@ -262,7 +294,13 @@ export default Ember.Mixin.create(ValidatableMixin, {
       previousValue = previousValue.concat(item);
       return previousValue;
     }, Ember.A());
-    return RSVP.all(promises);
+    const result = RSVP.all(promises)
+    result.finally(
+      () => { mediators.forEach((mediator) => {this.get('errors').notifyPropertyChange(get(mediator, 'attribute'))})}
+    );
+    // result.then(() => console.log("✓ Validation has been passed"));
+    // result.catch(() => console.log("✘ Validation has been failed"));
+    return result;
   },
 
   /**
@@ -288,7 +326,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @return {Array}
   */
   _createAttributeMediator(attribute, options={}, context=this) {
-    return AttributeMediator.extend(options).create({ context, attribute });
+    return AttributeMediator.extend(options).create({ context, attribute, options });
   },
 
   /**
