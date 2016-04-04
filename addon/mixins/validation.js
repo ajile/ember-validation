@@ -326,7 +326,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     @return {Array}
   */
   _createAttributeMediator(attribute, options={}, context=this) {
-    return AttributeMediator.extend(options).create({ context, attribute });
+    return AttributeMediator.extend(options).create({ context, attribute, options });
   },
 
   /**
