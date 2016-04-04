@@ -230,7 +230,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @param {Mediator} mediator
    * @returns {undefined}
    */
-  _onmediatorDidAdd: on('mediatorDidAdd', function (mediator) {
+  _onMediatorDidAdd: on('mediatorDidAdd', function (mediator) {
     var view = get(mediator, 'view'),
         selector = get(mediator, 'options.selector');
 
@@ -293,7 +293,7 @@ export default Ember.Mixin.create(ValidationMixin, {
   _bindMediatorToElement(mediator, selector) {
     var element = this.$(selector),
         view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
-
+console.log('_bindMediatorToElement', mediator, selector)
     if (view) {
       this._addViewEventsHadlers(view, mediator);
       mediator.set('view', view);
