@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import ValidationMixin from 'ember-validation/mixins/validation';
 import ElementMediator from 'ember-validation/mediators/element';
+import ElementProxyMediator from 'ember-validation/mediators/element-proxy';
 
-const { get, computed, observer, A, isArray, Instrumentation, on, Logger } = Ember;
+const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 
 /**
   @module
@@ -24,7 +25,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     @param {(Array|String)} messages
     @method remove
   */
-  add(attribute, messages) {
+  add(attribute, message) {
     var item = this._find(attribute);
 
     if (!item) {
@@ -32,9 +33,13 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
       this.get('_content').addObject(item);
     }
 
-    item.messages.addObjects(isArray(messages) ? messages : [messages]);
-    item.messages.uniq();
+    if (!message) {
+      message = 'unknown error';
+    }
 
+    if (!item.messages.findBy('message', message)) {
+      item.messages.addObject({message})
+    }
   },
 
   /**
@@ -58,7 +63,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   */
   clear() {
     this.get('_content').clear();
-    this.clear();
+    this._super();
   },
 
   /**
@@ -89,198 +94,322 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   }
 });
 
-const loggerSubject = 'Validation : Mixin : Component : ';
 
-/**
-  Return true if `child` is child view for `parent` view
 
-  @param Ember.View parent
-  @param Ember.View child
-*/
-function isChild(parent, child) {
-  var parents;
 
-  if (Ember.isEqual(child.parentView, parent)) {
-    return true;
-  }
-  if (typeof child.get('validate') === 'function' || child.get('validate-path')) {
-    parents = Ember.A();
 
-    while (child.parentView) {
-      parents.pushObject(child.parentView)
-      child = child.parentView;
-    }
 
-    return parents.indexOf(parent) !== -1;
-  }
-
+function onMediatorFocusIn() {
+  this.trigger('focusIn', this);
 }
 
+function onMediatorFocusOut() {
+  this.trigger('focusOut', this);
+}
 
 /**
-  @module
-  @augments module:ember/Mixin
-  @augments module:addon/mixins/validation
-  @public
-*/
+ * @module
+ * mixin
+ * @augments ember/Mixin
+ * @mixes ember-validation/mixins/validation
+ */
 export default Ember.Mixin.create(ValidationMixin, {
 
-  /**
-    Object wich properies will be validate.
-
-    @property validation-context
-    @type Object
-    @default {}
-    @public
-  */
-  'validation-context' : computed(() => { return {}; }),
-
-  /**
-    Hash with visible/hidden errors names
-
-    @property visibleErrors
-    @type Object
-    @default {}
-    @public
-  */
-  visibleErrors: computed(() => { return {}; }),
-
-  /**
-    Store Instrumentation.subscribe() result to unsibscribe at the end
-
-    @property subscriber
-    @type Object
-    @default {}
-    @public
-  */
+  /** @type {Object} */
   subscriber: null,
 
+  /** @type {ember/Array} */
+  'validation-context' : computed(() => {return {};}),
+
+  /** @type {ember/Array} */
+  visibleErrors: computed(() => {return {};}),
+
   /**
-    Create proxy for validation context errors
-
-    @method initErrors
-    @public
-    @return undefined
-  */
+   * Initialize errors
+   *
+   * @function
+   * @returns {undefined}
+   */
   initErrors() {
-    this.set('errors', ErrorsProxy.create({content: this.get('validation-context.errors') || []}));
-
-    this.get('validation-context').validate().then(() => {}, () => {});
+    this.set('errors', ErrorsProxy.create({content: this.get('validation-context.errors') || A()}));
   },
 
   /**
-    Remove prev validation and create new one
-
-    @method initValidation
-    @on init
-    @public
-    @return undefined
-  */
-  initValidation: on('didInsertElement', function () {
+   * Initialize validation
+   *
+   * @function
+   * @returns {undefined}
+   */
+  initValidation() {
+    var mediators;
 
     if (this.get('element')) {
-      this.get('mediators').slice().forEach((mediator) => this.unregisterView(get(mediator, 'view')));
-      this.get('childViews').forEach((view) => this.registerView(view));
+      this.get('childViews').forEach((view) => { this._addMediatorForView(view); });
+      this._super();
     }
 
-    this._super();
-  }),
+  },
 
   /**
-    Crete new errors and validation
+   * Clear validation
+   *
+   * @function
+   * @returns {undefined}
+   */
+  clearValidation() {
+    this.get('mediators').slice().forEach((mediator) => { this.removeMediator(mediator); });
+  },
 
-    @method contextDidChange
-    @observes validation-context
-    @private
-    @return undefined
-  */
-  contextDidChange: observer('validation-context', function () {
+  /**
+   * Reset validation
+   *
+   * @function
+   * @returns {undefined}
+   */
+  resetValidation() {
+    this.clearValidation();
+    this.initValidation();
+  },
+
+  /**
+   * Reset errors
+   *
+   * @function
+   * @returns {undefined}
+   */
+  resetErrors() {
+    this.clearErrors();
     this.initErrors();
+  },
+
+  /**
+   * Return true if view is validable child
+   *
+   * @function
+   * @returns {Boolean}
+   */
+  isChild(view) {
+
+    if (this.get('childViews').indexOf(view) === -1) {
+      return;
+    }
+
+    while (view.parentView) {
+      if (view.parentView.get('isValidatable')) {
+        return Ember.isEqual(view.parentView, this);
+      }
+      view = view.parentView;
+    }
+  },
+
+  /**
+   * Init validation on `didInsertElement`
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _onDidInsertElement : on('didInsertElement', function () {
     this.initValidation();
   }),
 
   /**
-    Register view for validation
+   * Reset validation and errors on context did change
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _onContextDidChange: observer('validation-context', function () {
+    this.resetErrors();
+    this.resetValidation();
+  }),
 
-    @method registerView
-    @param Ember.Component view
-    @return Boolean
-    @private
-  */
-  registerView(view) {
-    var mediators = this.get('mediators'),
-        path = get(view, 'validate-path'),
+  /**
+   * Do some initilaze stuffs for some types of mediators
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _onMediatorDidAdd: on('mediatorDidAdd', function (mediator) {
+    var view = get(mediator, 'view'),
+        selector = get(mediator, 'options.selector');
+
+    if (selector) {
+      if (this.get('element')) {
+        this._bindMediatorToElement(mediator, selector)
+      } else {
+        this.on('didInsertElement', () => { this._bindMediatorToElement(mediator, selector); })
+      }
+    } else if (view) {
+      this._addViewEventsHadlers(view, mediator);
+    }
+
+    if (view || selector) {
+      mediator
+        .on('passed', this, this._triggerValidatePassed)
+        .on('failed', this, this._triggerValidateFailed)
+        .on('focusIn', this, this._hideErrors)
+        .on('focusOut', this, this._runMediator);
+    }
+
+  }),
+
+  /**
+   * Do some stuffs before mediator will destroy
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _onMediatorWillDestroy: on('mediatorWillRemove', function (mediator) {
+    let view = get(mediator, 'view');
+
+    if (view) {
+      mediator
+        .on('passed', this, this._triggerValidatePassed)
+        .on('failed', this, this._triggerValidateFailed)
+        .on('focusIn', this, this._hideErrors)
+        .on('focusOut', this, this._runMediator);
+
+      view
+        .off('focusIn', mediator, onMediatorFocusIn)
+        .off('focusOut', mediator, onMediatorFocusOut);
+
+      this._hideErrors(mediator);
+
+      mediator.set('view', null);
+    }
+
+  }),
+
+  /**
+   * Connect mediator to view using events
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @param {String} selector
+   * @returns {undefined}
+   */
+  _bindMediatorToElement(mediator, selector) {
+    var element = this.$(selector),
+        view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
+console.log('_bindMediatorToElement', mediator, selector)
+    if (view) {
+      this._addViewEventsHadlers(view, mediator);
+      mediator.set('view', view);
+    }
+  },
+
+  /**
+   * Add `focusin`, `focusout`, `willDestroyElement` events listeners to view
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @param {String} selector
+   * @returns {undefined}
+   */
+  _addViewEventsHadlers(view, mediator) {
+    view
+      .on('focusIn', mediator, onMediatorFocusIn)
+      .on('focusOut', mediator, onMediatorFocusOut)
+      .on('willDestroyElement', () => { get(mediator, 'view') && this.removeMediator(mediator); });
+  },
+
+  /**
+   * Hide errors for for given mediator
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _hideErrors(mediator) {
+    let errorsName = mediator.get('attribute') || get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name');
+    this.set('visibleErrors.' + errorsName, false);
+  },
+
+  /**
+   * Call mediator `validate` method
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _runMediator(mediator) {
+    var errorsName = get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name'),
+        attribute = errorsName || get(mediator, 'attribute'),
+        promise = mediator.validate();
+
+    if (errorsName) {
+        promise.then(() => { this.get('errors').remove(attribute); }, () => {});
+        promise.catch((error) => {
+          this.get('errors').remove(attribute);
+          this.get('errors').add(attribute, error);
+        });
+    }
+
+    if (attribute) {
+      promise.finally(() => {
+        this.set('visibleErrors.' + attribute, true);
+        this.get('errors').notifyPropertyChange(attribute);
+      });
+    }
+
+  },
+
+  /**
+   * Create mediator for given view
+   *
+   * @function
+   * @param {Ember/View} view
+   * @returns {undefined}
+   */
+  _createElementMediator(view) {
+    var attribute = get(view, 'validate-path'),
         mediator;
 
-    if (mediators.findBy('view', view) || !(get(view, 'isValidatable') || path)) {
-      return;
+    if (attribute) {
+      mediator = ElementMediator.create({context : this.get('validation-context'), attribute, view});
+    } else if (get(view, 'isValidatable')) {
+      mediator = ElementProxyMediator.create({view});
     }
 
-    mediator = ElementMediator.create({context : this.get('validation-context'), view})
-      .on('focusIn', this, this.hideError)
-      .on('focusOut', this, this.showError)
-      .on('passed', this, this.triggerValidatePassed)
-      .on('failed', this, this.triggerValidateFailed);
-
-    view.on('willDestroyElement', this, () => this.unregisterView(view));
-
-    mediators.addObject(mediator);
-
-    Logger.info(loggerSubject, 'register view :', path, view);
-
-    return true;
+    return mediator;
   },
 
   /**
-    Unregister view for validation
+   * Add mediator for given view if not exits
+   *
+   * @function
+   * @param {Ember/View} view
+   * @returns {undefined}
+   */
+  _addMediatorForView(view) {
+    var mediator;
 
-    @method unregisterView
-    @param Ember.Component view
-    @return undefined
-    @private
-  */
-  unregisterView(view) {
-    var mediators = this.get('mediators'),
-        mediator = mediators.findBy('view', view),
-        path = get(view, 'validate-path');
-
-    if (mediator) {
-      mediator
-        .off('focusIn', this, this.hideError)
-        .off('focusOut', this, this.showError)
-        .off('passed', this, this.triggerValidatePassed)
-        .off('failed', this, this.triggerValidateFailed)
-        .destroy();
-
-      delete view.mediator;
-
-      mediators.removeObject(mediator);
-
-      this.set('visibleErrors.' + path, false);
-
-      Logger.info(loggerSubject, 'unregister view :', path, view);
+    if (!this.get('mediators').findBy('view', view) && (mediator = this._createElementMediator(view))) {
+      this.addMediator(mediator);
+      return true;
     }
   },
 
   /**
-    Check new rendered childs views to be registered for validation
-
-    @method subscribe
-    @on didInsertElement
-    @return undefined
-    @private
-  */
-  subscribe: on('didInsertElement', function () {
+   * Check new rendered childs views to be registered for validation
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _subscribe: on('didInsertElement', function () {
     var subscriber = Instrumentation.subscribe('render', {
       before: Ember.K,
 
       after: (name, timestamp, payload) => {
         var view = payload.view;
 
-        if (Ember.typeOf(view) === "instance" && isChild(this, view)) {
-          this.registerView(view);
+        if (Ember.typeOf(view) === "instance"
+          && (get(view, 'isValidatable') || get(view, 'validate-path'))
+          && this.isChild(view)) {
+            this._addMediatorForView(view);
         }
-
       }
     });
 
@@ -288,66 +417,36 @@ export default Ember.Mixin.create(ValidationMixin, {
   }),
 
   /**
-    Unsubscribe from listening new rendered child nodes
-
-    @method unsubscribe
-    @on willDestroyElement
-    @return undefined
-    @private
-  */
-  unsubscribe: Ember.on('willDestroyElement', function () {
+   * Unsubscribe from listening new rendered child nodes
+   *
+   * @function
+   * @returns {undefined}
+   */
+  _unsubscribe: Ember.on('willDestroyElement', function () {
     Instrumentation.unsubscribe(this.get('subscriber'));
   }),
 
   /**
-    Hide error for given path
-
-    @method hideError
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  hideError(path) {
-    this.set('visibleErrors.' + path, false);
+   * Trigger 'passed' event for given mediator
+   *
+   * @function
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _triggerValidatePassed(mediator) {
+    this.trigger('passed', mediator);
   },
 
   /**
-    Show error for given path
-
-    @method showError
-    @param String path
-    @param Ember.View view
-    @return undefined
-    @private
-  */
-  showError(path) {
-    this.set('visibleErrors.' + path, true);
-  },
-
-  /**
-    Trigger 'passed' event for given path
-
-    @method triggerValidatePassed
-    @param String path
-    @return undefined
-    @private
-  */
-  triggerValidatePassed(path /*,view*/) {
-    this.trigger('passed', path);
-  },
-
-  /**
-    Trigger 'failed' event for given path
-
-    @method triggerValidatePassed
-    @param String path
-    @param String error
-    @return undefined
-    @private
-  */
-  triggerValidateFailed(path, error /*,view*/) {
-    this.trigger('failed', path, error);
+   * Trigger 'failed' event for given path
+   *
+   * @function
+   * @param {String} eoor
+   * @param {Mediator} mediator
+   * @returns {undefined}
+   */
+  _triggerValidateFailed(error, mediator) {
+    this.trigger('failed', error, mediator);
   }
 
 });

@@ -54,7 +54,7 @@ export default Ember.Route.extend({
           last_name: 'Ivanov',
           email : 'bla@gmail.com',
           phone: '+79231231212',
-          gender: 'man',
+          gender: 'male',
           age:40
         });
       }

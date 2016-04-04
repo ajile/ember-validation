@@ -75,10 +75,6 @@ export default DS.Model.extend(ValidationMixin, {
   phone: attr("string", {defaultValue:''}),
   full_name: computed("first_name", "last_name", function() {
     return [this.get("first_name"), this.get("last_name")].join(" ");
-  }),
-
-  _t: Ember.observer('first_name', function () {
-    console.log('first_name did change', this.get('first_name'));
   })
 
 });
