@@ -9,7 +9,7 @@ const { RSVP, computed, tryInvoke, Logger } = Ember;
 */
 export default BaseMediator.extend({
   /** @type {Ember.Component} */
-  attribute: computed.alias('view.errors-name'),
+  attribute: computed.or('options.errorsName', 'view.errors-name'),
 
   /**
   * Validate
@@ -19,6 +19,7 @@ export default BaseMediator.extend({
   _validate() {
     Logger.info('Validation : Mediator : ElementProxy : validate : ', this.get('attribute'), this.get('view.element'));
     const promise = tryInvoke(this.get('view'), 'validate');
+
     return promise || RSVP.resolve();
   }
 

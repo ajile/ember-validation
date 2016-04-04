@@ -12,6 +12,6 @@ export default FormValidation.extend({
         { name: "number", options: { min: 1, max: 9999, messages: {not_number: "must be number from 1 till 9999", out_of_range: "must be number from 1 till 9999"} } }
       ]
     },
-  }
+  },
 
 });

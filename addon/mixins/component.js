@@ -182,6 +182,20 @@ export default Ember.Mixin.create(ValidationMixin, {
     this.initErrors();
   },
 
+  showAllErrors() {
+    this.get('mediators').forEach((mediator) => {
+      let attribute = get(mediator, 'attribute');
+
+      attribute && this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
+  hideAllErrors() {
+    this.get(Ember.keys(this.get('visibleErrors'))).forEach((attribute) => {
+      this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
   /**
    * Return true if view is validable child
    *
@@ -266,9 +280,9 @@ export default Ember.Mixin.create(ValidationMixin, {
 
     if (view) {
       mediator
-        .on('passed', this, this._triggerValidatePassed)
-        .on('failed', this, this._triggerValidateFailed)
-        .on('focusIn', this, this._hideErrors)
+        .off('passed', this, this._triggerValidatePassed)
+        .off('failed', this, this._triggerValidateFailed)
+        .off('focusIn', this, this._hideErrors)
         .on('focusOut', this, this._runMediator);
 
       view
@@ -293,7 +307,7 @@ export default Ember.Mixin.create(ValidationMixin, {
   _bindMediatorToElement(mediator, selector) {
     var element = this.$(selector),
         view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
-console.log('_bindMediatorToElement', mediator, selector)
+
     if (view) {
       this._addViewEventsHadlers(view, mediator);
       mediator.set('view', view);
@@ -335,25 +349,7 @@ console.log('_bindMediatorToElement', mediator, selector)
    * @returns {undefined}
    */
   _runMediator(mediator) {
-    var errorsName = get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name'),
-        attribute = errorsName || get(mediator, 'attribute'),
-        promise = mediator.validate();
-
-    if (errorsName) {
-        promise.then(() => { this.get('errors').remove(attribute); }, () => {});
-        promise.catch((error) => {
-          this.get('errors').remove(attribute);
-          this.get('errors').add(attribute, error);
-        });
-    }
-
-    if (attribute) {
-      promise.finally(() => {
-        this.set('visibleErrors.' + attribute, true);
-        this.get('errors').notifyPropertyChange(attribute);
-      });
-    }
-
+    mediator.validate();
   },
 
   /**
@@ -434,7 +430,12 @@ console.log('_bindMediatorToElement', mediator, selector)
    * @returns {undefined}
    */
   _triggerValidatePassed(mediator) {
-    this.trigger('passed', mediator);
+    let errors = this.get('errors'),
+        attribute = get(mediator, 'attribute');
+
+    errors.remove(attribute);
+    errors.notifyPropertyChange(attribute);
+    this.trigger('passed', attribute, mediator);
   },
 
   /**
@@ -446,7 +447,15 @@ console.log('_bindMediatorToElement', mediator, selector)
    * @returns {undefined}
    */
   _triggerValidateFailed(error, mediator) {
-    this.trigger('failed', error, mediator);
+    let errors = this.get('errors'),
+        attribute = get(mediator, 'attribute');
+
+    if (!get(errors, attribute)) {
+      errors.add(attribute, error);
+    }
+    this.set('visibleErrors.' + attribute, true);
+    this.get('errors').notifyPropertyChange(attribute);
+    this.trigger('failed', error, attribute, mediator);
   }
 
 });
