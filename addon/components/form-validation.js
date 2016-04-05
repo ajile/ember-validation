@@ -32,6 +32,20 @@ export default Ember.Component.extend(ComponentVaidation, {
         this.trigger('failed');
       });
 
-  }
+  },
+
+  showAllErrors() {
+    this.get('mediators').forEach((mediator) => {
+      let attribute = get(mediator, 'attribute');
+
+      attribute && this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
+  hideAllErrors() {
+    this.get(Ember.keys(this.get('visibleErrors'))).forEach((attribute) => {
+      this.set('visibleErrors.' + attribute, true);
+    });
+  },
 
 });

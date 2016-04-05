@@ -58,11 +58,11 @@ export default DS.Model.extend(ValidationMixin, {
 
     phone : {
       options: {condition : computed.not('context.email')},
-      validators : [{name : 'required'}]
+      validators : [{name : 'required', options:{messages: {default: "phone_required"}}}]
     },
     email : {
       options: {condition : computed.not('context.phone')},
-      validators : [{name : 'required'}]
+      validators : [{name : 'required', options:{messages: {default: "phone_required"}}}]
     }
 
   },

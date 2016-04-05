@@ -169,6 +169,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
   addMediator(mediator) {
     this.get("mediators").pushObject(mediator);
     this.trigger('mediatorDidAdd', mediator);
+    mediator.trigger('didAdd');
     Logger.info('Validation : mixin : Validation : addMediator : ', mediator);
   },
 
@@ -185,6 +186,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
 
     if (mediators.indexOf(mediator) !== -1) {
       this.trigger('mediatorWillRemove', mediator);
+      mediator.trigger('willRemove');
       mediators.removeObject(mediator);
       mediator.destroy();
       Logger.info('Validation : mixin : Validation : removeMediator : ', mediator);
