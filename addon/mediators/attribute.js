@@ -69,6 +69,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
     @return Ember.RSVP.Promise
   */
   _validate() {
+    Ember.Logger.info('Validation : Mediator : Attribute ' + (this._onFocusIn ? 'mixin(ElementMediator)' : '') + ' : validate : ', this.get('attribute'));
     const promises = get(this, "content").map((validator) => {
       return validator.validate();
     });

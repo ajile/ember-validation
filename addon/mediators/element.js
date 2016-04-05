@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import BaseMediator from 'ember-validation/core/mediator';
+import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 
 const { RSVP, tryInvoke, Logger } = Ember;
 
@@ -7,10 +8,7 @@ const { RSVP, tryInvoke, Logger } = Ember;
 * @module
 * @augments ember-validation/BaseMediator
 */
-export default BaseMediator.extend({
-
-  /** @type {Ember/Component} */
-  view : null,
+export default BaseMediator.extend(ElementMediatorMixin, {
 
   /**
    * Validate

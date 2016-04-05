@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import BaseMediator from 'ember-validation/core/mediator';
+import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 
 const { RSVP, computed, tryInvoke, Logger } = Ember;
 
@@ -7,9 +8,41 @@ const { RSVP, computed, tryInvoke, Logger } = Ember;
 * @module
 * @augments ember-validation/BaseMediator
 */
-export default BaseMediator.extend({
+export default BaseMediator.extend(ElementMediatorMixin, {
   /** @type {String} */
   attribute: computed.or('options.errorsName', 'view.errors-name'),
+
+  init() {
+    this._super(...arguments);
+
+    this.get('view')
+      .on('passed', this, this._onViewValidationPassed)
+      .on('failed', this, this._onViewValidationFailed);
+  },
+
+  willDestroy() {
+    let view = this.get('view');
+
+    if (view) {
+      view
+        .off('passed', this, this._onViewValidationPassed)
+        .off('failed', this, this._onViewValidationFailed);
+    }
+
+    this._super(...arguments);
+  },
+
+  _onFocusOut() {
+    this.trigger('showErrors', this.get('attribute'));
+  },
+
+  _onViewValidationPassed() {
+    this.trigger('passed', this)
+  },
+
+  _onViewValidationFailed(error) {
+    this.trigger('failed', error, this);
+  },
 
   /**
   * Validate
