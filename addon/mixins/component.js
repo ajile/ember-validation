@@ -6,24 +6,22 @@ import ElementProxyMediator from 'ember-validation/mediators/element-proxy';
 const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 
 /**
-  @module
-  @augments module:ember/ArrayProxy
-  @public
+* @module
+* @augments module:ember/ArrayProxy
+* @public
 */
 var ErrorsProxy = Ember.ArrayProxy.extend({
 
-  /**
-    @type Array
-    @private
-  */
+  /** @type {Array}  */
   _content: Ember.A(),
 
   /**
-    Adds error messages to a given attribute.
-
-    @param {String} attribute
-    @param {(Array|String)} messages
-    @method remove
+  * Adds error messages to a given attribute.
+  *
+  * @function
+  * @param {String} attribute
+  * @param {(Array|String)} messages
+  * @returns {undefined}
   */
   add(attribute, message) {
     var item = this._find(attribute);
@@ -38,15 +36,16 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     }
 
     if (!item.messages.findBy('message', message)) {
-      item.messages.addObject({message})
+      item.messages.addObject({message});
     }
   },
 
   /**
-    Removes all error messages from the given attribute.
-
-    @param {String} attribute
-    @method remove
+  * Removes all error messages from the given attribute.
+  *
+  * @function
+  * @param {String} attribute
+  * @returns {undefined}
   */
   remove(attribute) {
     var item = this._find(attribute);
@@ -57,9 +56,10 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-    Removes all error messages.
-
-    @method remove
+  * Removes all error messages.
+  *
+  * @function
+  * @returns {undefined}
   */
   clear() {
     this.get('_content').clear();
@@ -67,7 +67,11 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-    @method unknownProperty
+  * Return errors for given attribute
+  *
+  * @function
+  * @param {String} attribute
+  * @returns {Array}
   */
   unknownProperty(attribute) {
     var item = this._find(attribute);
@@ -75,19 +79,17 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     return item ? get(item, 'messages') : this.get('content.'+attribute);
   },
 
-  /**
-    @property length
-  */
+  /** @type {Number} */
   length: computed('content.length', '_content.length', function () {
     return this.get('content.length') + this.get('_content.length');
   }),
 
   /**
-    Find item in _content by attribute name
-
-    @param {String} attr name
-    @return {Object|undefined}
-    @method _find
+  * Find item in `_content` by attribute name
+  *
+  * @function
+  * @param {String} attr name
+  * @returns {Object|undefined}
   */
   _find(attribute) {
     return this.get('_content').findBy('attribute', attribute);
@@ -98,18 +100,29 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
 
 
 
-
+/**
+* Trigger `focusIn` on mediator
+*
+* @function
+* @fires 'focusIn'
+*/
 function onMediatorFocusIn() {
   this.trigger('focusIn', this);
 }
 
+/**
+* Trigger `focusOut` on mediator
+*
+* @function
+* @fires 'focusOut'
+*/
 function onMediatorFocusOut() {
   this.trigger('focusOut', this);
 }
 
 /**
  * @module
- * mixin
+ * @mixin
  * @augments ember/Mixin
  * @mixes ember-validation/mixins/validation
  */
@@ -180,6 +193,20 @@ export default Ember.Mixin.create(ValidationMixin, {
   resetErrors() {
     this.clearErrors();
     this.initErrors();
+  },
+
+  showAllErrors() {
+    this.get('mediators').forEach((mediator) => {
+      let attribute = get(mediator, 'attribute');
+
+      attribute && this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
+  hideAllErrors() {
+    this.get(Ember.keys(this.get('visibleErrors'))).forEach((attribute) => {
+      this.set('visibleErrors.' + attribute, true);
+    });
   },
 
   /**
@@ -266,9 +293,9 @@ export default Ember.Mixin.create(ValidationMixin, {
 
     if (view) {
       mediator
-        .on('passed', this, this._triggerValidatePassed)
-        .on('failed', this, this._triggerValidateFailed)
-        .on('focusIn', this, this._hideErrors)
+        .off('passed', this, this._triggerValidatePassed)
+        .off('failed', this, this._triggerValidateFailed)
+        .off('focusIn', this, this._hideErrors)
         .on('focusOut', this, this._runMediator);
 
       view
@@ -293,7 +320,7 @@ export default Ember.Mixin.create(ValidationMixin, {
   _bindMediatorToElement(mediator, selector) {
     var element = this.$(selector),
         view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
-console.log('_bindMediatorToElement', mediator, selector)
+
     if (view) {
       this._addViewEventsHadlers(view, mediator);
       mediator.set('view', view);
@@ -335,25 +362,7 @@ console.log('_bindMediatorToElement', mediator, selector)
    * @returns {undefined}
    */
   _runMediator(mediator) {
-    var errorsName = get(mediator, 'options.errorsName') || get(mediator, 'view.errors-name'),
-        attribute = errorsName || get(mediator, 'attribute'),
-        promise = mediator.validate();
-
-    if (errorsName) {
-        promise.then(() => { this.get('errors').remove(attribute); }, () => {});
-        promise.catch((error) => {
-          this.get('errors').remove(attribute);
-          this.get('errors').add(attribute, error);
-        });
-    }
-
-    if (attribute) {
-      promise.finally(() => {
-        this.set('visibleErrors.' + attribute, true);
-        this.get('errors').notifyPropertyChange(attribute);
-      });
-    }
-
+    mediator.validate();
   },
 
   /**
@@ -434,19 +443,32 @@ console.log('_bindMediatorToElement', mediator, selector)
    * @returns {undefined}
    */
   _triggerValidatePassed(mediator) {
-    this.trigger('passed', mediator);
+    let errors = this.get('errors'),
+        attribute = get(mediator, 'attribute');
+
+    errors.remove(attribute);
+    errors.notifyPropertyChange(attribute);
+    this.trigger('passed', attribute, mediator);
   },
 
   /**
    * Trigger 'failed' event for given path
    *
    * @function
-   * @param {String} eoor
+   * @param {String} error
    * @param {Mediator} mediator
    * @returns {undefined}
    */
   _triggerValidateFailed(error, mediator) {
-    this.trigger('failed', error, mediator);
+    let errors = this.get('errors'),
+        attribute = get(mediator, 'attribute');
+
+    if (!get(errors, attribute)) {
+      errors.add(attribute, error);
+    }
+    this.set('visibleErrors.' + attribute, true);
+    this.get('errors').notifyPropertyChange(attribute);
+    this.trigger('failed', error, attribute, mediator);
   }
 
 });

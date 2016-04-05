@@ -7,6 +7,10 @@ export default Ember.Controller.extend({
   actions : {
     toggleEmailAndPhone() {
       this.toggleProperty('emailAndPhoneOpened');
+    },
+
+    saveUser() {
+      console.log('Submit');
     }
   }
 });

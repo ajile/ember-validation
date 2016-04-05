@@ -13,4 +13,25 @@ export default Ember.Component.extend(ComponentVaidation, {
   /** @type {String} */
   tagName: 'form',
 
+  /**
+   * Validate all form on submit
+   *
+   * @function
+   * @param {jQuery.Event} event
+   * @returns {undefined}
+   */
+  submit(event) {
+    event.preventDefault();
+
+    this.validate().then(
+      () => {
+        this.trigger('passed');
+        this.sendAction('action');
+      },
+      (error) => {
+        this.trigger('failed');
+      });
+
+  }
+
 });
