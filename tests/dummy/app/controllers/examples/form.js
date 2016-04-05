@@ -10,7 +10,7 @@ export default Ember.Controller.extend({
     },
 
     saveUser() {
-      console.log('saveUser')
+      console.log('Submit');
     }
   }
 });

@@ -15,8 +15,9 @@ export default BaseMediator.extend({
   /**
    * Validate
    *
-   * @function {RSVP.Promise}
-   * @returns {undefined}
+   * @function
+   * @override
+   * @returns {RSVP.Promise}
    */
   _validate() {
     let attribute = this.get('attribute');

@@ -6,24 +6,22 @@ import ElementProxyMediator from 'ember-validation/mediators/element-proxy';
 const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 
 /**
-  @module
-  @augments module:ember/ArrayProxy
-  @public
+* @module
+* @augments module:ember/ArrayProxy
+* @public
 */
 var ErrorsProxy = Ember.ArrayProxy.extend({
 
-  /**
-    @type Array
-    @private
-  */
+  /** @type {Array}  */
   _content: Ember.A(),
 
   /**
-    Adds error messages to a given attribute.
-
-    @param {String} attribute
-    @param {(Array|String)} messages
-    @method remove
+  * Adds error messages to a given attribute.
+  *
+  * @function
+  * @param {String} attribute
+  * @param {(Array|String)} messages
+  * @returns {undefined}
   */
   add(attribute, message) {
     var item = this._find(attribute);
@@ -38,15 +36,16 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     }
 
     if (!item.messages.findBy('message', message)) {
-      item.messages.addObject({message})
+      item.messages.addObject({message});
     }
   },
 
   /**
-    Removes all error messages from the given attribute.
-
-    @param {String} attribute
-    @method remove
+  * Removes all error messages from the given attribute.
+  *
+  * @function
+  * @param {String} attribute
+  * @returns {undefined}
   */
   remove(attribute) {
     var item = this._find(attribute);
@@ -57,9 +56,10 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-    Removes all error messages.
-
-    @method remove
+  * Removes all error messages.
+  *
+  * @function
+  * @returns {undefined}
   */
   clear() {
     this.get('_content').clear();
@@ -67,7 +67,11 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-    @method unknownProperty
+  * Return errors for given attribute
+  *
+  * @function
+  * @param {String} attribute
+  * @returns {Array}
   */
   unknownProperty(attribute) {
     var item = this._find(attribute);
@@ -75,19 +79,17 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     return item ? get(item, 'messages') : this.get('content.'+attribute);
   },
 
-  /**
-    @property length
-  */
+  /** @type {Number} */
   length: computed('content.length', '_content.length', function () {
     return this.get('content.length') + this.get('_content.length');
   }),
 
   /**
-    Find item in _content by attribute name
-
-    @param {String} attr name
-    @return {Object|undefined}
-    @method _find
+  * Find item in `_content` by attribute name
+  *
+  * @function
+  * @param {String} attr name
+  * @returns {Object|undefined}
   */
   _find(attribute) {
     return this.get('_content').findBy('attribute', attribute);
@@ -98,18 +100,29 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
 
 
 
-
+/**
+* Trigger `focusIn` on mediator
+*
+* @function
+* @fires 'focusIn'
+*/
 function onMediatorFocusIn() {
   this.trigger('focusIn', this);
 }
 
+/**
+* Trigger `focusOut` on mediator
+*
+* @function
+* @fires 'focusOut'
+*/
 function onMediatorFocusOut() {
   this.trigger('focusOut', this);
 }
 
 /**
  * @module
- * mixin
+ * @mixin
  * @augments ember/Mixin
  * @mixes ember-validation/mixins/validation
  */
@@ -442,7 +455,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Trigger 'failed' event for given path
    *
    * @function
-   * @param {String} eoor
+   * @param {String} error
    * @param {Mediator} mediator
    * @returns {undefined}
    */

@@ -8,13 +8,14 @@ const { RSVP, computed, tryInvoke, Logger } = Ember;
 * @augments ember-validation/BaseMediator
 */
 export default BaseMediator.extend({
-  /** @type {Ember.Component} */
+  /** @type {String} */
   attribute: computed.or('options.errorsName', 'view.errors-name'),
 
   /**
   * Validate
   * @function
-  *@returns {undefined}
+  * @override
+  * @returns {RSVP.Promise}
   */
   _validate() {
     Logger.info('Validation : Mediator : ElementProxy : validate : ', this.get('attribute'), this.get('view.element'));
