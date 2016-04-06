@@ -26,7 +26,7 @@ export default Ember.Component.extend(ComponentVaidation, {
     this.validate().then(
       () => {
         this.trigger('passed');
-        this.sendAction('action');
+        this.sendAction('action', Ember.K, this.onSubmitFailed.bind(this));
       },
       (error) => {
         this.trigger('failed');
@@ -34,6 +34,22 @@ export default Ember.Component.extend(ComponentVaidation, {
 
   },
 
+  /**
+  * Callback for submit failed
+  *
+  * @function
+  * @returns {undefined}
+  */
+  onSubmitFailed() {
+    this.showAllErrors();
+  },
+
+  /**
+  * Make all errors visible
+  *
+  * @function
+  * @returns {undefined}
+  */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
       let attribute = get(mediator, 'attribute');
@@ -42,6 +58,12 @@ export default Ember.Component.extend(ComponentVaidation, {
     });
   },
 
+  /**
+  * Make all errors hidden
+  *
+  * @function
+  * @returns {undefined}
+  */
   hideAllErrors() {
     this.get(Ember.keys(this.get('visibleErrors'))).forEach((attribute) => {
       this.set('visibleErrors.' + attribute, true);
