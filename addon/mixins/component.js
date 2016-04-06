@@ -97,10 +97,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   }
 });
 
-
-
-
-
 /**
 * Trigger `focusIn` on mediator
 *
@@ -132,10 +128,10 @@ export default Ember.Mixin.create(ValidationMixin, {
   /** @type {Object} */
   subscriber: null,
 
-  /** @type {ember/Array} */
+  /** @type {ember/Object} */
   'validation-context' : computed(() => {return {};}),
 
-  /** @type {ember/Array} */
+  /** @type {ember/Object} */
   visibleErrors: computed(() => {return {};}),
 
   /**
@@ -284,8 +280,6 @@ export default Ember.Mixin.create(ValidationMixin, {
 
     this._hideErrors(get(mediator, 'attribute'));
   }),
-
-
 
   /**
    * Add mediator for given view if not exits and view is validatable or has `validate-path` attr
