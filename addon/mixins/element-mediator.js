@@ -29,7 +29,7 @@ export default Ember.Mixin.create({
   willDestroy() {
     var view = this.get('view');
 
-    if (view) { console.log('willDestroy', this)
+    if (view) {
       view
         .off('focusIn', this, this._onFocusIn)
         .off('focusOut', this, this._onFocusOut);
