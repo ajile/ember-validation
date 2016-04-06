@@ -60,13 +60,13 @@
       <div class="form-group {{if (and formView.errors.age_and_gender formView.visibleErrors.age_and_gender) 'has-error'}}">
         <label class="control-label">Nested component</label>
         <div>
-          {{user-age-gender age=model.age gender=model.gender validation-context=model   errors-name="age_and_gender"}}
+          {{user-age-gender age=model.age gender=model.gender validation-context=model errors-name="age_and_gender"}}
           error outside {{errors-list errors=formView.errors.age_and_gender show=formView.visibleErrors.age_and_gender}}
         </div>
       </div>
 
       <div class="form-group">
-        <button>Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
 
     {{/user-form}}
