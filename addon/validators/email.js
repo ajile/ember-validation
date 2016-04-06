@@ -6,12 +6,15 @@ const { RSVP, get } = Ember;
   @module
   @public
 */
-function validate(attributeName, context) {
+function validate(attributeName, context, options={}) {
   const deferred = RSVP.defer();
   const value = get(context, attributeName);
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
-  value.search(/@/) === -1 ? deferred.reject(get(options, "messages.default")) : deferred.resolve();
+
+  const reg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  reg.test(value) ? deferred.resolve() : deferred.reject(get(options, "messages.default"));
+
   return deferred.promise;
 };
 
-export default validator;
+export default validate;
