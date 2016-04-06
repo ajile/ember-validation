@@ -62,8 +62,21 @@ export default DS.Model.extend(ValidationMixin, {
     },
     email : {
       options: {condition : computed.not('context.phone')},
-      validators : [{name : 'required', options:{messages: {default: "phone_required"}}}]
-    }
+      validators : [{name : 'required', options:{messages: {default: "email_required"}}}]
+    },
+    city : {
+      options: {condition : computed.or('context.street', 'context.house')},
+      validators : [{name : 'required', options:{messages: {default: "city_required"}}}]
+    },
+    street : {
+      options: {condition : computed.or('context.city', 'context.house')},
+      validators : [{name : 'required', options:{messages: {default: "street_required"}}}]
+    },
+    house : {
+      options: {condition : computed.or('context.city', 'context.street')},
+      validators : [{name : 'required', options:{messages: {default: "house_number_required"}}}]
+    },
+
 
   },
 
@@ -73,6 +86,9 @@ export default DS.Model.extend(ValidationMixin, {
   age: attr("number"),
   email: attr("string", {defaultValue:''}),
   phone: attr("string", {defaultValue:''}),
+  city: attr("string", {defaultValue:''}),
+  street: attr("string", {defaultValue:''}),
+  house: attr("string", {defaultValue:''}),
   full_name: computed("first_name", "last_name", function() {
     return [this.get("first_name"), this.get("last_name")].join(" ");
   })
