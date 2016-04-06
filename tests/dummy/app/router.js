@@ -31,6 +31,7 @@ Router.map(function() {
     this.route('conditional');
     this.route('composition');
     this.route('form');
+    this.route('form-view-validation');
   });
 });
 

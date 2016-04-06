@@ -370,6 +370,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   _unsubscribe: Ember.on('willDestroyElement', function () {
     Instrumentation.unsubscribe(this.get('subscriber'));
+    this.clearValidation();
   }),
 
   /**
@@ -381,7 +382,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   _triggerValidatePassed(mediator) {
     let errors = this.get('errors'),
-        attribute = get(mediator, 'attribute');
+        attribute = get(mediator, 'view.errors-name') || get(mediator, 'attribute');
 
     if (attribute) {
       errors.remove(attribute);
@@ -400,9 +401,10 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   _triggerValidateFailed(error, mediator) {
     let errors = this.get('errors'),
-        attribute = get(mediator, 'attribute');
+        attribute = get(mediator, 'view.errors-name') || get(mediator, 'attribute');
 
     if (attribute) {
+      errors.remove(attribute);
       errors.add(attribute, error);
       this.set('visibleErrors.' + attribute, true);
       this.get('errors').notifyPropertyChange(attribute);
