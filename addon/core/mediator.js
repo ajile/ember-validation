@@ -50,7 +50,6 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @fires module:addon/core/mediator~conditionChanged
    */
   conditionDidChange: observer("condition", function() {
-    console.log(123);
     this.trigger("conditionChanged", this.get("condition"), this.get("context"), this);
   }),
 
@@ -69,7 +68,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
   /**
    * @event
-   * @property {String} message - The error message
+   * @property {Array} errors - The error message list
    */
   failed: Ember.K,
 
@@ -84,7 +83,7 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
       return RSVP.resolve();
     }
     const promise = this._validate(...arguments);
-    promise.catch((message) => { this.trigger("failed", message, this); });
+    promise.catch((errors) => { this.trigger("failed", errors, this); });
     promise.then(() => { this.trigger("passed", this); });
     return promise;
   },

@@ -18,7 +18,7 @@ export var Model1 = DS.Model.extend(ValidationMixin, {
     },
   },
   age: attr("number"),
-  validateAge: attr('boolean', {defaultValue: false})
+  validateAge: attr('boolean', { defaultValue: false })
 });
 
 export var Model2 = DS.Model.extend(ValidationMixin, {

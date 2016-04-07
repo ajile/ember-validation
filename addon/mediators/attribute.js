@@ -69,11 +69,27 @@ export default BaseMediator.extend(Ember.MutableArray, {
     @return Ember.RSVP.Promise
   */
   _validate() {
+
+    const deferred = RSVP.defer();
+
     Ember.Logger.info('Validation : Mediator : Attribute ' + (this._onFocusIn ? 'mixin(ElementMediator)' : '') + ' : validate : ', this.get('attribute'));
+
     const promises = get(this, "content").map((validator) => {
       return validator.validate();
     });
-    return RSVP.all(promises);
+
+    const settledPromise = RSVP.allSettled(promises, "All validators done");
+
+    settledPromise.then((results) => {
+      const rejected = Ember.A(results).filterBy("state", "rejected");
+      if (rejected.length === 0) {
+        deferred.resolve();
+      } else {
+        deferred.reject(Ember.A(rejected).mapBy("reason"));
+      }
+    });
+
+    return deferred.promise;
   },
 
   /**

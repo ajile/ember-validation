@@ -1,6 +1,12 @@
 import Ember from 'ember';
 
-const { RSVP: { defer }, get, getProperties } = Ember;
+const { RSVP: { defer }, get, getProperties, merge } = Ember;
+
+const defaultOptions = {
+  "messages": {
+    "out_of_range": "out_of_range"
+  }
+};
 
 /**
 * @function
@@ -12,6 +18,7 @@ const { RSVP: { defer }, get, getProperties } = Ember;
 * @public
 */
 function validate(attributeName, context, options={}) {
+  options = merge(defaultOptions, options)
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");

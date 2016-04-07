@@ -120,15 +120,16 @@ export default Ember.Mixin.create(ValidatableMixin, {
       assert("Every validation should contain validators", validation);
 
       // A list of the validator instances
-      let validatorObjects = this._createValidators(attribute, validation);
+      let validatorHashes = this._createValidators(attribute, validation);
 
       let options = getWithDefault(validation, "options", {});
       let attributeMediator = this._createAttributeMediator(attribute, options);
 
       // Iterating over the attribute's validators and wrap each of them by a
       // mediator, that has the same interface then they are.
-      validatorObjects.forEach((validator) => {
-        let options = Ember.getMeta(validator, "options");
+      validatorHashes.forEach((hash) => {
+        let options = get(hash, "options");
+        let validator = get(hash, "validator");
         let validatorMediator = this._createValidatorMediator(attribute, validator, options);
         attributeMediator.pushObject(validatorMediator);
       });
@@ -315,8 +316,7 @@ export default Ember.Mixin.create(ValidatableMixin, {
     return Ember.A( get(validation, "validators") ).map((description) => {
       const { name, options } = getProperties(description, ["name", "options"]);
       const validator = lookup(name, get(this, "container"));
-      Ember.setMeta(validator, "options", options || {});
-      return validator;
+      return { options, validator };
     });
   },
 
