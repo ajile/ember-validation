@@ -115,6 +115,9 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    * @abstract
    * @returns Ember.RSVP.Promise
    */
-  _check: () => RSVP.resolve()
+  _check() {
+    return this._validate(...arguments);
+  }
+
 
 });

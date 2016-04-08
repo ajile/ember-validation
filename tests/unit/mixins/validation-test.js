@@ -2,10 +2,9 @@ import Ember from 'ember';
 import ValidationMixin from 'ember-validation/mixins/validation';
 import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
-import RequiredValidator from 'ember-validation/validators/required';
 import Errors from 'ember-validation/core/errors';
 import startApp from '../../helpers/start-app';
-import { FailValidator } from '../../helpers/validators';
+import { failValidator } from '../../helpers/validators';
 import { module, test } from 'qunit';
 
 const { RSVP } = Ember;
@@ -14,7 +13,7 @@ module('Unit | Mixin | validation', {
   integration: true,
   setup: function () {
     this.app = startApp();
-    this.app.__container__._registry.register("validator:fail", FailValidator);
+    this.app.__container__._registry.register("validator:fail", failValidator);
   },
   teardown: function () {
     Ember.run(this.app, 'destroy');
@@ -86,7 +85,6 @@ test('is creates mediators', function(assert) {
   assert.ok(validatorMediator.get("attribute"), "Validator mediator should have attribute name");
 
   assert.ok(validatorMediator.get("testOption"), "The object declared in the validator `options` of the validationScheme should be mixed into the validator mediator");
-  assert.ok(validatorMediator.get("validator") instanceof RequiredValidator, "First validator mediator should contain `required` validator");
 
 
   const ValidationObject_1 = Ember.Object.extend(ValidationMixin, {
