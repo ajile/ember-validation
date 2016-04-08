@@ -1,0 +1,17 @@
+<div class="form-group {{if (and errors.city visibleErrors.city) 'has-error'}}">
+  <label class="control-label">City</label>
+  {{input value=validation-context.city class="form-control" validate-path="city"}}
+  {{errors-list errors=errors.city show=visibleErrors.city}}
+</div>
+
+<div class="form-group {{if (and errors.street visibleErrors.street) 'has-error'}}">
+  <label class="control-label">Street</label>
+  {{input value=validation-context.street class="form-control" validate-path="street"}}
+  {{errors-list errors=errors.street show=visibleErrors.street}}
+</div>
+
+<div class="form-group {{if (and errors.house visibleErrors.house) 'has-error'}}">
+  <label class="control-label">House number</label>
+  {{input value=validation-context.house class="form-control" validate-path="house"}}
+  {{errors-list errors=errors.house show=visibleErrors.house}}
+</div>
