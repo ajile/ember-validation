@@ -33,7 +33,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
   },
 
   _onViewValidationPassed() {
-    this.trigger('passed', this)
+    this.trigger('passed', this);
   },
 
   _onViewValidationFailed(error) {

@@ -7,11 +7,6 @@ export default Ember.Controller.extend({
   actions : {
     toggleAccordion() {
       this.toggleProperty('isAccordionOpened');
-    },
-
-    saveUser() {
-      console.log('Submit');
-      alert('Saved!');
     }
   }
 });

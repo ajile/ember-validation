@@ -1,4 +1,3 @@
-import Ember from "ember";
 import FormValidation from "ember-validation/components/form-validation";
 
 export default FormValidation.extend({

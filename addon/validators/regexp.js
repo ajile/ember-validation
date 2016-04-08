@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { RSVP: { defer }, get, getProperties } = Ember;
+const { RSVP: { defer }, get } = Ember;
 
 /**
 * @function
@@ -27,7 +27,7 @@ function validate(attributeName, context, options={}) {
   deferred.resolve();
 
   return deferred.promise;
-};
+}
 
 export default validate;
 

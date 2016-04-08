@@ -8,7 +8,7 @@ export default Ember.Route.extend({
 
   actions: {
     saveEvent() {
-      alert('Saved');
+      window.alert('Event saved');
     }
   }
 });

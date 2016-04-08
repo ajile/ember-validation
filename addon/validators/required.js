@@ -13,10 +13,10 @@ const defaultOptions = {
   @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options)
+  options = merge(defaultOptions, options);
   const value = get(context, attributeName);
   Logger.info('Validation : Validator : required called on %s with options', attributeName, options);
   return isBlank(value) ? reject(get(options, "messages.default")) : resolve();
-};
+}
 
 export default validate;
