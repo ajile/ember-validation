@@ -27,7 +27,7 @@ var findMediators = function(...names) {
   @augments module:addon/mixins/validatable
   @public
 */
-export default Ember.Mixin.create(ValidatableMixin, {
+export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
 
   /**
     Defines the properties that will be merged from the superclass

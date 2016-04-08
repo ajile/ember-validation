@@ -1,0 +1,63 @@
+<h3>Form with nested validatate-component</h3>
+<div class="row">
+  <div class="col-xs-6">
+    {{#form-validation validation-context=model action="saveUser" as |formView|}}
+      <div class="form-group {{if (and formView.errors.name formView.visibleErrors.name) 'has-error'}}">
+        <label class="control-label">Name</label>
+        {{input value=model.name class="form-control" validate-path="name"}}
+        {{errors-list errors=formView.errors.name show=formView.visibleErrors.name}}
+      </div>
+      <div class="form-group {{if (and formView.errors.email formView.visibleErrors.email) 'has-error'}}">
+        <label class="control-label">Email</label>
+        {{input value=model.email class="form-control" validate-path="email"}}
+        {{errors-list errors=formView.errors.email show=formView.visibleErrors.email}}
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Address</h3>
+          Nested validation component
+          {{#if (and formView.errors.address formView.visibleErrors.address)}}
+            <div class="pull-right">
+              <span class="pull-left">Error outside component:</span>
+              {{errors-list errors=formView.errors.address show=formView.visibleErrors.address class="pull-left"}}
+              <div class="clearfix"></div>
+            </div>
+
+          {{/if}}
+        </div>
+        <div class="panel-body {{if (and formView.errors.address formView.visibleErrors.address) 'has-error'}}">
+        {{#user-address validation-context=model.address errors-name="address" error-message="Valid address required"}}{{/user-address}}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Credentials</h3>
+          Nested validation component
+          {{#if (and formView.errors.credentials formView.visibleErrors.credentials)}}
+            <div>
+              <span class="pull-left">Error outside nested component:</span>
+              {{errors-list errors=formView.errors.credentials show=formView.visibleErrors.credentials class="pull-left"}}
+              <div class="clearfix"></div>
+            </div>
+
+          {{/if}}
+        </div>
+        <div class="panel-body {{if (and formView.errors.credentials formView.visibleErrors.credentials) 'has-error'}}">
+        {{#component-validation validation-context=model.credentials errors-name="credentials" error-message="Login and password required" as |formView|}}
+          <div class="form-group {{if (and formView.errors.login formView.visibleErrors.login) 'has-error'}}">
+            <label class="control-label">Login</label>
+            {{input value=model.credentials.login class="form-control" validate-path="login"}}
+            {{errors-list errors=formView.errors.login show=formView.visibleErrors.login}}
+          </div>
+          <div class="form-group {{if (and formView.errors.password formView.visibleErrors.password) 'has-error'}}">
+            <label class="control-label">Password</label>
+            {{input value=model.credentials.password class="form-control" validate-path="password"}}
+            {{errors-list errors=formView.errors.password show=formView.visibleErrors.password}}
+          </div>
+        {{/component-validation}}
+        </div>
+      </div>
+    {{/form-validation}}
+  </div>
+</div>

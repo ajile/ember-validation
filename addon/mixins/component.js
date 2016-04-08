@@ -24,7 +24,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   * @param {(Array|String)} messages
   * @returns {undefined}
   */
-  add(attribute, message) {
+  add(attribute, messages) {
     var item = this._find(attribute);
 
     if (!item) {
@@ -32,13 +32,19 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
       this.get('_content').addObject(item);
     }
 
-    if (!message) {
-      message = 'unknown error';
+    if (!messages) {
+      messages = A(['unknown error']);
     }
 
-    if (!item.messages.findBy('message', message)) {
-      item.messages.addObject({message});
+    if (!isArray(messages)) {
+      messages = A([messages]);
     }
+
+    messages.forEach((message) => {
+      if (!item.messages.findBy('message', message)) {
+        item.messages.addObject({message});
+      }
+    });
   },
 
   /**
@@ -96,26 +102,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
     return this.get('_content').findBy('attribute', attribute);
   }
 });
-
-/**
-* Trigger `focusIn` on mediator
-*
-* @function
-* @fires 'focusIn'
-*/
-function onMediatorFocusIn() {
-  this.trigger('focusIn', this);
-}
-
-/**
-* Trigger `focusOut` on mediator
-*
-* @function
-* @fires 'focusOut'
-*/
-function onMediatorFocusOut() {
-  this.trigger('focusOut', this);
-}
 
 /**
  * @module
@@ -310,7 +296,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     if (attribute) {
       return ElementMediator.create({context : this.get('validation-context'), attribute, view});
     }
-
+    console.log('ElementProxyMediator for', get(view, 'element'))
     return ElementProxyMediator.create({view});
 
   },
@@ -402,6 +388,8 @@ export default Ember.Mixin.create(ValidationMixin, {
   _triggerValidateFailed(error, mediator) {
     let errors = this.get('errors'),
         attribute = get(mediator, 'view.errors-name') || get(mediator, 'attribute');
+
+    error = get(mediator, 'view.error-message') || error;
 
     if (attribute) {
       errors.remove(attribute);

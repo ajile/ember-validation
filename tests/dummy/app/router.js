@@ -30,6 +30,7 @@ Router.map(function() {
     this.route('composition');
     this.route('form');
     this.route('form-view-validation');
+    this.route('form-nested-validation');
   });
 });
 
