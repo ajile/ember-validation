@@ -73,5 +73,11 @@ export default Ember.Route.extend({
 
     user.setProperties({address, credentials});
     return user;
+  },
+
+  actions: {
+    saveUser() {
+      window.alert('User saved!');
+    }
   }
 });

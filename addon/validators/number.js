@@ -14,7 +14,7 @@ const defaultOptions = {
   @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options)
+  options = merge(defaultOptions, options);
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");
@@ -37,7 +37,7 @@ function validate(attributeName, context, options={}) {
   deferred.resolve();
 
   return deferred.promise;
-};
+}
 
 var isNumber = (data) => !isNaN(parseFloat(data));
 

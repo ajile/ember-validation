@@ -1,7 +1,4 @@
 import Ember from "ember";
-import ValidationMixin from "ember-validation/mixins/model";
-
-const { computed } = Ember;
 
 export default Ember.Route.extend({
 
@@ -34,6 +31,10 @@ export default Ember.Route.extend({
       this.set('_model', user);
 
       this.refresh();
+    },
+
+    saveUser() {
+      window.alert('User saved!');
     }
   }
 });

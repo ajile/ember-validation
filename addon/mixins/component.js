@@ -137,7 +137,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @returns {undefined}
    */
   initValidation() {
-    var mediators;
 
     if (this.get('element')) {
       this.get('childViews').forEach(this._addElementMediator.bind(this));
@@ -227,8 +226,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @returns {undefined}
    */
   _onMediatorDidAdd: on('mediatorDidAdd', function (mediator) {
-    var view = get(mediator, 'view'),
-        selector = get(mediator, 'options.selector'),
+    var selector = get(mediator, 'options.selector'),
         bind = () => {
           let element = this.$(selector),
               view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
@@ -275,10 +273,8 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @returns {undefined}
    */
   _addElementMediator(view) {
-    var mediator;
 
-    if ((get(view, 'isValidatable') || get(view, 'validate-path'))
-    && !this.get('mediators').findBy('view', view)) {
+    if ((get(view, 'isValidatable') || get(view, 'validate-path'))  && !this.get('mediators').findBy('view', view)) {
       this.addMediator(this._createElementMediator(view));
     }
   },
@@ -296,7 +292,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     if (attribute) {
       return ElementMediator.create({context : this.get('validation-context'), attribute, view});
     }
-    console.log('ElementProxyMediator for', get(view, 'element'))
+
     return ElementProxyMediator.create({view});
 
   },
@@ -337,9 +333,7 @@ export default Ember.Mixin.create(ValidationMixin, {
       after: (name, timestamp, payload) => {
         var view = payload.view;
 
-        if (Ember.typeOf(view) === "instance"
-          && (get(view, 'isValidatable') || get(view, 'validate-path'))
-          && this.isChild(view)) {
+        if (Ember.typeOf(view) === "instance" && (get(view, 'isValidatable') || get(view, 'validate-path')) && this.isChild(view)) {
             this._addElementMediator(view);
         }
       }

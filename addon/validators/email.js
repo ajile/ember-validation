@@ -13,7 +13,7 @@ const defaultOptions = {
   @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options)
+  options = merge(defaultOptions, options);
   const deferred = RSVP.defer();
   const value = get(context, attributeName);
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
@@ -22,6 +22,6 @@ function validate(attributeName, context, options={}) {
   reg.test(value) ? deferred.resolve() : deferred.reject(get(options, "messages.default"));
 
   return deferred.promise;
-};
+}
 
 export default validate;
