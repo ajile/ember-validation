@@ -32,10 +32,6 @@ export default BaseMediator.extend(ElementMediatorMixin, {
     this._super(...arguments);
   },
 
-  _onFocusOut() {
-    this.trigger('showErrors', this.get('attribute'));
-  },
-
   _onViewValidationPassed() {
     this.trigger('passed', this)
   },
