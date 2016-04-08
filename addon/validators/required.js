@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { RSVP: {resolve, reject}, get, isBlank, Logger, merge } = Ember;
+const { Logger, RSVP: {resolve, reject}, get, isBlank, merge } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -15,7 +15,7 @@ const defaultOptions = {
 function validate(attributeName, context, options={}) {
   options = merge(defaultOptions, options);
   const value = get(context, attributeName);
-  Logger.info('Validation : Validator : required called on %s with options', attributeName, options);
+  Logger.info("Validation : <<validator>> : 'required' called on %s with options %o", attributeName, options);
   return isBlank(value) ? reject(get(options, "messages.default")) : resolve();
 }
 

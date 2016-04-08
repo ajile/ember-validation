@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { RSVP, get, merge } = Ember;
+const { Logger, RSVP, get, merge } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -17,6 +17,8 @@ function validate(attributeName, context, options={}) {
   const deferred = RSVP.defer();
   const value = get(context, attributeName);
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
+
+  Logger.info("Validation : <<validator>> : 'email' called on %s with options %o", attributeName, options);
 
   const reg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   reg.test(value) ? deferred.resolve() : deferred.reject(get(options, "messages.default"));

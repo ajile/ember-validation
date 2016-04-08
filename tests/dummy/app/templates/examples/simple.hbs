@@ -39,6 +39,18 @@
       {{error-list errors=user.errors.full_name}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'full_name'}}>Validate field</a>
     </div>
+    <div class="form-group {{if user.errors.phone 'has-error'}}">
+      <label class="control-label">Phone</label>
+      {{input value=user.phone class="form-control"}}
+      {{error-list errors=user.errors.phone}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'phone'}}>Validate field</a>
+    </div>
+    <div class="form-group {{if user.errors.email 'has-error'}}">
+      <label class="control-label">Email</label>
+      {{input value=user.email class="form-control"}}
+      {{error-list errors=user.errors.email}}
+      <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'email'}}>Validate field</a>
+    </div>
 
     <div class="form-group {{if user.errors.gender 'has-error'}}">
       <label class="control-label">Gender</label>

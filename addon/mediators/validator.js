@@ -48,11 +48,20 @@ export default BaseMediator.extend({
     @return Ember.RSVP.Promise
   */
   _validate() {
+
     const attribute = get(this, "attribute"),
           options = get(this, "options"),
           context = this.getSnapshot("context"),
           validator = this.get("validator");
-    return validator(attribute, context, options);
+
+    Ember.Logger.info("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
+
+    const promise = validator(attribute, context, options);
+
+    promise.catch(() => { console.log("TEMPORARY 1"); });
+
+    return promise;
+
   }
 
 });

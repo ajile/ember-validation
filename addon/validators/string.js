@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { RSVP: { defer }, get, getProperties, merge } = Ember;
+const { Logger, RSVP: { defer }, get, getProperties, merge } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -22,6 +22,8 @@ function validate(attributeName, context, options={}) {
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");
+
+  Logger.info("Validation : <<validator>> : 'string' called on %s with options %o", attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
 

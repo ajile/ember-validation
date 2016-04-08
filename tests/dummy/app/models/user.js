@@ -51,30 +51,61 @@ export default DS.Model.extend(ValidationMixin, {
         condition: computed.not("isUnknown")
       },
       validators: [
-        { name: "number", options: { min: 21, max: 65, messages: {default: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) } },
-        { name: "number", options: { min: 18, max: 55, messages: {default: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) } }
+        {
+          name: "number",
+          options: { min: 21, max: 65, messages: {default: "age_is_wrong_for_male"}, condition: computed.equal("context.gender", GENDERS.MALE) }
+        },
+        {
+          name: "number",
+          options: { min: 18, max: 55, messages: {default: "age_is_wrong_for_female"}, condition: computed.equal("context.gender", GENDERS.FEMALE) }
+        }
       ]
     },
 
-    phone : {
-      options: {condition : computed.not('context.email')},
-      validators : [{name : 'required', options:{messages: {default: "phone_required"}}}]
+    phone: {
+      options: { condition: computed.not('context.email') },
+      validators: [
+        {
+          name: 'required',
+          options: { messages: { default: "phone_required" } }
+        }
+      ]
     },
-    email : {
-      options: {condition : computed.not('context.phone')},
-      validators : [{name : 'required', options:{messages: {default: "email_required"}}}]
+    email: {
+      options: { condition: computed.not('context.phone') },
+      validators: [
+        {
+          name: 'required',
+          options: { messages: { default: "email_required" } }
+        }
+      ]
     },
-    city : {
-      options: {condition : computed.or('context.street', 'context.house')},
-      validators : [{name : 'required', options:{messages: {default: "city_required"}}}]
+    city: {
+      options: { condition: computed.or('context.street', 'context.house') },
+      validators: [
+        {
+          name: 'required',
+          options: { messages: { default: "city_required" } }
+        }
+      ]
     },
-    street : {
-      options: {condition : computed.or('context.city', 'context.house')},
-      validators : [{name : 'required', options:{messages: {default: "street_required"}}}]
+    street: {
+      options: { condition: computed.or('context.city', 'context.house') },
+      validators: [
+        {
+          name: 'required',
+          options: { messages: { default: "street_required" } }
+        }
+      ]
     },
-    house : {
-      options: {condition : computed.or('context.city', 'context.street')},
-      validators : [{name : 'required', options:{messages: {default: "house_number_required"}}}]
+    house: {
+      options: { condition: computed.or('context.city', 'context.street') },
+      validators: [
+        {
+          name: 'required',
+          options: { messages: { default: "house_number_required" } }
+        }
+      ]
     },
 
 

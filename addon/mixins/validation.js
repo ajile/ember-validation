@@ -134,22 +134,19 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
         attributeMediator.pushObject(validatorMediator);
       });
 
+      attributeMediator.on("passed", () => {
+        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.passed%c on attribute '%s'", "color: #090", null, attribute);
+        this.get("errors").remove(attribute);
+      });
 
       attributeMediator.on("failed", (message) => {
-        console.log("Attribute '%s' is invalid with message '%s'", attribute, message);
-        console.log("    " + attribute);
-        console.log("    " + message);
+        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with messages %o", "color: #900", null, attribute, message);
         this.get("errors").add(attribute, message);
         this.get("errors").arrayContentDidChange();
       });
 
-      attributeMediator.on("passed", () => {
-        console.log("Attribute %s is valid", attribute);
-        this.get("errors").remove(attribute);
-      });
-
       attributeMediator.on("conditionChanged", () => {
-        // console.log("Condition of attribute %s changed", attribute);
+        Logger.info("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
         this.get("errors").remove(attribute);
       });
 
@@ -168,10 +165,10 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     @return undefined
   */
   addMediator(mediator) {
+    const attrName = get(mediator, "attribute");
     this.get("mediators").pushObject(mediator);
     this.trigger('mediatorDidAdd', mediator);
-    mediator.trigger('didAdd');
-    Logger.info('Validation : mixin : Validation : addMediator : ', mediator);
+    Logger.info("Validation : <<mixin>> : Validation : addMediator %o for '%s'", mediator, attrName);
   },
 
   /**
@@ -183,14 +180,14 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     @return undefined
   */
   removeMediator(mediator) {
-    let mediators = this.get("mediators");
+    const mediators = this.get("mediators");
+    const attrName = get(mediator, "attribute");
 
     if (mediators.indexOf(mediator) !== -1) {
-      this.trigger('mediatorWillRemove', mediator);
-      mediator.trigger('willRemove');
+      this.trigger("mediatorWillRemove", mediator);
       mediators.removeObject(mediator);
       mediator.destroy();
-      Logger.info('Validation : mixin : Validation : removeMediator : ', mediator);
+      Logger.info("Validation : <<mixin>> : Validation : removeMediator %o for '%s'", mediator, attrName);
     }
   },
 
@@ -292,18 +289,36 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     @return {Ember.RSVP.Promise}
   */
   _runMediators(method, mediators) {
-    let promises = mediators.map((mediator) => tryInvoke(mediator, method));
-    promises = promises.reduce((previousValue, item) => {
-      previousValue = previousValue.concat(item);
-      return previousValue;
-    }, Ember.A());
-    const result = RSVP.all(promises)
-    result.finally(
-      () => { mediators.forEach((mediator) => {this.get('errors').notifyPropertyChange(get(mediator, 'attribute'))})}
-    );
-    // result.then(() => console.log("✓ Validation has been passed"));
-    // result.catch(() => console.log("✘ Validation has been failed"));
-    return result;
+
+    const deferred = RSVP.defer();
+
+    var promises = mediators.map((mediator) => tryInvoke(mediator, method));
+        promises = promises.reduce((previous, item) => previous.concat(item), Ember.A());
+
+    const settledPromise = RSVP.allSettled(promises);
+
+    settledPromise.then((results) => {
+      const rejected = Ember.A(results).filterBy("state", "rejected");
+      if (rejected.length === 0) {
+        Logger.info("Validation : <<mixin>> : Validation : _runMediators %c✓ passed", "color: #090");
+        deferred.resolve();
+      } else {
+        Logger.info("Validation : <<mixin>> : Validation : _runMediators %c✘ failed", "color: #900");
+        deferred.reject(Ember.A(rejected).mapBy("reason"));
+      }
+    });
+
+    const promise = deferred.promise;
+
+    // promise.catch(RSVP.rethrow);
+
+    promise.finally(() => {
+      mediators.forEach((mediator) => {
+        this.get('errors').notifyPropertyChange(get(mediator, 'attribute'));
+      });
+    });
+
+    return promise;
   },
 
   /**

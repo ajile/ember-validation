@@ -63,12 +63,14 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
   /**
    * @event
+   * @property {module:addon/core/mediator} mediator - The mediator instance
    */
   passed: Ember.K,
 
   /**
    * @event
    * @property {Array} errors - The error message list
+   * @property {module:addon/core/mediator} mediator - The mediator instance
    */
   failed: Ember.K,
 
