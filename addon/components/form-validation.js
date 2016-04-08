@@ -30,6 +30,7 @@ export default Ember.Component.extend(ComponentVaidation, {
       },
       (error) => {
         this.trigger('failed', error);
+        this.showAllErrors();
       });
 
   },
