@@ -11,7 +11,17 @@
 </div>
 <div class="row">
   <div class="col-xs-6">
-    {{#form-validation action="saveUser" validation-context=model as |formView|}}
+    {{#simple-form action="saveUser" validation-context=model as |formView|}}
+      <div class="form-group">
+        {{#if formView.modelWasSaved}}
+          <div class="alert alert-success">
+            <span class="glyphicon glyphicon-ok-sign"></span>
+            The model is saved
+          </div>
+        {{/if}}
+
+      </div>
+
       <div class="form-group {{if (and formView.errors.first_name formView.visibleErrors.first_name) 'has-error'}}" id="first_name">
         <label class="control-label">First name</label>
         {{input value=model.first_name class="form-control" validate-path="first_name"}}
@@ -38,25 +48,25 @@
 
       <div class="form-group">
         <div class="panel panel-default">
-          <div class="panel-heading" {{action "toggleAccordion"}}>
+          <div class="panel-heading" {{action "toggleAccordion" target=formView}} id="panel-head">
             <span class="caret"></span> Address <span class="text-muted">optional</span>
           </div>
-          {{#if isAccordionOpened}}
+          {{#if formView.isAccordionOpened}}
             <div class="panel-body">
 
-              <div class="form-group {{if (and formView.errors.city formView.visibleErrors.city) 'has-error'}}">
+              <div class="form-group {{if (and formView.errors.city formView.visibleErrors.city) 'has-error'}}" id="city">
                 <label class="control-label">City</label>
                 {{input value=model.city class="form-control" validate-path="city"}}
                 {{errors-list errors=formView.errors.city show=formView.visibleErrors.city}}
               </div>
 
-              <div class="form-group {{if (and formView.errors.street formView.visibleErrors.street) 'has-error'}}">
+              <div class="form-group {{if (and formView.errors.street formView.visibleErrors.street) 'has-error'}}" id="street">
                 <label class="control-label">Street</label>
                 {{input value=model.street class="form-control" validate-path="street"}}
                 {{errors-list errors=formView.errors.street show=formView.visibleErrors.street}}
               </div>
 
-              <div class="form-group {{if (and formView.errors.house formView.visibleErrors.house) 'has-error'}}">
+              <div class="form-group {{if (and formView.errors.house formView.visibleErrors.house) 'has-error'}}" id="house">
                 <label class="control-label">House number</label>
                 {{input value=model.house class="form-control" validate-path="house"}}
                 {{errors-list errors=formView.errors.house show=formView.visibleErrors.house}}
@@ -72,6 +82,6 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
 
-    {{/form-validation}}
+    {{/simple-form}}
   </div>
 </div>

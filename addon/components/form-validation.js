@@ -25,11 +25,11 @@ export default Ember.Component.extend(ComponentVaidation, {
 
     this.validate().then(
       () => {
-        this.trigger('passed');
+        this.trigger('formValidationPassed');
         this.sendAction('action', this.onSubmitDone.bind(this), this.onSubmitFailed.bind(this));
       },
       (error) => {
-        this.trigger('failed', error);
+        this.trigger('formValidationFailed', error);
         this.showAllErrors();
       });
 
@@ -44,13 +44,22 @@ export default Ember.Component.extend(ComponentVaidation, {
   onSubmitDone: Ember.K,
 
   /**
+  * Custom callback for submit failed
+  *
+  * @function
+  * @returns {undefined}
+  */
+  onSubmitFailed: Ember.K,
+
+  /**
   * Callback for submit failed
   *
   * @function
   * @returns {undefined}
   */
-  onSubmitFailed() {
+  _onSubmitFailed() {
     this.showAllErrors();
+    this.onSubmitFailed();
   },
 
   /**

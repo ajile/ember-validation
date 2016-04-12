@@ -10,20 +10,9 @@ export function focusIn(selector, options = {}) {
     isDescriptor: true,
 
     value() {
-      const fullSelector = buildSelector(this, selector, options);
-      const context = getContext(this);
-      console.log('---->', context, fullSelector)
-      // if (context && findElementWithAssert(this, selector)) {
-      //   Ember.run(() => {
-      //     context.$(fullSelector).focus();
-      //   });
-      // } else {
-      //   /* global click */
-      //   click(fullSelector);
-      // }
-      findElementWithAssert(this, selector).focus()
-      triggerEvent(selector, 'focus')
-      triggerEvent(selector, 'focusin')
+      findElementWithAssert(this, selector).focus();
+      triggerEvent(selector, 'focus');
+      triggerEvent(selector, 'focusin');
       return this;
     }
   }
@@ -34,9 +23,9 @@ export function focusOut(selector, options = {}) {
     isDescriptor: true,
 
     value() {
-      findElementWithAssert(this, selector).blur();
-      triggerEvent(selector, 'blur');
-      triggerEvent(selector, 'focusout');
+      // findElementWithAssert(this, selector).blur();
+      // triggerEvent(selector, 'blur');
+      // triggerEvent(selector, 'focusout');
       return this;
     }
   }
