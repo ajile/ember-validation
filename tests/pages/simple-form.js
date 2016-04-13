@@ -35,7 +35,8 @@ var config = {
   submit: clickable('button'),
   click: clickable(),
 
-  togglePanel: clickable('#panel-head')
+  togglePanel: clickable('#panel-head'),
+  saved: text('.alert-success')
 };
 
 // console.log('---->', config)
