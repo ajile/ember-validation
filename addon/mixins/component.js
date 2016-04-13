@@ -245,7 +245,8 @@ export default Ember.Mixin.create(ValidationMixin, {
       .on('passed', this, this._triggerValidatePassed)
       .on('failed', this, this._triggerValidateFailed)
       .on('showErrors', this, this._showErrors)
-      .on('hideErrors', this, this._hideErrors);
+      .on('hideErrors', this, this._hideErrors)
+      .on('willDestroy', this, () => { console.log('willDestroy', view.element, this.get('mediators').indexOf(mediator)) });
   }),
 
   /**
@@ -275,7 +276,10 @@ export default Ember.Mixin.create(ValidationMixin, {
   _addElementMediator(view) {
 
     if ((get(view, 'isValidatable') || get(view, 'validate-path'))  && !this.get('mediators').findBy('view', view)) {
-      this.addMediator(this._createElementMediator(view));
+      let mediator = this._createElementMediator(view);
+
+      view.on('willDestroyElement', () => { this.removeMediator(mediator); });
+      this.addMediator(mediator);
     }
   },
 

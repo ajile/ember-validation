@@ -33,8 +33,9 @@ export default Ember.Route.extend({
       this.refresh();
     },
 
-    saveUser() {
-      window.alert('User saved!');
+    saveUser(done, failed) {
+      // window.alert('User saved!');
+      done();
     }
   }
 });
