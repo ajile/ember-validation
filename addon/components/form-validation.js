@@ -2,6 +2,7 @@ import Ember from 'ember';
 import ComponentVaidation from 'ember-validation/mixins/component';
 import layout from '../templates/components/form-validation';
 
+const { K, RSVP } = Ember;
 /**
  * @module
  * @augments ember/Component
@@ -21,19 +22,52 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   submit(event) {
+    var validationError;
+
     event.preventDefault();
 
-    this.validate().then(
-      () => {
-        this.trigger('formValidationPassed');
-        this.sendAction('action', this.onSubmitDone.bind(this), this.onSubmitFailed.bind(this));
-      },
-      (error) => {
-        this.trigger('formValidationFailed', error);
-        this.showAllErrors();
-      });
+    this.beforeValidate()
+      .then(() => {
+        this.trigger('validationBegin');
+        this.validate()
+          .then(
+            () => {
+              this.hideAllErrors();
+              this.onValidatePassed();
+              this.trigger('formValidationPassed');
+
+              this.sendAction('action', () => {
+                  this.onSubmitDone();
+                  this.afterSubmit();
+                }, () => {
+                  this.showAllErrors();
+                  this.onSubmitFailed();
+                });
+            },
+            (error) => {
+              validationError = error;
+              this.showAllErrors();
+              this.onValidateFailed(error);
+              this.trigger('formValidationFailed', error);
+          })
+          .finally(() => {
+            this.trigger('validationEnd', validationError);
+            this.afterValidation(validationError);
+          });
+
+      }).finally(() => { this.afterValidation(validationError) });
+
+
 
   },
+
+  beforeValidate: () => RSVP.resolve(),
+
+  onValidatePassed: K,
+
+  onValidateFailed: K,
+
+  afterValidation: K,
 
   /**
   * Callback for submit passed
@@ -41,7 +75,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   * @function
   * @returns {undefined}
   */
-  onSubmitDone: Ember.K,
+  onSubmitDone: K,
 
   /**
   * Custom callback for submit failed
@@ -49,18 +83,9 @@ export default Ember.Component.extend(ComponentVaidation, {
   * @function
   * @returns {undefined}
   */
-  onSubmitFailed: Ember.K,
+  onSubmitFailed: K,
 
-  /**
-  * Callback for submit failed
-  *
-  * @function
-  * @returns {undefined}
-  */
-  _onSubmitFailed() {
-    this.showAllErrors();
-    this.onSubmitFailed();
-  },
+  afterSubmit: K,
 
   /**
   * Make all errors visible
@@ -83,7 +108,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   * @returns {undefined}
   */
   hideAllErrors() {
-    this.get(Ember.keys(this.get('visibleErrors'))).forEach((attribute) => {
+    Ember.keys(this.get('visibleErrors')).forEach((attribute) => {
       this.set('visibleErrors.' + attribute, true);
     });
   },
