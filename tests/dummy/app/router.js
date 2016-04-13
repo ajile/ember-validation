@@ -5,12 +5,15 @@ var Router = Ember.Router.extend({
   location: config.locationType,
   didTransition() {
     this._super(...arguments);
-    Ember.run.scheduleOnce("afterRender", Prism, () => {
-      try {
-        Prism.highlightAll();
-        Prism.fileHighlight();
-      } catch(e) {}
-    });
+
+    if (window.Prism) {
+      Ember.run.scheduleOnce("afterRender", window.Prism, () => {
+        try {
+          window.Prism.highlightAll();
+          window.Prism.fileHighlight();
+        } catch(e) {}
+      });
+    }
   }
 });
 
