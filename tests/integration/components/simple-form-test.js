@@ -130,9 +130,7 @@ test('submit form', function (assert) {
   });
 
   andThen(() => {
-    // debugger
-    console.log(page.errors)
-    assert.equal(page.errorsCount, 6, '6 errors');
+    assert.equal(page.errorsCount, 5, '5 errors');
     assert.equal(page.inputsCount, 7, '7 inputs');
 
     page.first_name.fillIn('vasya');
@@ -160,5 +158,18 @@ test('submit form', function (assert) {
 
 });
 
+test('chnage model', function (assert) {
+  page.visit().submit();
+
+  andThen(() => {
+    assert.equal(page.errorsCount, 3, '3 errors');
+    page.changeModel();
+  });
+
+  andThen(() => {
+    assert.equal(page.errorsCount, 0, 'no errors');
+  });
+
+});
 
 
