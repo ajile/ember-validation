@@ -18,7 +18,7 @@ const defaultOptions = {
 * @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options);
+  options = Ember.$.extend({}, defaultOptions, options);
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");
@@ -26,12 +26,12 @@ function validate(attributeName, context, options={}) {
   Logger.info("Validation : <<validator>> : 'string' called on %s with options %o", attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
-
-  if (!Ember.isNone(min) && value.length < min) {
+  console.log('length', value.length, 'min', min, 'max', max)
+  if (!Ember.isNone(min) && value.length < min) {console.log('---> validate min')
     return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
   }
 
-  if (!Ember.isNone(max) && value.length > max) {
+  if (!Ember.isNone(max) && value.length > max) {console.log('---> validate max')
     return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
   }
 

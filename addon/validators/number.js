@@ -14,7 +14,7 @@ const defaultOptions = {
   @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options);
+  options = Ember.$.extend({}, defaultOptions, options);
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");

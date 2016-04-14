@@ -76,8 +76,8 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    saveUser() {
-      window.alert('User saved!');
+    saveUser(done) {
+      typeof done === 'function' && done();
     }
   }
 });

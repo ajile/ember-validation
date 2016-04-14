@@ -23,9 +23,9 @@ export function focusOut(selector, options = {}) {
     isDescriptor: true,
 
     value() {
-      // findElementWithAssert(this, selector).blur();
-      // triggerEvent(selector, 'blur');
-      // triggerEvent(selector, 'focusout');
+      findElementWithAssert(this, selector).blur();
+      triggerEvent(selector, 'blur');
+      triggerEvent(selector, 'focusout');
       return this;
     }
   }
