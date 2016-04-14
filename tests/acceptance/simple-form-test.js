@@ -1,7 +1,7 @@
 import { moduleForComponent, test } from 'ember-qunit';
-import moduleForAcceptance from '../../helpers/module-for-acceptance';
+import moduleForAcceptance from '../helpers/module-for-acceptance';
 import hbs from 'htmlbars-inline-precompile';
-import page from '../../pages/simple-form';
+import { simpleForm as page } from '../pages/forms';
 
 moduleForAcceptance('Acceptance | Page | simple form');
 

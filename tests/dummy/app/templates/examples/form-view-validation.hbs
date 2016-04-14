@@ -2,17 +2,23 @@
 <div class="row">
   <div class="col-xs-6">
     {{#event-form action="saveEvent" validation-context=model as |formView|}}
-      <div class="form-group {{if (and formView.errors.name formView.visibleErrors.name) 'has-error'}}">
+      {{#if formView.modelWasSaved}}
+        <div class="alert alert-success">
+          <span class="glyphicon glyphicon-ok-sign"></span>
+          The model is saved
+        </div>
+      {{/if}}
+      <div class="form-group {{if (and formView.errors.name formView.visibleErrors.name) 'has-error'}}" id="name">
         <label class="control-label">Event name</label>
         {{input value=model.name name="name" class="form-control" errors-name="name"}}
         {{errors-list errors=formView.errors.name show=formView.visibleErrors.name}}
       </div>
-      <div class="form-group {{if (and formView.errors.number formView.visibleErrors.number) 'has-error'}}">
+      <div class="form-group {{if (and formView.errors.number formView.visibleErrors.number) 'has-error'}}" id="participants_number">
         <label class="control-label">Participants number</label>
         {{input value=model.participants_number name="participants_number" class="form-control" errors-name="number"}}
         {{errors-list errors=formView.errors.number show=formView.visibleErrors.number}}
       </div>
-      <div class="form-group {{if (and formView.errors.email formView.visibleErrors.email) 'has-error'}}">
+      <div class="form-group {{if (and formView.errors.email formView.visibleErrors.email) 'has-error'}}" id="contact_email">
         <label class="control-label">Contact email</label>
         {{input value=model.contact_email name="email" class="form-control" errors-name="email"}}
         {{errors-list errors=formView.errors.email show=formView.visibleErrors.email}}

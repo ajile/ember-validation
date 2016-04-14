@@ -26,7 +26,7 @@ export default Ember.Component.extend(ComponentVaidation, {
 
     event.preventDefault();
 
-    this.beforeValidate()
+    this.beforeValidation()
       .then(() => {
         this.trigger('validationBegin');
         this.validate()
@@ -61,7 +61,7 @@ export default Ember.Component.extend(ComponentVaidation, {
 
   },
 
-  beforeValidate: () => RSVP.resolve(),
+  beforeValidation: () => RSVP.resolve(),
 
   onValidatePassed: K,
 

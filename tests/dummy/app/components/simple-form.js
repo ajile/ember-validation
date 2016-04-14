@@ -27,7 +27,7 @@ export default FormValidation.extend({
     this.$().on('focus', 'input', () => { this.set('modelWasSaved', false); })
   },
 
-  beforeValidate() {
+  beforeValidation() {
     const deferred = RSVP.defer();
 
     if (!this.get('isAccordionOpened')) {
