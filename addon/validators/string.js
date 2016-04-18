@@ -26,12 +26,12 @@ function validate(attributeName, context, options={}) {
   Logger.info("Validation : <<validator>> : 'string' called on %s with options %o", attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
-  console.log('length', value.length, 'min', min, 'max', max)
-  if (!Ember.isNone(min) && value.length < min) {console.log('---> validate min')
+
+  if (!Ember.isNone(min) && value.length < min) {
     return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
   }
 
-  if (!Ember.isNone(max) && value.length > max) {console.log('---> validate max')
+  if (!Ember.isNone(max) && value.length > max) {
     return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
   }
 

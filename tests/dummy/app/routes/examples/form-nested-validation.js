@@ -75,9 +75,4 @@ export default Ember.Route.extend({
     return user;
   },
 
-  actions: {
-    saveUser(done) {
-      typeof done === 'function' && done();
-    }
-  }
 });
