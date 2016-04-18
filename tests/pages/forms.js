@@ -55,3 +55,20 @@ elements = {};
 Ember.A(['name', 'participants_number', 'contact_email']).map(name => { elements[name] = createElement('#' + name); });
 
 export var viewValidationForm = createPage('/examples/form-view-validation', elements);
+
+elements = {};
+Ember.A(['name', 'email', 'city', 'street', 'house']).map(name => { elements[name] = createElement('#' + name); });
+Ember.A(['login', 'password']).map(name => { elements[name] = createElement('#' + name); });
+export var nestedValidationForm = createPage('/examples/form-nested-validation', elements, {
+  address: {
+    scope: '#address',
+    errors: text('.validation-error-list', {multiple: true}),
+    errorsCount: count('.validation-error-list'),
+  },
+  credentials: {
+    scope: '#credentials',
+    errors: text('.validation-error-list', {multiple: true}),
+    errorsCount: count('.validation-error-list'),
+  }
+});
+
