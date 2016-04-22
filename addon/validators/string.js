@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { Logger, RSVP: { defer }, get, getProperties, merge } = Ember;
+const { Logger, RSVP: { defer }, get, getProperties } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -18,7 +18,7 @@ const defaultOptions = {
 * @public
 */
 function validate(attributeName, context, options={}) {
-  options = Ember.$.extend({}, defaultOptions, options);
+  options = $.extend({}, defaultOptions, options);
   const deferred = defer();
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");

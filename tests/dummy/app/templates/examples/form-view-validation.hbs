@@ -1,12 +1,18 @@
 <h3>Form with view validation</h3>
 <div class="row">
   <div class="col-xs-6">
-    {{#event-form action="saveEvent" validation-context=model as |formView|}}
-      {{#if formView.modelWasSaved}}
+    {{#event-form action=(action "saveEvent") reset=(action "reset") validation-context=model as |formView|}}
+      {{#if formView.submitError}}
+        Submit failed with error "{{formView.submitError}}"
+      {{else if formView.isSubmited}}
         <div class="alert alert-success">
           <span class="glyphicon glyphicon-ok-sign"></span>
           The model is saved
         </div>
+      {{else if formView.isSubmiting}}
+        Submit data...
+      {{else if formView.isValidating}}
+        Validate form...
       {{/if}}
       <div class="form-group {{if (and formView.errors.name formView.visibleErrors.name) 'has-error'}}" id="name">
         <label class="control-label">Event name</label>
@@ -24,6 +30,7 @@
         {{errors-list errors=formView.errors.email show=formView.visibleErrors.email}}
       </div>
       <div class="form-group">
+        <button type="reset" class="btn" {{action "reset" target=formView}}>Reset</button>
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     {{/event-form}}

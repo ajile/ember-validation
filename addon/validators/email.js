@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { Logger, RSVP, get, merge } = Ember;
+const { Logger, RSVP, get } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -13,7 +13,7 @@ const defaultOptions = {
   @public
 */
 function validate(attributeName, context, options={}) {
-  options = merge(defaultOptions, options);
+  options = $.extend({}, defaultOptions, options);
   const deferred = RSVP.defer();
   const value = get(context, attributeName);
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
