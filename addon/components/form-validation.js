@@ -14,6 +14,18 @@ export default Ember.Component.extend(ComponentVaidation, {
   /** @type {String} */
   tagName: 'form',
 
+  /** @type {Boolean} */
+  isValidating: false,
+
+  /** @type {Boolean} */
+  isSubmiting: false,
+
+  /** @type {Boolean} */
+  isSubmited: false,
+
+  /** @type {Boolean} */
+  submitError: '',
+
   /**
    * Validate all form on submit
    *
@@ -22,70 +34,101 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   submit(event) {
-    var validationError;
 
     event.preventDefault();
 
-    this.beforeValidation()
+    this.setProperties({
+      submitError: '',
+      isSubmited: false,
+      isValidating: true
+    });
+
+    this.validationStart()
       .then(() => {
-        this.trigger('validationBegin');
         this.validate()
-          .then(
-            () => {
-              this.hideAllErrors();
-              this.onValidatePassed();
-              this.trigger('formValidationPassed');
-
-              this.sendAction('action', () => {
-                  this.onSubmitDone();
-                  this.afterSubmit();
-                }, () => {
-                  this.showAllErrors();
-                  this.onSubmitFailed();
-                });
-            },
-            (error) => {
-              validationError = error;
-              this.showAllErrors();
-              this.onValidateFailed(error);
-              this.trigger('formValidationFailed', error);
-          })
-          .finally(() => {
-            this.trigger('validationEnd', validationError);
-            this.afterValidation(validationError);
-          });
-
-      }).finally(() => { this.afterValidation(validationError) });
-
-
+          .then(this.validationPassed.bind(this), this.validationFailed.bind(this));
+      })
+      .finally(this.validationEnd.bind(this));
 
   },
 
-  beforeValidation: () => RSVP.resolve(),
-
-  onValidatePassed: K,
-
-  onValidateFailed: K,
-
-  afterValidation: K,
+  /**
+  * Called before validation starts.
+  * If returned promise rejected - validation will not starts
+  *
+  * @function
+  * @returns {Ember/RSVP.resolve}
+  */
+  validationStart: () => RSVP.resolve(),
 
   /**
-  * Callback for submit passed
+  * Called after validation was passed
+  * Call given `action`
   *
   * @function
   * @returns {undefined}
   */
-  onSubmitDone: K,
+  validationPassed() {
+    this.hideAllErrors();
+    this.submitStart();
+    this.attrs.action(this.submitDone.bind(this), this.submitFailed.bind(this));
+  },
 
   /**
-  * Custom callback for submit failed
+  * Called after validation was failed
   *
   * @function
   * @returns {undefined}
   */
-  onSubmitFailed: K,
+  validationFailed(/*errors*/) {
+    this.showAllErrors();
+  },
 
-  afterSubmit: K,
+  /**
+  * Called at the end of validation
+  *
+  * @function
+  * @returns {undefined}
+  */
+  validationEnd() {
+    this.set('isValidating', false);
+  },
+
+  submitStart() {
+    this.set('isSubmiting', true)
+  },
+
+  /**
+  * Called when submit daone
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitDone() { //console.log('submitDone')
+    this.set('isSubmited', true);
+    this.submitEnd();
+  },
+
+  /**
+  * Called when submit failed
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitFailed(error) {
+    this.set('submitError', error);
+    this.submitEnd();
+  },
+
+  /**
+  * Called after submit complete
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitEnd() {console.log('submitEnd')
+    this.set('isSubmiting', false);
+  },
 
   /**
   * Make all errors visible
@@ -112,5 +155,33 @@ export default Ember.Component.extend(ComponentVaidation, {
       this.set('visibleErrors.' + attribute, true);
     });
   },
+
+  /**
+  * Check `action` argument was given
+  *
+  * @function
+  * @returns {undefined}
+  */
+  didReceiveAttrs() {
+    Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, !!this.attrs.action);
+  },
+
+  didInsertElement() {
+    this._super(...arguments);
+
+    this.$().on('focusin', () => {
+      this.setProperties({
+        submitError: '',
+        isSubmited: false
+      });
+    });
+  },
+
+  actions: {
+    reset() {
+      typeof this.attrs.reset === 'function' && this.attrs.reset();
+      return true
+    }
+  }
 
 });
