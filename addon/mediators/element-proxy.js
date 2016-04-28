@@ -41,7 +41,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
     this.trigger('failed', error, this);
   },
 
-  _onFocusOut(e) {
+  _onFocusOut() {
     // vlidate only when whole element lost focus
     Ember.run.sync();
     Ember.run.next(this, () => {

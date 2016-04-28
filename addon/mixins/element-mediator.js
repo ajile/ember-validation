@@ -56,7 +56,7 @@ export default Ember.Mixin.create({
   * @fires showErrors
   * @returns {undefined}
   */
-  _onFocusOut(e) {
+  _onFocusOut() {
     this.trigger('showErrors', this.get('attribute'));
     this.validate();
   },
