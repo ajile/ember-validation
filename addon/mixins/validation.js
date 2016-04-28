@@ -291,6 +291,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   _runMediators(method, mediators) {
 
     const deferred = RSVP.defer();
+    const promise = deferred.promise;
 
     var promises = mediators.map((mediator) => tryInvoke(mediator, method));
         promises = promises.reduce((previous, item) => previous.concat(item), Ember.A());
@@ -308,15 +309,12 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       }
     });
 
-    const promise = deferred.promise;
-
-    // promise.catch(RSVP.rethrow);
-
+    promise.then(() => {}, () => {});
     promise.finally(() => {
       mediators.forEach((mediator) => {
         this.get('errors').notifyPropertyChange(get(mediator, 'attribute'));
       });
-    });
+    }).then(() => {}, () => {});
 
     return promise;
   },

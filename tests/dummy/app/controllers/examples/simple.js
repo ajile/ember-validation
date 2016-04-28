@@ -12,8 +12,10 @@ export default Ember.Controller.extend({
 
     validate() {
       const promise = Ember.tryInvoke(this.get("user"), "validate");
-      promise.then(() => { this.set("validationResult", "Model is validated - it's valid"); });
-      promise.catch(() => { this.set("validationResult", "Model is validated - it's invalid"); });
+      promise.then(
+        () => { this.set("validationResult", "Model is validated - it's valid"); },
+        () => { this.set("validationResult", "Model is validated - it's invalid"); }
+      );
     },
 
     validateField(name) {
@@ -22,8 +24,10 @@ export default Ember.Controller.extend({
 
     check() {
       const promise = Ember.tryInvoke(this.get("user"), "check");
-      promise.then(() => { this.set("validationResult", "Model is checked it's valid"); });
-      promise.catch(() => { this.set("validationResult", "Model is checked it's invalid"); });
+      promise.then(
+        () => { this.set("validationResult", "Model is checked - it's valid"); },
+        () => { this.set("validationResult", "Model is checked - it's invalid"); }
+      );
     },
 
     setGender(gender) {

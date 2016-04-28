@@ -85,7 +85,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
       if (rejected.length === 0) {
         deferred.resolve();
       } else {
-        deferred.reject(Ember.A(rejected).mapBy("reason"));
+        deferred.reject(Ember.A(rejected).mapBy("reason"), "Mediator attribute rejects the promise");
       }
     });
 

@@ -1,6 +1,5 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { test } from 'ember-qunit';
 import moduleForAcceptance from '../helpers/module-for-acceptance';
-import hbs from 'htmlbars-inline-precompile';
 import { simpleForm as page } from '../pages/forms';
 
 moduleForAcceptance('Acceptance | Page | simple form');
@@ -83,7 +82,7 @@ test('valid inputs one by one', function (assert) {
   andThen(() => {
     assert.equal(page.errorsCount, 0, '0 error');
     assert.equal(page.phone.errorsCount, 0, 'no phone error');
-  })
+  });
 });
 
 test('validate additional fields', function (assert) {

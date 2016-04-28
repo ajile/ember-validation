@@ -3,10 +3,9 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
   actions: {
-    saveEvent(done, failed) {
+    saveEvent(done) {
       Ember.run.later(this, () => {
         typeof done === 'function' && done();
-        // typeof failed === 'function' && failed('Unknown error');
       }, 500);
     },
 

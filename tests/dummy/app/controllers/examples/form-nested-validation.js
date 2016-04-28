@@ -5,7 +5,7 @@ export default Ember.Controller.extend({
   modelWasSaved: false,
 
   actions: {
-    saveUser(done) {
+    saveUser() {
       this.set('modelWasSaved', true);
     }
   }

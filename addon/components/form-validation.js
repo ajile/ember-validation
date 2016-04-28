@@ -2,7 +2,8 @@ import Ember from 'ember';
 import ComponentVaidation from 'ember-validation/mixins/component';
 import layout from '../templates/components/form-validation';
 
-const { K, RSVP } = Ember;
+const { RSVP } = Ember;
+
 /**
  * @module
  * @augments ember/Component
@@ -18,10 +19,10 @@ export default Ember.Component.extend(ComponentVaidation, {
   isValidating: false,
 
   /** @type {Boolean} */
-  isSubmiting: false,
+  isSubmitting: false,
 
   /** @type {Boolean} */
-  isSubmited: false,
+  isSubmitted: false,
 
   /** @type {Boolean} */
   submitError: '',
@@ -39,7 +40,7 @@ export default Ember.Component.extend(ComponentVaidation, {
 
     this.setProperties({
       submitError: '',
-      isSubmited: false,
+      isSubmitted: false,
       isValidating: true
     });
 
@@ -95,7 +96,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   submitStart() {
-    this.set('isSubmiting', true)
+    this.set('isSubmitting', true);
   },
 
   /**
@@ -104,8 +105,8 @@ export default Ember.Component.extend(ComponentVaidation, {
   * @function
   * @returns {undefined}
   */
-  submitDone() { //console.log('submitDone')
-    this.set('isSubmited', true);
+  submitDone() {
+    this.set('isSubmitted', true);
     this.submitEnd();
   },
 
@@ -126,8 +127,8 @@ export default Ember.Component.extend(ComponentVaidation, {
   * @function
   * @returns {undefined}
   */
-  submitEnd() {console.log('submitEnd')
-    this.set('isSubmiting', false);
+  submitEnd() {
+    this.set('isSubmitting', false);
   },
 
   /**
@@ -172,7 +173,7 @@ export default Ember.Component.extend(ComponentVaidation, {
     this.$().on('focusin', () => {
       this.setProperties({
         submitError: '',
-        isSubmited: false
+        isSubmitted: false
       });
     });
   },
@@ -180,7 +181,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   actions: {
     reset() {
       typeof this.attrs.reset === 'function' && this.attrs.reset();
-      return true
+      return true;
     }
   }
 

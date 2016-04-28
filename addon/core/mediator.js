@@ -85,8 +85,9 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
       return RSVP.resolve();
     }
     const promise = this._validate(...arguments);
-    promise.catch((errors) => { this.trigger("failed", errors, this); });
-    promise.then(() => { this.trigger("passed", this); });
+    const onResolve = () => { this.trigger("passed", this); };
+    const onReject = errors => { this.trigger("failed", errors, this); };
+    promise.then(onResolve, onReject);
     return promise;
   },
 
@@ -98,7 +99,9 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
     if (!Ember.isNone(this.condition) && !this.get('condition')) {
       return RSVP.resolve();
     }
-    return this._check(...arguments);
+    var promise = this._check(...arguments);
+    promise.then(() => {}, () => {});
+    return promise;
   },
 
   /**

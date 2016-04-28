@@ -1,6 +1,5 @@
 import { test } from 'ember-qunit';
 import moduleForAcceptance from '../helpers/module-for-acceptance';
-// import hbs from 'htmlbars-inline-precompile';
 import { nestedValidationForm as page } from '../pages/forms';
 
 moduleForAcceptance('Acceptance | Page | nested validation form');

@@ -1,3 +1,4 @@
+import Ember from "ember";
 import { module } from 'qunit';
 import startApp from './start-app';
 

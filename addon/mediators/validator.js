@@ -58,8 +58,6 @@ export default BaseMediator.extend({
 
     const promise = validator(attribute, context, options);
 
-    promise.catch(() => { console.log("TEMPORARY 1"); });
-
     return promise;
 
   }

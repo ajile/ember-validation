@@ -18,7 +18,7 @@ test('SHow errors on focusout', function (assert) {
   andThen(() => {
     page.contact_email.click();
     page.click();
-  })
+  });
 
   andThen(() => {
     assert.equal(page.errorsCount, 3, '3 errors');
@@ -38,11 +38,10 @@ test('validators', function (assert) {
 
   andThen(() => {
     page.participants_number.click();
-  })
+  });
 
   andThen(() => {
     assert.equal(page.name.errors, 'must be at leat 3 symbols', 'name min length error');
-    console.log(page.name.errors)
     page.name.click().fillIn('vaaaaaaaaaaaaaaa');
   });
 

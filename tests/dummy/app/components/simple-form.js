@@ -23,18 +23,16 @@ export default FormValidation.extend({
 
   didInsertElement() {
     this._super(...arguments);
-
-    this.$().on('focus', 'input', () => { this.set('modelWasSaved', false); })
+    this.$().on('focus', 'input', () => { this.set('modelWasSaved', false); });
   },
 
   beforeValidation() {
     const deferred = RSVP.defer();
 
     if (!this.get('isAccordionOpened')) {
-
       this.toggleProperty('isAccordionOpened');
-      Ember.run.scheduleOnce('afterRender', this, () => { deferred.resolve(); })
-      this.one('validationEnd', (error) => {
+      Ember.run.scheduleOnce('afterRender', this, () => { deferred.resolve(); });
+      this.one('validationEnd', () => {
         if (!(this.get('errors.city') || this.get('errors.street') || this.get('errors.house'))) {
           this.toggleProperty('isAccordionOpened');
         }
