@@ -18,7 +18,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
     this.get('view')
       .on('passed', this, this._onViewValidationPassed)
       .on('failed', this, this._onViewValidationFailed)
-      .$().attr('tabindex', 0).addClass('no-focus'); // make element focusable
+      .$().attr('tabindex', -1).addClass('no-focus'); // make element focusable
   },
 
   willDestroy() {
