@@ -2,6 +2,7 @@
   {{#if errors.length}}
     <ul class="validation-error-list">
       {{#each errors as |error|}}
+        {{log error}}
         <li class="validation-error">{{error.message}}</li>
       {{/each}}
     </ul>

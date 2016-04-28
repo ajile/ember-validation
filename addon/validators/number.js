@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
+import { createError } from 'ember-validation/utils/error';
 
 const { Logger, RSVP: { defer }, get, getProperties } = Ember;
 
@@ -23,16 +24,20 @@ function validate(attributeName, context, options={}) {
   Logger.info("Validation : <<validator>> : 'number' called on %s with options %o", attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
+
   if (!isNumber(value)) {
-    return deferred.reject(get(options, "messages.not_number"), "Validator `number` rejects the promise"), deferred.promise;
+    var err = createError(get(options, "messages.not_number"), value, options);
+    return deferred.reject(err), deferred.promise;
   }
 
   if (!Ember.isNone(min) && value < min) {
-    return deferred.reject(get(options, "messages.out_of_range"), "Validator `number` rejects the promise"), deferred.promise;
+    var err = createError(get(options, "messages.out_of_range"), value, options);
+    return deferred.reject(err), deferred.promise;
   }
 
   if (!Ember.isNone(max) && value > max) {
-    return deferred.reject(get(options, "messages.out_of_range"), "Validator `number` rejects the promise"), deferred.promise;
+    var err = createError(get(options, "messages.out_of_range"), value, options);
+    return deferred.reject(err), deferred.promise;
   }
 
   deferred.resolve();

@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
+import { createError } from 'ember-validation/utils/error';
 
 const { RSVP: { defer }, get } = Ember;
 
@@ -29,7 +30,8 @@ function validate(attributeName, context, options={}) {
   Ember.assert("validators/regexp: options.regexp must be instance of RegExp", regexp instanceof RegExp);
 
   if (!regexp.test(value)) {
-    return deferred.reject(get(options, "messages.default"), "Validator `regexp` rejects the promise"), deferred.promise;
+    var err = createError(get(options, "messages.default"), value, options);
+    return deferred.reject(err), deferred.promise;
   }
 
   deferred.resolve();

@@ -77,6 +77,10 @@ export default DS.Model.extend(ValidationMixin, {
         {
           name: 'required',
           options: { messages: { default: "email_required" } }
+        },
+        {
+          name: 'email',
+          options: { messages: { default: "email_wrong" } }
         }
       ]
     },

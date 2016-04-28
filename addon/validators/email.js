@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
+import { createError } from 'ember-validation/utils/error';
 
 const { Logger, RSVP, get } = Ember;
 
@@ -22,7 +23,13 @@ function validate(attributeName, context, options={}) {
   Logger.info("Validation : <<validator>> : 'email' called on %s with options %o", attributeName, options);
 
   const reg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  reg.test(value) ? deferred.resolve() : deferred.reject(get(options, "messages.default"), "Validator `email` rejects the promise");
+
+  if (reg.test(value)) {
+    deferred.resolve();
+  } else {
+    var err = createError(get(options, "messages.default"), value, options);
+    deferred.reject(err);
+  }
 
   return deferred.promise;
 }

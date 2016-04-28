@@ -28,14 +28,6 @@ function validate(attributeName, context, options={}) {
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
 
-  if (!Ember.isNone(min) && value.length < min) {
-    return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
-  }
-
-  if (!Ember.isNone(max) && value.length > max) {
-    return deferred.reject(get(options, "messages.out_of_range")), deferred.promise;
-  }
-
   deferred.resolve();
 
   return deferred.promise;

@@ -140,7 +140,8 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       });
 
       attributeMediator.on("failed", (message) => {
-        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with messages %o", "color: #900", null, attribute, message);
+        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
+        this.get("errors").remove(attribute);
         this.get("errors").add(attribute, message);
         this.get("errors").arrayContentDidChange();
       });
