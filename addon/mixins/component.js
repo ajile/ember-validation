@@ -245,8 +245,7 @@ export default Ember.Mixin.create(ValidationMixin, {
       .on('passed', this, this._triggerValidatePassed)
       .on('failed', this, this._triggerValidateFailed)
       .on('showErrors', this, this._showErrors)
-      .on('hideErrors', this, this._hideErrors)
-      .on('willDestroy', this, () => { console.log('willDestroy', view.element, this.get('mediators').indexOf(mediator)) });
+      .on('hideErrors', this, this._hideErrors);
   }),
 
   /**

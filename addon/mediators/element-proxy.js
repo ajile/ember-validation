@@ -17,7 +17,8 @@ export default BaseMediator.extend(ElementMediatorMixin, {
 
     this.get('view')
       .on('passed', this, this._onViewValidationPassed)
-      .on('failed', this, this._onViewValidationFailed);
+      .on('failed', this, this._onViewValidationFailed)
+      .$().attr('tabindex', 0).addClass('no-focus'); // make element focusable
   },
 
   willDestroy() {
@@ -38,6 +39,21 @@ export default BaseMediator.extend(ElementMediatorMixin, {
 
   _onViewValidationFailed(error) {
     this.trigger('failed', error, this);
+  },
+
+  _onFocusOut(e) {
+    // vlidate only when whole element lost focus
+    Ember.run.sync();
+    Ember.run.next(this, () => {
+      Ember.run.scheduleOnce('afterRender', this, () => {
+        const view = this.get('view');
+
+        if (!(view.$().is(':focus') || view.$(':focus').length)) {
+          this.trigger('showErrors', this.get('attribute'));
+          this.validate();
+        }
+      });
+    });
   },
 
   /**
