@@ -51,16 +51,16 @@
           {{/if}}
         </div>
         <div class="panel-body {{if (and formView.errors.credentials formView.visibleErrors.credentials) 'has-error'}}">
-        {{#component-validation validation-context=model.credentials errors-name="credentials" error-message="Login and password required" as |formView|}}
-          <div class="form-group {{if (and formView.errors.login formView.visibleErrors.login) 'has-error'}}" id="login">
+        {{#component-validation validation-context=model.credentials errors-name="credentials" error-message="Login and password required" as |formView errors visibleErrors|}}
+          <div class="form-group {{if (and errors.login visibleErrors.login) 'has-error'}}" id="login">
             <label class="control-label">Login</label>
             {{input value=model.credentials.login class="form-control" validate-path="login"}}
-            {{errors-list errors=formView.errors.login show=formView.visibleErrors.login}}
+            {{errors-list errors=errors.login show=visibleErrors.login}}
           </div>
-          <div class="form-group {{if (and formView.errors.password formView.visibleErrors.password) 'has-error'}}" id="password">
+          <div class="form-group {{if (and errors.password visibleErrors.password) 'has-error'}}" id="password">
             <label class="control-label">Password</label>
             {{input value=model.credentials.password class="form-control" validate-path="password"}}
-            {{errors-list errors=formView.errors.password show=formView.visibleErrors.password}}
+            {{errors-list errors=errors.password show=visibleErrors.password}}
           </div>
         {{/component-validation}}
         </div>
