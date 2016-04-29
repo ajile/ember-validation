@@ -11,15 +11,13 @@ const { RSVP, tryInvoke, Logger } = Ember;
 export default BaseMediator.extend(ElementMediatorMixin, {
 
   /**
-   * Validate
-   *
    * @function
    * @override
    * @returns {RSVP.Promise}
    */
   _validate() {
     let attribute = this.get('attribute');
-    Logger.log('Validation : Mediator : Element : validate : ', attribute, this.get('view.element'));
+    Logger.log('Validation : <<mediator>> : Element : _validate : %s %O', attribute, this.get('view.element'));
     const promise = tryInvoke(this.get('context'), 'validate', [attribute]);
     return promise || RSVP.resolve();
   }

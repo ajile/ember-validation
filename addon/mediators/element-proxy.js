@@ -9,6 +9,7 @@ const { RSVP, computed, tryInvoke, Logger } = Ember;
 * @augments ember-validation/BaseMediator
 */
 export default BaseMediator.extend(ElementMediatorMixin, {
+
   /** @type {String} */
   attribute: computed.or('options.errorsName', 'view.errors-name'),
 
@@ -42,7 +43,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
   },
 
   _onFocusOut() {
-    // vlidate only when whole element lost focus
+    // validate only when whole element lost focus
     Ember.run.sync();
     Ember.run.next(this, () => {
       Ember.run.scheduleOnce('afterRender', this, () => {
@@ -57,13 +58,12 @@ export default BaseMediator.extend(ElementMediatorMixin, {
   },
 
   /**
-  * Validate
-  * @function
-  * @override
-  * @returns {RSVP.Promise}
-  */
+   * @function
+   * @override
+   * @returns {RSVP.Promise}
+   */
   _validate() {
-    Logger.log('Validation : Mediator : ElementProxy : validate : ', this.get('attribute'), this.get('view.element'));
+    Logger.log('Validation : <<mediator>> : ElementProxy : _validate : %s %O', this.get('attribute'), this.get('view.element'));
     const promise = tryInvoke(this.get('view'), 'validate');
 
     return promise || RSVP.resolve();
