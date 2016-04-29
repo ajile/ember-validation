@@ -10,6 +10,7 @@ const { RSVP } = Ember;
  * @augments ember-validation/mixins/component
  */
 export default Ember.Component.extend(ComponentVaidation, {
+
   layout: layout,
 
   /** @type {String} */
@@ -140,7 +141,6 @@ export default Ember.Component.extend(ComponentVaidation, {
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
       let attribute = Ember.get(mediator, 'attribute');
-
       attribute && this.set('visibleErrors.' + attribute, true);
     });
   },

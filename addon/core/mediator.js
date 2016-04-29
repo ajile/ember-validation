@@ -1,3 +1,4 @@
+/* jslint plusplus: true */
 import Ember from 'ember';
 import ValidatableMixin from 'ember-validation/mixins/validatable';
 

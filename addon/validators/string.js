@@ -1,7 +1,8 @@
 import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
+import { createError } from 'ember-validation/utils/error';
 
-const { Logger, RSVP: { resolve, reject }, get, getProperties } = Ember;
+const { Logger, RSVP: { resolve, reject }, get } = Ember;
 
 const defaultOptions = {
   "messages": {
@@ -21,7 +22,6 @@ const defaultOptions = {
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const value = get(context, attributeName);
-  const { min, max } = getProperties(options, "min", "max");
 
   Logger.log("Validation : <<validator>> : 'string' called on %s with options %o", attributeName, options);
 

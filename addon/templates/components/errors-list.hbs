@@ -2,7 +2,7 @@
   {{#if errors.length}}
     <ul class="validation-error-list">
       {{#each errors as |error|}}
-        {{#if error.message.isValidationError}}
+        {{#if error.message.key}}
           <li class="validation-error">{{error.message.key}}</li>
         {{else}}
           <li class="validation-error">{{error.message}}</li>

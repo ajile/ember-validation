@@ -10,8 +10,6 @@ const { getProperties } = Ember;
  */
 export default Ember.Object.extend({
 
-  isValidationError: true,
-
   /**
    * A key of the error. It can be used for translation needs.
    * @type String
