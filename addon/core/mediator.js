@@ -120,7 +120,23 @@ export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
    */
   _check() {
     return this._validate(...arguments);
-  }
+  },
 
+  /**
+   * Collecting all computed properties that contained in the options into the
+   * object.
+   * @function
+   * @returns Object
+   */
+  optionsToJSON() {
+    const options = this.get("options"),
+          keys = Ember.A(options ? Object.keys(options) : []),
+          result = {};
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      result[key] = this.get(key);
+    }
+    return result;
+  }
 
 });

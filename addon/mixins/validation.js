@@ -135,19 +135,19 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       });
 
       attributeMediator.on("passed", () => {
-        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.passed%c on attribute '%s'", "color: #090", null, attribute);
+        Logger.log("Validation : <<mixin>> : Validation : %cevent::Mediator.passed%c on attribute '%s'", "color: #090", null, attribute);
         this.get("errors").remove(attribute);
       });
 
       attributeMediator.on("failed", (message) => {
-        Logger.info("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
+        Logger.log("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
         this.get("errors").remove(attribute);
         this.get("errors").add(attribute, message);
         this.get("errors").arrayContentDidChange();
       });
 
       attributeMediator.on("conditionChanged", () => {
-        Logger.info("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
+        Logger.log("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
         this.get("errors").remove(attribute);
       });
 
@@ -169,7 +169,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     const attrName = get(mediator, "attribute");
     this.get("mediators").pushObject(mediator);
     this.trigger('mediatorDidAdd', mediator);
-    Logger.info("Validation : <<mixin>> : Validation : addMediator %o for '%s'", mediator, attrName);
+    Logger.log("Validation : <<mixin>> : Validation : addMediator %o for '%s'", mediator, attrName);
   },
 
   /**
@@ -188,7 +188,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       this.trigger("mediatorWillRemove", mediator);
       mediators.removeObject(mediator);
       mediator.destroy();
-      Logger.info("Validation : <<mixin>> : Validation : removeMediator %o for '%s'", mediator, attrName);
+      Logger.log("Validation : <<mixin>> : Validation : removeMediator %o for '%s'", mediator, attrName);
     }
   },
 
@@ -302,10 +302,10 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     settledPromise.then((results) => {
       const rejected = Ember.A(results).filterBy("state", "rejected");
       if (rejected.length === 0) {
-        Logger.info("Validation : <<mixin>> : Validation : _runMediators %c✓ passed", "color: #090");
+        Logger.log("Validation : <<mixin>> : Validation : _runMediators %c✓ passed", "color: #090");
         deferred.resolve();
       } else {
-        Logger.info("Validation : <<mixin>> : Validation : _runMediators %c✘ failed", "color: #900");
+        Logger.log("Validation : <<mixin>> : Validation : _runMediators %c✘ failed", "color: #900");
         deferred.reject(Ember.A(rejected).mapBy("reason"));
       }
     });

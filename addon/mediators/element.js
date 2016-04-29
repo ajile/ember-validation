@@ -19,7 +19,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
    */
   _validate() {
     let attribute = this.get('attribute');
-    Logger.info('Validation : Mediator : Element : validate : ', attribute, this.get('view.element'));
+    Logger.log('Validation : Mediator : Element : validate : ', attribute, this.get('view.element'));
     const promise = tryInvoke(this.get('context'), 'validate', [attribute]);
     return promise || RSVP.resolve();
   }

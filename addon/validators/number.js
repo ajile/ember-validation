@@ -21,22 +21,22 @@ function validate(attributeName, context, options={}) {
   const value = get(context, attributeName);
   const { min, max } = getProperties(options, "min", "max");
 
-  Logger.info("Validation : <<validator>> : 'number' called on %s with options %o", attributeName, options);
+  Logger.log("Validation : <<validator>> : 'number' called on %s with options %o", attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
 
   if (!isNumber(value)) {
-    var err = createError(get(options, "messages.not_number"), value, options);
+    var err = createError(get(options, "messages.not_number"), value);
     return deferred.reject(err), deferred.promise;
   }
 
   if (!Ember.isNone(min) && value < min) {
-    var err = createError(get(options, "messages.out_of_range"), value, options);
+    var err = createError(get(options, "messages.out_of_range"), value);
     return deferred.reject(err), deferred.promise;
   }
 
   if (!Ember.isNone(max) && value > max) {
-    var err = createError(get(options, "messages.out_of_range"), value, options);
+    var err = createError(get(options, "messages.out_of_range"), value);
     return deferred.reject(err), deferred.promise;
   }
 

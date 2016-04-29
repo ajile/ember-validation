@@ -30,7 +30,7 @@ function validate(attributeName, context, options={}) {
   Ember.assert("validators/regexp: options.regexp must be instance of RegExp", regexp instanceof RegExp);
 
   if (!regexp.test(value)) {
-    var err = createError(get(options, "messages.default"), value, options);
+    var err = createError(get(options, "messages.default"), value);
     return deferred.reject(err), deferred.promise;
   }
 

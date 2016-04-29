@@ -17,10 +17,10 @@ const defaultOptions = {
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const value = get(context, attributeName);
-  Logger.info("Validation : <<validator>> : 'required' called on %s with options %o", attributeName, options);
+  Logger.log("Validation : <<validator>> : 'required' called on %s with options %o", attributeName, options);
 
   if (isBlank(value)) {
-    var err = createError(get(options, "messages.default"), value, options);
+    var err = createError(get(options, "messages.default"), value);
     return reject(err);
   }
 

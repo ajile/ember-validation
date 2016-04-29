@@ -20,14 +20,14 @@ function validate(attributeName, context, options={}) {
   const value = get(context, attributeName);
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
 
-  Logger.info("Validation : <<validator>> : 'email' called on %s with options %o", attributeName, options);
+  Logger.log("Validation : <<validator>> : 'email' called on %s with options %o", attributeName, options);
 
   const reg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   if (reg.test(value)) {
     deferred.resolve();
   } else {
-    var err = createError(get(options, "messages.default"), value, options);
+    var err = createError(get(options, "messages.default"), value);
     deferred.reject(err);
   }
 

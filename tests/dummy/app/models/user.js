@@ -23,7 +23,7 @@ export default DS.Model.extend(ValidationMixin, {
 
     first_name: {
       validators: [
-        { name: "required", options: { messages: {default: "first_name_required"} } }
+        { name: "required", options: { messages: {default: "first_name_required"}, test: computed.alias("context.testValue") } }
       ]
     },
 
@@ -111,9 +111,9 @@ export default DS.Model.extend(ValidationMixin, {
         }
       ]
     },
-
-
   },
+
+  testValue: "THE TEST VALUE",
 
   first_name: attr("string", {defaultValue:''}),
   last_name: attr("string", {defaultValue:''}),
