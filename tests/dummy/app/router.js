@@ -26,6 +26,7 @@ Router.map(function() {
       this.route('creating');
     });
     this.route('components');
+    this.route('presets');
   });
   this.route('examples', function() {
     this.route('simple');

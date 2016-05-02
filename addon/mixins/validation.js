@@ -3,7 +3,7 @@ import ValidatableMixin from 'ember-validation/mixins/validatable';
 import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
 import Errors from 'ember-validation/core/errors';
-import lookup from 'ember-validation/utils/lookup';
+import { lookupValidator, lookupPreset } from 'ember-validation/utils/lookup';
 
 const { RSVP, computed, get, keys, assert, Logger, getWithDefault, getProperties, tryInvoke } = Ember;
 
@@ -63,7 +63,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     @type Object
     @protected
   */
-  validationScheme: {},
+  validationScheme: computed(() => { return {}; }),
 
   init() {
     this.initErrors();
@@ -107,7 +107,26 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
 
     const validationScheme = this.get("validationScheme");
 
-    assert("You should define `validationScheme` property", validationScheme);
+    if (Ember.isBlank(Object.keys(validationScheme))) {
+      // The object doesn't have a validation scheme. Probably it has validation
+      // schemes on every it's attribute.
+      var attributes = Ember.get(this.constructor, "attributes");
+
+      attributes.forEach(item => {
+        Logger.log("Validation : <<mixin>> : Validation : looking preset for type %s", item.type);
+        let { type, name, options } = item;
+        let preset = lookupPreset(type, get(this, "container"));
+        Logger.log("Validation : <<mixin>> : Validation : preset found %o", preset.create(item));
+        validationScheme[name] = preset.create(item).evolve();
+      });
+    }
+
+    console.log(validationScheme);
+
+    return this._initValidationByScheme(validationScheme);
+  },
+
+  _initValidationByScheme(validationScheme) {
 
     // Getting the object's properties that should have validation.
     const attributes = Ember.A(keys(validationScheme));
@@ -184,7 +203,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     const mediators = this.get("mediators");
     const attrName = get(mediator, "attribute");
 
-    if (mediators.indexOf(mediator) !== -1) {
+    if (mediators.ndexOf(mediator) !== -1) {
       this.trigger("mediatorWillRemove", mediator);
       mediators.removeObject(mediator);
       mediator.destroy();
@@ -329,7 +348,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   _createValidators(attribute, validation) {
     return Ember.A( get(validation, "validators") ).map((description) => {
       const { name, options } = getProperties(description, ["name", "options"]);
-      const validator = lookup(name, get(this, "container"));
+      const validator = lookupValidator(name, get(this, "container"));
       return { options, validator };
     });
   },
