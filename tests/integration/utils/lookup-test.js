@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import lookup from '../../../utils/lookup';
+import { lookupValidator } from '../../../utils/lookup';
 import startApp from '../../helpers/start-app';
 
 module('Integration | Utility | lookup', {
@@ -14,22 +14,22 @@ module('Integration | Utility | lookup', {
 });
 
 // Replace this with your real tests.
-test('it works', function(assert) {
+test('lookupValidator works', function(assert) {
 
   const app = this.app;
   const container = app.__container__;
 
-  assert.throws(() => lookup(), "Throws an error when no name nor container");
-  assert.throws(() => lookup("", container), "Throws an error when name wrong");
-  assert.throws(() => lookup(null, container), "Throws an error when name wrong");
-  assert.throws(() => lookup(undefined, container), "Throws an error when name wrong");
-  assert.throws(() => lookup("aaaa", "Throws an error when name wrong and no container"));
-  assert.throws(() => lookup("imaginary-validator", container), "Throws an error when validator not found");
+  assert.throws(() => lookupValidator(), "Throws an error when no name nor container");
+  assert.throws(() => lookupValidator("", container), "Throws an error when name wrong");
+  assert.throws(() => lookupValidator(null, container), "Throws an error when name wrong");
+  assert.throws(() => lookupValidator(undefined, container), "Throws an error when name wrong");
+  assert.throws(() => lookupValidator("aaaa", "Throws an error when name wrong and no container"));
+  assert.throws(() => lookupValidator("imaginary-validator", container), "Throws an error when validator not found");
 
   const name = "test";
-  const ValidatorClass = Ember.Object.extend({ name: "TEST_VALIDATOR" });
-  container._registry.register(`validator:${name}`, ValidatorClass);
-  let Validator = lookup(name, container);
+  const validatorFunction = () => {};
+  container._registry.register(`validator:${name}`, validatorFunction);
+  let validator = lookupValidator(name, container);
 
-  assert.ok(Validator.create() instanceof ValidatorClass, "Function returns validator from registry by name");
+  assert.ok(Ember.typeOf(validator) === "function", "Function returns validator from registry by name");
 });

@@ -1,7 +1,45 @@
 <h3>Simple model</h3>
 <formset>
   <legend>On demand</legend>
+  <form {{action 'validateCompany' on='submit'}}>
+    <p>We're working with company model ({{company}}).</p>
+
+    {{#if company.isValid}}
+      <div class="alert alert-success">
+        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        The model is valid
+      </div>
+    {{else}}
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Some fields of the model invalid
+      </div>
+    {{/if}}
+
+    <div class="form-group {{if company.errors.name 'has-error'}}">
+      <label class="control-label">Name</label>
+      {{input value=company.name class="form-control"}}
+      {{errors-list errors=company.errors.name}}
+    </div>
+
+    <div class="form-group {{if company.errors.age 'has-error'}}">
+      <label class="control-label">Age</label>
+      {{input value=company.age class="form-control"}}
+      {{errors-list errors=company.errors.age}}
+    </div>
+
+    <button type="submit" class="btn btn-default">Validate</button>
+  </form>
+</formset>
+
+
+<hr />
+
+
+<formset>
+  <legend>On demand</legend>
   <form {{action 'validate' on='submit'}}>
+    <p>We're working with user model ({{user}}).</p>
     {{#if validationResult}}
       <div class="alert alert-info">
         {{validationResult}}

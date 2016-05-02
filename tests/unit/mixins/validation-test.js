@@ -100,7 +100,7 @@ test('is creates mediators', function(assert) {
 
 test('it works with object\'s errors', function(assert) {
 
-  expect(8);
+  expect(7);
 
   const app = this.app;
   const container = app.__container__;
@@ -125,27 +125,15 @@ test('it works with object\'s errors', function(assert) {
   assert.equal(subject.get("errors").get("length"), 0, "Subject doesn't have errors before validation");
 
   subject.validate().catch(() => {
-    assert.equal(subject.get("errors.length"), 1, "If validation failed object should get errors");
+    assert.equal(subject.get("errors.length"), 2, "If validation failed object should get errors from every failed validator");
     subject.clearErrors();
     assert.equal(subject.get("errors.length"), 0, "Errors length equal 0 after clearErrors");
     assert.ok(subject.get("isValid"), "Object become valid after clearErrors");
 
     subject.validate().catch(() => {
-      assert.equal(subject.get("errors.someAttributeName.length"), 1, "Attribute someAttributeName has errors");
+      assert.equal(subject.get("errors.someAttributeName.length"), 2, "Attribute someAttributeName has errors");
       subject.clearErrorsByName("someAttributeName");
       assert.ok(!subject.get("errors.someAttributeName.length"), "Errors length of someAttributeName attr equal 0 after clearErrorsByName");
-    });
-  });
-
-  const mediators = subject.get("mediators");
-  const attributeMediator = mediators.get("firstObject");
-
-  subject.validate().catch(() => {
-    assert.equal(subject.get("errors.length"), 1, "The object should contain only 1 error");
-    attributeMediator.on("conditionChanged", () => {
-      Ember.run.scheduleOnce("actions", this, () => {
-        assert.equal(subject.get("errors.length"), 0, "When attribute validation condition changes it flushed field's errors");
-      });
     });
   });
 

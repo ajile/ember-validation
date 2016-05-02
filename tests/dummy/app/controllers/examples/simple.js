@@ -4,9 +4,8 @@ export default Ember.Controller.extend({
 
   validationResult: "Unknown",
 
-  user: Ember.computed(function() {
-    return this.store.createRecord("user");
-  }),
+  user: Ember.computed(function() { return this.store.createRecord("user"); }),
+  company: Ember.computed(function() { return this.store.createRecord("company"); }),
 
   actions: {
 
@@ -16,6 +15,10 @@ export default Ember.Controller.extend({
         () => { this.set("validationResult", "Model is validated - it's valid"); },
         () => { this.set("validationResult", "Model is validated - it's invalid"); }
       );
+    },
+
+    validateCompany() {
+      Ember.tryInvoke(this.get("company"), "validate");
     },
 
     validateField(name) {
