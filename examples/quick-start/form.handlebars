@@ -1,0 +1,11 @@
+{{#form-validation action="save" validation-context=model as |form|}}
+
+  <div class="form-group">
+    <label class="control-label">Username</label>
+    {{input value=model.username class="form-control" validate-path="username"}}
+    {{errors-list errors=model.errors.username show=form.visibleErrors.username}}
+  </div>
+
+  <button type="submit">Validate & Save</button>
+
+{{/form-validation}}

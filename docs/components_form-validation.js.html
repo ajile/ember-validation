@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>components/form-validation.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addon_components_form-validation.html">addon/components/form-validation</a><ul class='methods'><li data-type='method'><a href="module-addon_components_form-validation.html#~didReceiveAttrs">didReceiveAttrs</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~hideAllErrors">hideAllErrors</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~showAllErrors">showAllErrors</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submit">submit</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitDone">submitDone</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitEnd">submitEnd</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitFailed">submitFailed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationEnd">validationEnd</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationFailed">validationFailed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationPassed">validationPassed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationStart">validationStart</a></li></ul></li><li><a href="module-addon_core_error.html">addon/core/error</a><ul class='methods'><li data-type='method'><a href="module-addon_core_error.html#~toString">toString</a></li></ul></li><li><a href="module-addon_core_errors.html">addon/core/errors</a></li><li><a href="module-addon_core_mediator.html">addon/core/mediator</a><ul class='methods'><li data-type='method'><a href="module-addon_core_mediator.html#~_check">_check</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~check">check</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~conditionDidChange">conditionDidChange</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~optionsToJSON">optionsToJSON</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~validate">validate</a></li></ul></li><li><a href="module-addon_mediators_attribute.html">addon/mediators/attribute</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_attribute.html#~_check">_check</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~objectAtContent">objectAtContent</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~replace">replace</a></li></ul></li><li><a href="module-addon_mediators_element.html">addon/mediators/element</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_element.html#~_validate">_validate</a></li></ul></li><li><a href="module-addon_mediators_element-proxy.html">addon/mediators/element-proxy</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_element-proxy.html#~_validate">_validate</a></li></ul></li><li><a href="module-addon_mediators_model-validator.html">addon/mediators/model-validator</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_model-validator.html#~getSnapshot">getSnapshot</a></li></ul></li><li><a href="module-addon_mediators_validator.html">addon/mediators/validator</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_validator.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_mediators_validator.html#~getSnapshot">getSnapshot</a></li></ul></li><li><a href="module-addon_mixins_component.html">addon/mixins/component</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_component.html#~_addElementMediator">_addElementMediator</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_createElementMediator">_createElementMediator</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_find">_find</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_hideErrors">_hideErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onContextDidChange">_onContextDidChange</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onDidInsertElement">_onDidInsertElement</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onMediatorDidAdd">_onMediatorDidAdd</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onMediatorWillDestroy">_onMediatorWillDestroy</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_showErrors">_showErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_subscribe">_subscribe</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_triggerValidateFailed">_triggerValidateFailed</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_triggerValidatePassed">_triggerValidatePassed</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_unsubscribe">_unsubscribe</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~add">add</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~clear">clear</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~clearValidation">clearValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~initErrors">initErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~initValidation">initValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~isChild">isChild</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~remove">remove</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~resetErrors">resetErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~resetValidation">resetValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~unknownProperty">unknownProperty</a></li></ul></li><li><a href="module-addon_mixins_model.html">addon/mixins/model</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_model.html#~_createValidatorMediator">_createValidatorMediator</a></li></ul></li><li><a href="module-addon_mixins_validatable.html">addon/mixins/validatable</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_validatable.html#~validate">validate</a></li></ul></li><li><a href="module-addon_mixins_validation.html">addon/mixins/validation</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_validation.html#~_createAttributeMediator">_createAttributeMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_createValidatorMediator">_createValidatorMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_createValidators">_createValidators</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_runMediators">_runMediators</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~addMediator">addMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~check">check</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~checkByName">checkByName</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~clearErrors">clearErrors</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~clearErrorsByName">clearErrorsByName</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~initValidation">initValidation</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~removeMediator">removeMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~validate">validate</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~validateByName">validateByName</a></li></ul></li><li><a href="module-addon_validators_email.html">addon/validators/email</a></li><li><a href="module-addon_validators_number.html">addon/validators/number</a></li><li><a href="module-addon_validators_regexp.html">addon/validators/regexp</a></li><li><a href="module-addon_validators_required.html">addon/validators/required</a></li><li><a href="module-addon_validators_string.html">addon/validators/string</a></li></ul><h3>Events</h3><ul><li><a href="module-addon_core_mediator.html#~event:conditionChanged">conditionChanged</a></li><li><a href="module-addon_core_mediator.html#~event:failed">failed</a></li><li><a href="module-addon_core_mediator.html#~event:passed">passed</a></li></ul><h3>Mixins</h3><ul><li><a href="module-addon_mixins_component-addon_mixins_component.html">addon/mixins/component</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onFocusIn">_onFocusIn</a></li><li><a href="global.html#_onFocusOut">_onFocusOut</a></li><li><a href="global.html#lookup">lookup</a></li><li><a href="global.html#lookupPreset">lookupPreset</a></li><li><a href="global.html#lookupValidator">lookupValidator</a></li><li><a href="global.html#merge">merge</a></li><li><a href="global.html#view">view</a></li><li><a href="global.html#viewDidChange">viewDidChange</a></li><li><a href="global.html#willDestroy">willDestroy</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/form-validation.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+import ComponentVaidation from 'ember-validation/mixins/component';
+import layout from '../templates/components/form-validation';
+
+const { RSVP } = Ember;
+
+/**
+ * @module
+ * @augments ember/Component
+ * @augments ember-validation/mixins/component
+ */
+export default Ember.Component.extend(ComponentVaidation, {
+
+  layout: layout,
+
+  /** @type {String} */
+  tagName: 'form',
+
+  /** @type {Boolean} */
+  isValidating: false,
+
+  /** @type {Boolean} */
+  isSubmitting: false,
+
+  /** @type {Boolean} */
+  isSubmitted: false,
+
+  /** @type {Boolean} */
+  submitError: '',
+
+  /**
+   * Validate all form on submit
+   *
+   * @function
+   * @param {jQuery.Event} event
+   * @returns {undefined}
+   */
+  submit(event) {
+
+    event.preventDefault();
+
+    this.setProperties({
+      submitError: '',
+      isSubmitted: false,
+      isValidating: true
+    });
+
+    this.validationStart()
+      .then(() => {
+        this.validate()
+          .then(this.validationPassed.bind(this), this.validationFailed.bind(this));
+      })
+      .finally(this.validationEnd.bind(this));
+
+  },
+
+  /**
+  * Called before validation starts.
+  * If returned promise rejected - validation will not starts
+  *
+  * @function
+  * @returns {Ember/RSVP.resolve}
+  */
+  validationStart: () => RSVP.resolve(),
+
+  /**
+  * Called after validation was passed
+  * Call given `action`
+  *
+  * @function
+  * @returns {undefined}
+  */
+  validationPassed() {
+    this.hideAllErrors();
+    this.submitStart();
+    this.attrs.action(this.submitDone.bind(this), this.submitFailed.bind(this));
+  },
+
+  /**
+  * Called after validation was failed
+  *
+  * @function
+  * @returns {undefined}
+  */
+  validationFailed(/*errors*/) {
+    this.showAllErrors();
+  },
+
+  /**
+  * Called at the end of validation
+  *
+  * @function
+  * @returns {undefined}
+  */
+  validationEnd() {
+    this.set('isValidating', false);
+  },
+
+  submitStart() {
+    this.set('isSubmitting', true);
+  },
+
+  /**
+  * Called when submit daone
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitDone() {
+    this.set('isSubmitted', true);
+    this.submitEnd();
+  },
+
+  /**
+  * Called when submit failed
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitFailed(error) {
+    this.set('submitError', error);
+    this.submitEnd();
+  },
+
+  /**
+  * Called after submit complete
+  *
+  * @function
+  * @returns {undefined}
+  */
+  submitEnd() {
+    this.set('isSubmitting', false);
+  },
+
+  /**
+  * Make all errors visible
+  *
+  * @function
+  * @returns {undefined}
+  */
+  showAllErrors() {
+    this.get('mediators').forEach((mediator) => {
+      let attribute = Ember.get(mediator, 'attribute');
+      attribute &amp;&amp; this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
+  /**
+  * Make all errors hidden
+  *
+  * @function
+  * @returns {undefined}
+  */
+  hideAllErrors() {
+    Ember.keys(this.get('visibleErrors')).forEach((attribute) => {
+      this.set('visibleErrors.' + attribute, true);
+    });
+  },
+
+  /**
+  * Check `action` argument was given
+  *
+  * @function
+  * @returns {undefined}
+  */
+  didReceiveAttrs() {
+    Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, !!this.attrs.action);
+  },
+
+  didInsertElement() {
+    this._super(...arguments);
+
+    this.$().on('focusin', () => {
+      this.setProperties({
+        submitError: '',
+        isSubmitted: false
+      });
+    });
+  },
+
+  actions: {
+    reset() {
+      typeof this.attrs.reset === 'function' &amp;&amp; this.attrs.reset();
+      return true;
+    }
+  }
+
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue May 03 2016 13:29:16 GMT+0300 (MSK) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

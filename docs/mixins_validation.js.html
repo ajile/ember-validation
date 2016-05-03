@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>mixins/validation.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addon_components_form-validation.html">addon/components/form-validation</a><ul class='methods'><li data-type='method'><a href="module-addon_components_form-validation.html#~didReceiveAttrs">didReceiveAttrs</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~hideAllErrors">hideAllErrors</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~showAllErrors">showAllErrors</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submit">submit</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitDone">submitDone</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitEnd">submitEnd</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~submitFailed">submitFailed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationEnd">validationEnd</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationFailed">validationFailed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationPassed">validationPassed</a></li><li data-type='method'><a href="module-addon_components_form-validation.html#~validationStart">validationStart</a></li></ul></li><li><a href="module-addon_core_error.html">addon/core/error</a><ul class='methods'><li data-type='method'><a href="module-addon_core_error.html#~toString">toString</a></li></ul></li><li><a href="module-addon_core_errors.html">addon/core/errors</a></li><li><a href="module-addon_core_mediator.html">addon/core/mediator</a><ul class='methods'><li data-type='method'><a href="module-addon_core_mediator.html#~_check">_check</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~check">check</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~conditionDidChange">conditionDidChange</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~optionsToJSON">optionsToJSON</a></li><li data-type='method'><a href="module-addon_core_mediator.html#~validate">validate</a></li></ul></li><li><a href="module-addon_mediators_attribute.html">addon/mediators/attribute</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_attribute.html#~_check">_check</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~objectAtContent">objectAtContent</a></li><li data-type='method'><a href="module-addon_mediators_attribute.html#~replace">replace</a></li></ul></li><li><a href="module-addon_mediators_element.html">addon/mediators/element</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_element.html#~_validate">_validate</a></li></ul></li><li><a href="module-addon_mediators_element-proxy.html">addon/mediators/element-proxy</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_element-proxy.html#~_validate">_validate</a></li></ul></li><li><a href="module-addon_mediators_model-validator.html">addon/mediators/model-validator</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_model-validator.html#~getSnapshot">getSnapshot</a></li></ul></li><li><a href="module-addon_mediators_validator.html">addon/mediators/validator</a><ul class='methods'><li data-type='method'><a href="module-addon_mediators_validator.html#~_validate">_validate</a></li><li data-type='method'><a href="module-addon_mediators_validator.html#~getSnapshot">getSnapshot</a></li></ul></li><li><a href="module-addon_mixins_component.html">addon/mixins/component</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_component.html#~_addElementMediator">_addElementMediator</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_createElementMediator">_createElementMediator</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_find">_find</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_hideErrors">_hideErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onContextDidChange">_onContextDidChange</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onDidInsertElement">_onDidInsertElement</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onMediatorDidAdd">_onMediatorDidAdd</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_onMediatorWillDestroy">_onMediatorWillDestroy</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_showErrors">_showErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_subscribe">_subscribe</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_triggerValidateFailed">_triggerValidateFailed</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_triggerValidatePassed">_triggerValidatePassed</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~_unsubscribe">_unsubscribe</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~add">add</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~clear">clear</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~clearValidation">clearValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~initErrors">initErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~initValidation">initValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~isChild">isChild</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~remove">remove</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~resetErrors">resetErrors</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~resetValidation">resetValidation</a></li><li data-type='method'><a href="module-addon_mixins_component.html#~unknownProperty">unknownProperty</a></li></ul></li><li><a href="module-addon_mixins_model.html">addon/mixins/model</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_model.html#~_createValidatorMediator">_createValidatorMediator</a></li></ul></li><li><a href="module-addon_mixins_validatable.html">addon/mixins/validatable</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_validatable.html#~validate">validate</a></li></ul></li><li><a href="module-addon_mixins_validation.html">addon/mixins/validation</a><ul class='methods'><li data-type='method'><a href="module-addon_mixins_validation.html#~_createAttributeMediator">_createAttributeMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_createValidatorMediator">_createValidatorMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_createValidators">_createValidators</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~_runMediators">_runMediators</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~addMediator">addMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~check">check</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~checkByName">checkByName</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~clearErrors">clearErrors</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~clearErrorsByName">clearErrorsByName</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~initValidation">initValidation</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~removeMediator">removeMediator</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~validate">validate</a></li><li data-type='method'><a href="module-addon_mixins_validation.html#~validateByName">validateByName</a></li></ul></li><li><a href="module-addon_validators_email.html">addon/validators/email</a></li><li><a href="module-addon_validators_number.html">addon/validators/number</a></li><li><a href="module-addon_validators_regexp.html">addon/validators/regexp</a></li><li><a href="module-addon_validators_required.html">addon/validators/required</a></li><li><a href="module-addon_validators_string.html">addon/validators/string</a></li></ul><h3>Events</h3><ul><li><a href="module-addon_core_mediator.html#~event:conditionChanged">conditionChanged</a></li><li><a href="module-addon_core_mediator.html#~event:failed">failed</a></li><li><a href="module-addon_core_mediator.html#~event:passed">passed</a></li></ul><h3>Mixins</h3><ul><li><a href="module-addon_mixins_component-addon_mixins_component.html">addon/mixins/component</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onFocusIn">_onFocusIn</a></li><li><a href="global.html#_onFocusOut">_onFocusOut</a></li><li><a href="global.html#lookup">lookup</a></li><li><a href="global.html#lookupPreset">lookupPreset</a></li><li><a href="global.html#lookupValidator">lookupValidator</a></li><li><a href="global.html#merge">merge</a></li><li><a href="global.html#view">view</a></li><li><a href="global.html#viewDidChange">viewDidChange</a></li><li><a href="global.html#willDestroy">willDestroy</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">mixins/validation.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+import ValidatableMixin from 'ember-validation/mixins/validatable';
+import AttributeMediator from 'ember-validation/mediators/attribute';
+import ValidatorMediator from 'ember-validation/mediators/validator';
+import Errors from 'ember-validation/core/errors';
+import { lookupValidator, lookupPreset } from 'ember-validation/utils/lookup';
+
+const { RSVP, computed, get, keys, assert, Logger, getWithDefault, getProperties, tryInvoke } = Ember;
+
+var findMediators = function(...names) {
+    assert("You should provide at least one attribute name", !Ember.isEmpty(names));
+
+    // Iterating over the names (of attributes) and getting mediators.
+    const mediators = Ember.A(names).map((name) => {
+      let mediator = this.get("mediators").findBy("attribute", name);
+      assert("Mediator for attribute named `" + name + "` not found", mediator);
+      return mediator;
+    });
+
+    return mediators;
+};
+
+
+/**
+  @module
+  @augments module:ember/Mixin
+  @augments module:addon/mixins/validatable
+  @public
+*/
+export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
+
+  /**
+    Defines the properties that will be merged from the superclass
+    (instead of overridden).
+    @type Array
+    @default null
+    @public
+  */
+  mergedProperties: ["validationScheme"],
+
+  /**
+    A collection that contains all validators of the class instance that
+    implements current mixin. The property fills up by the `initValidation`
+    method from `validationScheme` (contains instruction to create validators).
+    @type {Array}
+  */
+  mediators: computed(() => Ember.A()),
+
+  /**
+    This is an instruction for creating validators for an object that implements
+    current mixin. The structure of it is following:
+
+    @example:
+      validationScheme
+        attribute
+          options: ATTRIBUTE_VALIDATION_OPTIONS,
+          validators[]
+            { name: VALIDATOR_NAME, options: VALIDATOR_OPTIONS }
+
+    The method fills `validators` collection by validators and invoke each of
+    them on `validate` method.
+
+    @type Object
+    @protected
+  */
+  validationScheme: computed(() => { return {}; }),
+
+  init() {
+    this.initErrors();
+    this.initValidation();
+    this.initStates();
+    return this._super(...arguments);
+  },
+
+  initStates() {
+      // The class already has a state, it means that the class has isValid and
+      // isInvalid states as well.
+      if (this.get("currentState")) {
+          return;
+      }
+
+      Ember.defineProperty(this, "isValid", computed("errors.length", () => {
+        return this.get("errors.length") === 0;
+      }));
+
+      Ember.defineProperty(this, "isInvalid", computed.not("isValid"));
+  },
+
+  initErrors() {
+    Ember.isArray(this.get("errors")) || this.set("errors", Errors.create());
+  },
+
+  /**
+    Method creates validators for every object's attribute from the
+    `validationScheme`. Validators are gets from the registry by names. Default
+    namespace for them is `validator:`, that means that they are should be
+    placed in the `validators/` project directory.
+
+    Validators creates and wrappes by an attribute mediator. It has the same
+    interface as they are. The mediators triggers events every time when they
+    called.
+
+    @method initValidation
+    @private
+  */
+  initValidation() {
+
+    const validationScheme = this.get("validationScheme");
+
+    if (Ember.isBlank(Object.keys(validationScheme))) {
+      // The object doesn't have a validation scheme. Probably it has validation
+      // schemes on every it's attribute.
+      var attributes = Ember.get(this.constructor, "attributes");
+
+      attributes.forEach(item => {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : looking preset for type %s", item.type);
+        let { type, name, options } = item;
+        let preset = lookupPreset(type, get(this, "container"));
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : preset found %o", preset.create(item));
+        validationScheme[name] = preset.create(item).evolve();
+      });
+    }
+
+    console.log(validationScheme);
+
+    return this._initValidationByScheme(validationScheme);
+  },
+
+  _initValidationByScheme(validationScheme) {
+
+    // Getting the object's properties that should have validation.
+    const attributes = Ember.A(keys(validationScheme));
+
+    attributes.forEach((attribute) => {
+
+      // Instruction to create validators for the attribute
+      let validation = get(validationScheme, attribute);
+
+      assert("Every validation should contain validators", validation);
+
+      // A list of the validator instances
+      let validatorHashes = this._createValidators(attribute, validation);
+
+      let options = getWithDefault(validation, "options", {});
+      let attributeMediator = this._createAttributeMediator(attribute, options);
+
+      // Iterating over the attribute's validators and wrap each of them by a
+      // mediator, that has the same interface then they are.
+      validatorHashes.forEach((hash) => {
+        let options = get(hash, "options");
+        let validator = get(hash, "validator");
+        let validatorMediator = this._createValidatorMediator(attribute, validator, options);
+        attributeMediator.pushObject(validatorMediator);
+      });
+
+      attributeMediator.on("passed", () => {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : %cevent::Mediator.passed%c on attribute '%s'", "color: #090", null, attribute);
+        this.get("errors").remove(attribute);
+      });
+
+      attributeMediator.on("failed", (message) => {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
+        this.get("errors").remove(attribute);
+        this.get("errors").add(attribute, message);
+        this.get("errors").arrayContentDidChange();
+      });
+
+      attributeMediator.on("conditionChanged", () => {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
+        this.get("errors").remove(attribute);
+      });
+
+      // mediators.pushObject(attributeMediator);
+      this.addMediator(attributeMediator);
+    });
+
+  },
+
+  /**
+    Add mediator to mediators list and fire event
+
+    @method addMediator
+    @param Mediator
+    @trigger mediatorDidAdd
+    @return undefined
+  */
+  addMediator(mediator) {
+    const attrName = get(mediator, "attribute");
+    this.get("mediators").pushObject(mediator);
+    this.trigger('mediatorDidAdd', mediator);
+    Logger.log("Validation : &lt;&lt;mixin>> : Validation : addMediator %o for '%s'", mediator, attrName);
+  },
+
+  /**
+    remove mediator from mediators list and fire event
+
+    @method removeMediator
+    @param Mediator
+    @trigger mediatorWillRemove
+    @return undefined
+  */
+  removeMediator(mediator) {
+    const mediators = this.get("mediators");
+    const attrName = get(mediator, "attribute");
+
+    if (mediators.ndexOf(mediator) !== -1) {
+      this.trigger("mediatorWillRemove", mediator);
+      mediators.removeObject(mediator);
+      mediator.destroy();
+      Logger.log("Validation : &lt;&lt;mixin>> : Validation : removeMediator %o for '%s'", mediator, attrName);
+    }
+  },
+
+  /**
+    Iterates over the elements of a validation collection, calls `validate` on
+    each them, collect result of evaluation and put it into the `errors`
+    property of the object.
+    @method validate
+    @return {Ember.RSVP.Promise}
+  */
+  validate() {
+    if (Ember.isEmpty(arguments)) {
+      return this._runMediators("validate", this.get("mediators"));
+    } else {
+      Ember.warn('You probably want to call `validateByName`', Ember.isEmpty(arguments));
+      return this.validateByName(...arguments);
+    }
+  },
+
+  /**
+    This method the same as `validate`, only difference is that the `validate`
+    fills errors of the object. This method may be helpful to you, if you want
+    to check the object validation, but do not want fill it with errors.
+    @method check
+    @return {Ember.RSVP.Promise}
+  */
+  check() {
+    if (Ember.isEmpty(arguments)) {
+      return this._runMediators("check", this.get("mediators"));
+    } else {
+      Ember.warn('You probably want to call `checkByName`', Ember.isEmpty(arguments));
+      return this.validateByName(...arguments);
+    }
+  },
+
+  /**
+    Method searching mediators by name and executes validation on each of them.
+    May be helpful if you'd like to validate just few attributes of the object,
+    not all of them.
+
+    @example:
+      // Validate only one field
+      var promise = user.validateByName("firstName");
+
+      // Validate few fields
+      var promise = user.validateByName("firstName", "lastName", "birthday");
+
+    @method validateByName
+    @param {String[]} names
+    @return {Ember.RSVP.Promise}
+  */
+  validateByName(...names) {
+    return this._runMediators("validate", findMediators.call(this, ...names));
+  },
+
+  /**
+    Method searching mediators by name and executes check method on each of them.
+    May be helpful if you'd like to check just few attributes of the object,
+    not all of them.
+
+    @example:
+      // Validate field
+      var promise = user.checkByName("firstName", "lastName");
+
+    @method checkByName
+    @param {String[]} names
+    @return {Ember.RSVP.Promise}
+  */
+  checkByName(...names) {
+    return this._runMediators("check", findMediators.call(this, ...names));
+  },
+
+  /**
+    @method clearErrors
+  */
+  clearErrors() {
+    this.get("errors").clear();
+  },
+
+  /**
+    @method clearErrorsByName
+    @param {String} name
+  */
+  clearErrorsByName(name) {
+    const attributeErrors = this.get("errors").filterBy("attribute", name);
+    var errors = this.get("errors");
+    attributeErrors.forEach((attr) => {
+      errors = errors.without(attr);
+    });
+    this.set("errors", errors);
+  },
+
+  /**
+    Iterating over the validators in collection and calling validate method
+    each of them to fill object by errors.
+    @method _runMediators
+    @params {Array} mediators
+    @private
+    @return {Ember.RSVP.Promise}
+  */
+  _runMediators(method, mediators) {
+
+    const deferred = RSVP.defer();
+    const promise = deferred.promise;
+
+    var promises = mediators.map((mediator) => tryInvoke(mediator, method));
+        promises = promises.reduce((previous, item) => previous.concat(item), Ember.A());
+
+    const settledPromise = RSVP.allSettled(promises);
+
+    settledPromise.then((results) => {
+      const rejected = Ember.A(results).filterBy("state", "rejected");
+      if (rejected.length === 0) {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : _runMediators %c✓ passed", "color: #090");
+        deferred.resolve();
+      } else {
+        Logger.log("Validation : &lt;&lt;mixin>> : Validation : _runMediators %c✘ failed", "color: #900");
+        deferred.reject(Ember.A(rejected).mapBy("reason"));
+      }
+    });
+
+    promise.then(() => {}, () => {});
+    promise.finally(() => {
+      mediators.forEach((mediator) => {
+        this.get('errors').notifyPropertyChange(get(mediator, 'attribute'));
+      });
+    }).then(() => {}, () => {});
+
+    return promise;
+  },
+
+  /**
+    @method _createValidators
+    @param {String} attribute
+    @param {Object} validation
+    @return {Array}
+  */
+  _createValidators(attribute, validation) {
+    return Ember.A( get(validation, "validators") ).map((description) => {
+      const { name, options } = getProperties(description, ["name", "options"]);
+      const validator = lookupValidator(name, get(this, "container"));
+      return { options, validator };
+    });
+  },
+
+  /**
+    @method _createAttributeMediator
+    @param {String} attribute
+    @param {Object} options
+    @param {Object} context
+    @return {Array}
+  */
+  _createAttributeMediator(attribute, options={}, context=this) {
+    return AttributeMediator.extend(options).create({ context, attribute, options });
+  },
+
+  /**
+    @method _createValidatorMediator
+    @param {Validator} validator
+    @param {Object} options
+    @param {Object} context
+    @return {Array}
+  */
+  _createValidatorMediator(attribute, validator, options={}, context=this) {
+    return ValidatorMediator.extend(options).create({ context, attribute, validator, options });
+  },
+
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue May 03 2016 13:29:16 GMT+0300 (MSK) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
