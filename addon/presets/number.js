@@ -1,18 +1,25 @@
 import Ember from "ember";
+import BasePreset from 'ember-validation/core/preset';
 
 const { get } = Ember;
 
-export default Ember.Object.extend({
+/**
+ * @module
+ * @augments module:addon/core/preset
+ * @public
+ */
+export default BasePreset.extend({
 
-  evolve() {
-  	const options = this.get("options");
-  	const scheme = { options, validators: [] };
-
-  	get(options, "required") && scheme.validators.push({ "name": "required" });
-
+  /**
+   * @function
+   * @param {Object} scheme
+   * @param {Object} options
+   * @return {Object}
+   * @private
+   */
+  _evolve(scheme, options) {
   	scheme.validators.push({ "name": "number", options });
-
-  	return scheme;
+    return scheme;
   }
 
 });
