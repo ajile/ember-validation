@@ -45,11 +45,11 @@ export default FormValidation.extend({
   },
 
   /**
-  * Callback for submit passed
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Callback for submit passed
+   *
+   * @function
+   * @returns {undefined}
+   */
   onSubmitDone() {
     this.set('modelWasSaved', true);
   }

@@ -1,15 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
+
   /** @type {Ember/Component} */
   view : null,
 
   /**
-  * Attach event listeners to view
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Attach event listeners to view
+   *
+   * @function
+   * @returns {undefined}
+   */
   viewDidChange: Ember.on('init', Ember.observer('view', function () {
     let view = this.get('view');
 
@@ -21,11 +22,11 @@ export default Ember.Mixin.create({
   })),
 
   /**
-  * Remove event listeners from view befor destroy
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Remove event listeners from view befor destroy
+   *
+   * @function
+   * @returns {undefined}
+   */
   willDestroy() {
     var view = this.get('view');
 
@@ -39,25 +40,26 @@ export default Ember.Mixin.create({
   },
 
   /**
-  * Trigger event after view focused in
-  *
-  * @function
-  * @fires hideErrors
-  * @returns {undefined}
-  */
+   * Trigger event after view focused in
+   *
+   * @function
+   * @fires hideErrors
+   * @returns {undefined}
+   */
   _onFocusIn() {
     this.trigger('hideErrors', this.get('attribute'));
   },
 
   /**
-  * Validate and trigger event after view focused out
-  *
-  * @function
-  * @fires showErrors
-  * @returns {undefined}
-  */
+   * Validate and trigger event after view focused out
+   *
+   * @function
+   * @fires showErrors
+   * @returns {undefined}
+   */
   _onFocusOut() {
     this.trigger('showErrors', this.get('attribute'));
     this.validate();
-  },
+  }
+
 });

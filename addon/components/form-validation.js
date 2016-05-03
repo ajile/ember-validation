@@ -55,21 +55,21 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   /**
-  * Called before validation starts.
-  * If returned promise rejected - validation will not starts
-  *
-  * @function
-  * @returns {Ember/RSVP.resolve}
-  */
+   * Called before validation starts.
+   * If returned promise rejected - validation will not starts
+   *
+   * @function
+   * @returns {Ember/RSVP.resolve}
+   */
   validationStart: () => RSVP.resolve(),
 
   /**
-  * Called after validation was passed
-  * Call given `action`
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called after validation was passed
+   * Call given `action`
+   *
+   * @function
+   * @returns {undefined}
+   */
   validationPassed() {
     this.hideAllErrors();
     this.submitStart();
@@ -77,21 +77,21 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   /**
-  * Called after validation was failed
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called after validation was failed
+   *
+   * @function
+   * @returns {undefined}
+   */
   validationFailed(/*errors*/) {
     this.showAllErrors();
   },
 
   /**
-  * Called at the end of validation
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called at the end of validation
+   *
+   * @function
+   * @returns {undefined}
+   */
   validationEnd() {
     this.set('isValidating', false);
   },
@@ -101,43 +101,43 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   /**
-  * Called when submit daone
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called when submitting done
+   *
+   * @function
+   * @returns {undefined}
+   */
   submitDone() {
     this.set('isSubmitted', true);
     this.submitEnd();
   },
 
   /**
-  * Called when submit failed
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called when submitting failed
+   *
+   * @function
+   * @returns {undefined}
+   */
   submitFailed(error) {
     this.set('submitError', error);
     this.submitEnd();
   },
 
   /**
-  * Called after submit complete
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Called after submitting complete
+   *
+   * @function
+   * @returns {undefined}
+   */
   submitEnd() {
     this.set('isSubmitting', false);
   },
 
   /**
-  * Make all errors visible
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Make all errors visible
+   *
+   * @function
+   * @returns {undefined}
+   */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
       let attribute = Ember.get(mediator, 'attribute');
@@ -146,11 +146,11 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   /**
-  * Make all errors hidden
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Make all errors hidden
+   *
+   * @function
+   * @returns {undefined}
+   */
   hideAllErrors() {
     Ember.keys(this.get('visibleErrors')).forEach((attribute) => {
       this.set('visibleErrors.' + attribute, true);
@@ -158,11 +158,11 @@ export default Ember.Component.extend(ComponentVaidation, {
   },
 
   /**
-  * Check `action` argument was given
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Check `action` argument was given
+   *
+   * @function
+   * @returns {undefined}
+   */
   didReceiveAttrs() {
     Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, !!this.attrs.action);
   },

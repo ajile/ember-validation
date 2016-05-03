@@ -17,13 +17,13 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   _content: Ember.A(),
 
   /**
-  * Adds error messages to a given attribute.
-  *
-  * @function
-  * @param {String} attribute
-  * @param {(Array|String)} messages
-  * @returns {undefined}
-  */
+   * Adds error messages to a given attribute.
+   *
+   * @function
+   * @param {String} attribute
+   * @param {(Array|String)} messages
+   * @returns {undefined}
+   */
   add(attribute, messages) {
     var item = this._find(attribute);
 
@@ -48,12 +48,12 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-  * Removes all error messages from the given attribute.
-  *
-  * @function
-  * @param {String} attribute
-  * @returns {undefined}
-  */
+   * Removes all error messages from the given attribute.
+   *
+   * @function
+   * @param {String} attribute
+   * @returns {undefined}
+   */
   remove(attribute) {
     var item = this._find(attribute);
 
@@ -63,23 +63,23 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   },
 
   /**
-  * Removes all error messages.
-  *
-  * @function
-  * @returns {undefined}
-  */
+   * Removes all error messages.
+   *
+   * @function
+   * @returns {undefined}
+   */
   clear() {
     this.get('_content').clear();
     this._super();
   },
 
   /**
-  * Return errors for given attribute
-  *
-  * @function
-  * @param {String} attribute
-  * @returns {Array}
-  */
+   * Return errors for given attribute
+   *
+   * @function
+   * @param {String} attribute
+   * @returns {Array}
+   */
   unknownProperty(attribute) {
     var item = this._find(attribute);
 
@@ -92,12 +92,12 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   }),
 
   /**
-  * Find item in `_content` by attribute name
-  *
-  * @function
-  * @param {String} attr name
-  * @returns {Object|undefined}
-  */
+   * Find item in `_content` by attribute name
+   *
+   * @function
+   * @param {String} attr name
+   * @returns {Object|undefined}
+   */
   _find(attribute) {
     return this.get('_content').findBy('attribute', attribute);
   }
