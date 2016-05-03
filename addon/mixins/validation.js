@@ -110,18 +110,16 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     if (Ember.isBlank(Object.keys(validationScheme))) {
       // The object doesn't have a validation scheme. Probably it has validation
       // schemes on every it's attribute.
-      var attributes = Ember.get(this.constructor, "attributes");
+      var attributes = get(this.constructor, "attributes");
 
-      attributes.forEach(item => {
+      attributes && attributes.forEach(item => {
         Logger.log("Validation : <<mixin>> : Validation : looking preset for type %s", item.type);
-        let { type, name, options } = item;
+        let { type, name } = item;
         let preset = lookupPreset(type, get(this, "container"));
         Logger.log("Validation : <<mixin>> : Validation : preset found %o", preset.create(item));
         validationScheme[name] = preset.create(item).evolve();
       });
     }
-
-    console.log(validationScheme);
 
     return this._initValidationByScheme(validationScheme);
   },

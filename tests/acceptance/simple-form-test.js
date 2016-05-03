@@ -157,7 +157,7 @@ test('submit form', function (assert) {
 
 });
 
-test('chnage model', function (assert) {
+test('change model', function (assert) {
   page.visit().submit();
 
   andThen(() => {
