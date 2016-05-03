@@ -25,6 +25,8 @@ Router.map(function() {
     this.route('validators', function() {
       this.route('creating');
     });
+    this.route('presets');
+    this.route('errors');
     this.route('components');
     this.route('presets');
   });

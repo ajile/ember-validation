@@ -4,10 +4,26 @@ import ValidationMixin from "ember-validation/mixins/validation";
 const User = Ember.Object.extend(ValidationMixin, {
   validationScheme: {
     username: {
-      validators: [ {name: "required"} ]
+      validators: [
+        { name: "required" },
+        { name: "string", options: { max: 32 } }
+      ]
+    },
+    age: {
+      validators: [
+        { name: "number", options: { min: 0 } }
+      ]
+    },
+    email: {
+      validators: [
+        { name: "required" },
+        { name: "email" }
+      ]
     }
   },
-  username: null
+  username: null,
+  age: null,
+  email: null,
 });
 
 export default User;

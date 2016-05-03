@@ -241,7 +241,7 @@ ember ember-cli-jsdoc && rm -rf tests/dummy/public/docs && mv -f docs tests/dumm
 ### Обновление сайта
 
 ```shell
-./publish.sh
+./public.sh
 ```
 
 ### Написание тестов
