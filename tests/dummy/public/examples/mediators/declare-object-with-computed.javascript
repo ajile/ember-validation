@@ -12,7 +12,7 @@ const User = Ember.Object.extend(ValidationMixin, {
   validationScheme: {
     age: {
       options: {
-        // Attribute will be validated when gender will be set. Til gender is
+        // Attribute will be validated when gender will be set. Until gender is
         // unknown this field is not required.
         condition: computed.not("isUnknownGender")
       },

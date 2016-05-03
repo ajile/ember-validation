@@ -40,7 +40,7 @@ function validate(attributeName, context, options={}) {
     err = createError(get(options, "messages.out_of_range"), value);
   }
 
-  return err ? reject(err) : resolve;
+  return err ? reject(err) : resolve();
 }
 
 var isNumber = (data) => !isNaN(parseFloat(data));

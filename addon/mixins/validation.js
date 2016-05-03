@@ -201,7 +201,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     const mediators = this.get("mediators");
     const attrName = get(mediator, "attribute");
 
-    if (mediators.ndexOf(mediator) !== -1) {
+    if (mediators.indexOf(mediator) !== -1) {
       this.trigger("mediatorWillRemove", mediator);
       mediators.removeObject(mediator);
       mediator.destroy();

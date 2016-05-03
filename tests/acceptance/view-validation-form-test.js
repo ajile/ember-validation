@@ -5,7 +5,7 @@ import { viewValidationForm as page } from '../pages/forms';
 
 moduleForAcceptance('Acceptance | Page | view validation form');
 
-test('SHow errors on focusout', function (assert) {
+test('Show errors on focusout', function (assert) {
   page.visit();
 
   andThen(() => {
