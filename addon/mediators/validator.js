@@ -50,7 +50,7 @@ export default BaseMediator.extend({
   _validate() {
 
     const attribute = get(this, "attribute"),
-          options = get(this, "options"),
+          options = this.optionsToJSON(),
           context = this.getSnapshot("context"),
           validator = this.get("validator");
 
@@ -58,7 +58,7 @@ export default BaseMediator.extend({
 
     const promise = validator(attribute, context, options);
 
-    return promise.catch(error => RSVP.reject(error.set("options", this.optionsToJSON())));
+    return promise.catch(error => RSVP.reject(error.set("options", options)));
 
   }
 
