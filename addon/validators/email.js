@@ -6,7 +6,7 @@ const { Logger, RSVP, get } = Ember;
 
 const defaultOptions = {
   "messages": {
-    "default": "email_invalid"
+    "default": "email.invalid"
   }
 };
 

@@ -6,15 +6,22 @@ const { Logger, RSVP: { resolve, reject }, get, getProperties } = Ember;
 
 const defaultOptions = {
   "messages": {
-    "not_number": "not_number",
-    "out_of_range": "out_of_range"
+    "default": "number.not_number",
+    "out_of_range": "number.out_of_range",
+    "less_then": "number.less_then",
+    "greater_then": "number.greater_then"
   }
 };
 
 /**
-  @module
-  @public
-*/
+ * @function
+ * @param {String} attributeName
+ * @param {Object} context
+ * @param {Object} options
+ * @returns {ember/RSVP.defer}
+ * @module
+ * @public
+ */
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const value = get(context, attributeName);
@@ -24,23 +31,25 @@ function validate(attributeName, context, options={}) {
 
   Logger.log("Validation : <<validator>> : 'number' called on %s with options %o", attributeName, options);
 
-  if (Ember.isBlank(value)) {
-    return resolve();
-  }
+  if (Ember.isBlank(value)) { return resolve(); }
 
   if (!isNumber(value)) {
-    err = createError(get(options, "messages.not_number"), value);
+    return reject( createError(get(options, "messages.default"), value) );
+  }
+
+  if (!Ember.isNone(min) && !Ember.isNone(max) && (value < min || value > max)) {
+    return reject( createError(get(options, "messages.out_of_range"), value) );
   }
 
   if (!Ember.isNone(min) && value < min) {
-    err = createError(get(options, "messages.out_of_range"), value);
+    return reject( createError(get(options, "messages.less_then"), value) );
   }
 
   if (!Ember.isNone(max) && value > max) {
-    err = createError(get(options, "messages.out_of_range"), value);
+    return reject( createError(get(options, "messages.greater_then"), value) );
   }
 
-  return err ? reject(err) : resolve();
+  return resolve();
 }
 
 var isNumber = (data) => !isNaN(parseFloat(data));

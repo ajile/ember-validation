@@ -6,7 +6,7 @@ const { RSVP: { defer }, get } = Ember;
 
 const defaultOptions = {
   "messages": {
-    "default": "required"
+    "default": "regexp.invalid"
   }
 };
 
