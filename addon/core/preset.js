@@ -37,7 +37,7 @@ export default Ember.Object.extend({
    * @return {Object}
    * @private
    */
-  _evolve(scheme, options) {
+  _evolve(scheme) {
     return scheme;
   }
 

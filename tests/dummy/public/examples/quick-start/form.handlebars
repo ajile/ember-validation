@@ -3,7 +3,7 @@
   <div class="form-group">
     <label class="control-label">Username</label>
     {{input value=model.username class="form-control" validate-path="username"}}
-    {{errors-list errors=model.errors.username show=form.visibleErrors.username}}
+    {{ember-validation-error-list errors=model.errors.username show=form.visibleErrors.username}}
   </div>
 
   <button type="submit">Validate & Save</button>

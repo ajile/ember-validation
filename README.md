@@ -154,10 +154,10 @@ var User = DS.Model.extend(ModelValidationMixin, {
   {{#form model=user as |userForm|}}
 
     {{input value=user.name validatePath="name"}}
-    {{errors-list errors=user.errors.name}}
+    {{ember-validation-error-list errors=user.errors.name}}
 
     {{input value=user.age validatePath="age"}}
-    {{errors-list errors=user.errors.age}}
+    {{ember-validation-error-list errors=user.errors.age}}
 
   {{/form}}
 {{!-- Main form end --}}
@@ -184,10 +184,10 @@ var User = DS.Model.extend(ModelValidationMixin, {
       {{#form-company model=employee.company as |companyForm| tagName="div"}}
 
         {{input value=companyForm.model.name validatePath="name"}}
-        {{errors-list errors=companyForm.errors.name}}
+        {{ember-validation-error-list errors=companyForm.errors.name}}
 
         {{input value=companyForm.model.inn validatePath="inn"}}
-        {{errors-list errors=companyForm.errors.inn}}
+        {{ember-validation-error-list errors=companyForm.errors.inn}}
 
       {{/form-company}}
     {{!-- Company form end --}}

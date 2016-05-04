@@ -1,8 +1,6 @@
 import Ember from "ember";
 import BasePreset from 'ember-validation/core/preset';
 
-const { get } = Ember;
-
 /**
  * @module
  * @augments module:addon/core/preset

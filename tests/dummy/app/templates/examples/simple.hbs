@@ -19,13 +19,13 @@
     <div class="form-group {{if company.errors.name 'has-error'}}">
       <label class="control-label">Name</label>
       {{input value=company.name class="form-control"}}
-      {{errors-list errors=company.errors.name}}
+      {{ember-validation-error-list errors=company.errors.name}}
     </div>
 
     <div class="form-group {{if company.errors.age 'has-error'}}">
       <label class="control-label">Age</label>
       {{input value=company.age class="form-control"}}
-      {{errors-list errors=company.errors.age}}
+      {{ember-validation-error-list errors=company.errors.age}}
     </div>
 
     <button type="submit" class="btn btn-default">Validate</button>
@@ -61,32 +61,32 @@
     <div class="form-group {{if user.errors.first_name 'has-error'}}">
       <label class="control-label">First name</label>
       {{input value=user.first_name class="form-control"}}
-      {{errors-list errors=user.errors.first_name}}
+      {{ember-validation-error-list errors=user.errors.first_name}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'first_name'}}>Validate field</a>
     </div>
 
     <div class="form-group {{if user.errors.last_name 'has-error'}}">
       <label class="control-label">Last name</label>
       {{input value=user.last_name class="form-control"}}
-      {{errors-list errors=user.errors.last_name}}
+      {{ember-validation-error-list errors=user.errors.last_name}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'last_name'}}>Validate field</a>
     </div>
     <div class="form-group {{if user.errors.full_name 'has-error'}}">
       <label class="control-label">Full name</label>
       {{input value=user.full_name class="form-control" disabled=true}}
-      {{errors-list errors=user.errors.full_name}}
+      {{ember-validation-error-list errors=user.errors.full_name}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'full_name'}}>Validate field</a>
     </div>
     <div class="form-group {{if user.errors.phone 'has-error'}}">
       <label class="control-label">Phone</label>
       {{input value=user.phone class="form-control"}}
-      {{errors-list errors=user.errors.phone}}
+      {{ember-validation-error-list errors=user.errors.phone}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'phone'}}>Validate field</a>
     </div>
     <div class="form-group {{if user.errors.email 'has-error'}}">
       <label class="control-label">Email</label>
       {{input value=user.email class="form-control"}}
-      {{errors-list errors=user.errors.email}}
+      {{ember-validation-error-list errors=user.errors.email}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'email'}}>Validate field</a>
     </div>
 
@@ -97,7 +97,7 @@
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
-      {{errors-list errors=user.errors.gender}}
+      {{ember-validation-error-list errors=user.errors.gender}}
       <a href="javascript: void 0;" class="pseudo" {{action 'validateField' 'gender'}}>Validate field</a>
     </div>
 
