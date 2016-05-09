@@ -11,6 +11,10 @@ import ModelValidatorMediator from 'ember-validation/mediators/model-validator';
 */
 export default Ember.Mixin.create(ValidationMixin, {
 
+  initErrors() {
+    // Do nothing...
+  },
+
   /**
     @method
     @param {Validator} validator
