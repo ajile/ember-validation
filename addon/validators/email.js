@@ -2,7 +2,9 @@ import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
 import { createError } from 'ember-validation/utils/error';
 
-const { Logger, RSVP, get } = Ember;
+const { Logger, RSVP: { resolve, reject }, get } = Ember;
+
+const VALIDATOR_NAME = "email";
 
 const defaultOptions = {
   "messages": {
@@ -16,22 +18,18 @@ const defaultOptions = {
 */
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
-  const deferred = RSVP.defer();
   const value = get(context, attributeName);
-  if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
+  if (Ember.isBlank(value)) { return resolve(); }
 
-  Logger.log("Validation : <<validator>> : 'email' called on %s with options %o", attributeName, options);
+  Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
   const reg = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   if (reg.test(value)) {
-    deferred.resolve();
-  } else {
-    var err = createError(get(options, "messages.default"), value);
-    deferred.reject(err);
+    return resolve();
   }
 
-  return deferred.promise;
+  return reject(createError(get(options, "messages.default"), value, VALIDATOR_NAME));
 }
 
 export default validate;

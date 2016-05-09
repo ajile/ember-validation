@@ -4,6 +4,8 @@ import { createError } from 'ember-validation/utils/error';
 
 const { Logger, RSVP: { resolve, reject }, get, isBlank } = Ember;
 
+const VALIDATOR_NAME = "required";
+
 const defaultOptions = {
   "messages": {
     "default": "required"
@@ -17,11 +19,11 @@ const defaultOptions = {
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const value = get(context, attributeName);
-  Logger.log("Validation : <<validator>> : 'required' called on %s with options %o", attributeName, options);
+
+  Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
   if (isBlank(value)) {
-    var err = createError(get(options, "messages.default"), value);
-    return reject(err);
+    return reject(createError(get(options, "messages.default"), value, VALIDATOR_NAME));
   }
 
   return resolve();

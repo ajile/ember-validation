@@ -4,6 +4,8 @@ import { createError } from 'ember-validation/utils/error';
 
 const { Logger, RSVP: { resolve, reject }, get, getProperties } = Ember;
 
+const VALIDATOR_NAME = "number";
+
 const defaultOptions = {
   "messages": {
     "default": "number.not_number",
@@ -29,24 +31,24 @@ function validate(attributeName, context, options={}) {
 
   var err = null;
 
-  Logger.log("Validation : <<validator>> : 'number' called on %s with options %o", attributeName, options);
+  Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
   if (Ember.isBlank(value)) { return resolve(); }
 
   if (!isNumber(value)) {
-    return reject( createError(get(options, "messages.default"), value) );
+    return reject( createError(get(options, "messages.default"), value, VALIDATOR_NAME) );
   }
 
   if (!Ember.isNone(min) && !Ember.isNone(max) && (value < min || value > max)) {
-    return reject( createError(get(options, "messages.out_of_range"), value) );
+    return reject( createError(get(options, "messages.out_of_range"), value, VALIDATOR_NAME) );
   }
 
   if (!Ember.isNone(min) && value < min) {
-    return reject( createError(get(options, "messages.less_then"), value) );
+    return reject( createError(get(options, "messages.less_then"), value, VALIDATOR_NAME) );
   }
 
   if (!Ember.isNone(max) && value > max) {
-    return reject( createError(get(options, "messages.greater_then"), value) );
+    return reject( createError(get(options, "messages.greater_then"), value, VALIDATOR_NAME) );
   }
 
   return resolve();
