@@ -87,7 +87,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   },
 
   initErrors() {
-    Ember.isArray(this.get("errors")) || this.set("errors", Errors.create());
+    this.get("errors") || this.set("errors", Errors.create());
   },
 
   /**
@@ -114,7 +114,11 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
 
       attributes && attributes.forEach(item => {
         Logger.log("Validation : <<mixin>> : Validation : looking preset for type %s", item.type);
-        let { type, name } = item;
+        let { type, name, options } = item;
+        if (options && get(options, "preset")) {
+          type = get(options, "preset");
+        }
+        if (!options.isValidatable) { return; }
         let preset = lookupPreset(type, get(this, "container"));
         Logger.log("Validation : <<mixin>> : Validation : preset found %o", preset.create(item));
         validationScheme[name] = preset.create(item).evolve();
