@@ -45,13 +45,19 @@
     "minami": "^1.1.1"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-validation",
+    "validation",
+    "validators"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.3",
     "ember-cli-htmlbars": "0.7.9"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "after": [
+      "ember-validation"
+    ]
   }
 }
