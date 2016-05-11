@@ -50,7 +50,6 @@ export default BaseMediator.extend(ElementMediatorMixin, {
         const view = this.get('view');
 
         if (!(view.$().is(':focus') || view.$(':focus').length)) {
-          this.trigger('showErrors', this.get('attribute'));
           this.validate();
         }
       });
@@ -64,6 +63,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
    */
   _validate() {
     Logger.log('Validation : <<mediator>> : ElementProxy : _validate : %s %O', this.get('attribute'), this.get('view.element'));
+
     const promise = tryInvoke(this.get('view'), 'validate');
 
     return promise || RSVP.resolve();

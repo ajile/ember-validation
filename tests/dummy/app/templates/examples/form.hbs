@@ -11,14 +11,20 @@
 </div>
 <div class="row">
   <div class="col-xs-6">
-    {{#simple-form action="saveUser" validation-context=model as |formView|}}
+    {{#simple-form action=(action "saveUser") validation-context=model as |formView|}}
       <div class="form-group">
-        {{#if formView.modelWasSaved}}
-          <div class="alert alert-success">
-            <span class="glyphicon glyphicon-ok-sign"></span>
-            The model is saved
-          </div>
-        {{/if}}
+        {{#if formView.submitError}}
+            Submit failed with error "{{formView.submitError}}"
+          {{else if formView.isSubmitted}}
+            <div class="alert alert-success">
+              <span class="glyphicon glyphicon-ok-sign"></span>
+              The model is saved
+            </div>
+          {{else if formView.isSubmitting}}
+            Submit data...
+          {{else if formView.isValidating}}
+            Validate form...
+          {{/if}}
 
       </div>
 

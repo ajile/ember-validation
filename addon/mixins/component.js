@@ -25,25 +25,14 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    * @returns {undefined}
    */
   add(attribute, messages) {
-    var item = this._find(attribute);
-
-    if (!item) {
-      item = {attribute, messages: A()};
-      this.get('_content').addObject(item);
-    }
+    var content = this.get('_content');
 
     if (!messages) {
       messages = A(['unknown error']);
     }
 
-    if (!isArray(messages)) {
-      messages = A([messages]);
-    }
-
-    messages.forEach((message) => {
-      if (!item.messages.findBy('message', message)) {
-        item.messages.addObject({message});
-      }
+    A(Ember.makeArray(messages)).forEach((message) => {
+      content.addObject({attribute, message});
     });
   },
 
@@ -55,11 +44,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    * @returns {undefined}
    */
   remove(attribute) {
-    var item = this._find(attribute);
-
-    if (item) {
-      this.get('_content').removeObject(item);
-    }
+    this.get('_content').removeObjects(this._messagesForAttribute(attribute));
   },
 
   /**
@@ -81,9 +66,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    * @returns {Array}
    */
   unknownProperty(attribute) {
-    var item = this._find(attribute);
-
-    return item ? get(item, 'messages') : this.get('content.'+attribute);
+    return this._messagesForAttribute(attribute) || this.get('content.'+attribute);
   },
 
   /** @type {Number} */
@@ -92,14 +75,14 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
   }),
 
   /**
-   * Find item in `_content` by attribute name
+   * Return errors for given attribute
    *
    * @function
    * @param {String} attr name
-   * @returns {Object|undefined}
+   * @returns {Array}
    */
-  _find(attribute) {
-    return this.get('_content').findBy('attribute', attribute);
+  _messagesForAttribute(attribute) {
+    return this.get('_content').filterBy('attribute', attribute);
   }
 });
 
@@ -365,12 +348,12 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   _triggerValidatePassed(mediator) {
     let errors = this.get('errors'),
-        attribute = get(mediator, 'view.errors-name') || get(mediator, 'attribute');
+        errorName = get(mediator, 'errorsName');
 
-    if (attribute) {
-      errors.remove(attribute);
-      errors.notifyPropertyChange(attribute);
-      this.trigger('passed', mediator, attribute);
+    if (errorName) {
+      errors.remove(errorName);
+      errors.notifyPropertyChange(errorName);
+      this.trigger('passed', mediator, errorName);
     }
   },
 
@@ -384,18 +367,17 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   _triggerValidateFailed(error, mediator) {
     let errors = this.get('errors'),
-        attribute = get(mediator, 'view.errors-name') || get(mediator, 'attribute');
+        errorName = get(mediator, 'errorsName'),
+        message = get(mediator, 'view.error-message') || error;
 
-    error = get(mediator, 'view.error-message') || error;
-
-    if (attribute) {
-      errors.remove(attribute);
-      errors.add(attribute, error);
-      this.set('visibleErrors.' + attribute, true);
-      this.get('errors').notifyPropertyChange(attribute);
+    if (errorName) {
+      errors.remove(errorName);
+      errors.add(errorName, message);
+      this._showErrors(errorName);
+      this.get('errors').notifyPropertyChange(errorName);
     }
 
-    this.trigger('failed', error, mediator, attribute);
+    this.trigger('failed', message, mediator, errorName);
   }
 
 });

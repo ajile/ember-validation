@@ -11,6 +11,8 @@ const { RSVP } = Ember;
  */
 export default Ember.Component.extend(ComponentVaidation, {
 
+  validationScheme: {},
+
   layout: layout,
 
   /** @type {String} */
@@ -27,6 +29,8 @@ export default Ember.Component.extend(ComponentVaidation, {
 
   /** @type {Boolean} */
   submitError: '',
+
+  errorClass: 'has-error',
 
   /**
    * Validate all form on submit
@@ -84,6 +88,9 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   validationFailed(/*errors*/) {
     this.showAllErrors();
+    Ember.run.scheduleOnce('afterRender', this, () => {
+      this.$().find('.' + this.get('errorClass') + ':first input,textarea,select').focus();
+    });
   },
 
   /**
@@ -164,18 +171,16 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   didReceiveAttrs() {
-    Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, !!this.attrs.action);
+    Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, typeof this.attrs.action === 'function');
   },
 
   didInsertElement() {
     this._super(...arguments);
 
-    this.$().on('focusin', () => {
-      this.setProperties({
-        submitError: '',
-        isSubmitted: false
-      });
-    });
+    this.$().on('focusin', () => { this.set('submitError', ''); });
+
+    this.$().on('change keyup', 'input, textarea, select', () => { this.set('isSubmitted', false); });
+
   },
 
   actions: {

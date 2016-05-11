@@ -6,18 +6,14 @@ moduleForComponent('form-validation', 'Integration | Component | form validation
 });
 
 test('it renders', function(assert) {
-  assert.expect(2);
+  this.on('myAction', function() { });
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  this.render(hbs`{{form-validation action=(action "myAction")}}`);
 
-  this.render(hbs`{{form-validation}}`);
+  assert.equal(this.$().text().trim(), 'No Block Specified');
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
   this.render(hbs`
-    {{#form-validation}}
+    {{#form-validation action=(action "myAction")}}
       template block text
     {{/form-validation}}
   `);

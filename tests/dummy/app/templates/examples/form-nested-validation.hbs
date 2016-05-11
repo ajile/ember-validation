@@ -1,7 +1,7 @@
 <h3>Form with nested validatate-component</h3>
 <div class="row">
   <div class="col-xs-6">
-    {{#form-validation validation-context=model action="saveUser" as |formView|}}
+    {{#form-validation validation-context=model action=(action "saveUser") as |formView|}}
       {{#if modelWasSaved}}
         <div class="alert alert-success">
           <span class="glyphicon glyphicon-ok-sign"></span>

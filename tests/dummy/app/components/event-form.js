@@ -36,7 +36,6 @@ export default FormValidation.extend({
         {name: 'email', options: {messages:{default: 'must_be_valid_email'}}}
       ]
     }
-
   },
 
   didInsertElement() {

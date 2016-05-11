@@ -23,7 +23,8 @@ export default DS.Model.extend(ValidationMixin, {
 
     first_name: {
       validators: [
-        { name: "required", options: { messages: {default: "first_name_required"}, test: computed.alias("context.testValue") } }
+        { name: "required", options: { messages: {default: "first_name_required"}, test: computed.alias("context.testValue") } },
+        { name: "string", options: { min: 2, max: 20 } }
       ]
     },
 
