@@ -20,9 +20,10 @@ test('Show errors on focusout', function (assert) {
     page.click();
   });
 
+  andThen(() => { page.reset(); });
+
   andThen(() => {
     assert.equal(page.errorsCount, 3, '3 errors');
-
   });
 
 });
@@ -41,7 +42,7 @@ test('validators', function (assert) {
   });
 
   andThen(() => {
-    assert.equal(page.name.errors, 'must be at leat 3 symbols', 'name min length error');
+    assert.equal(page.name.errors, 'string.less_then', 'name min length error');
     page.name.click().fillIn('vaaaaaaaaaaaaaaa');
   });
 
@@ -50,7 +51,7 @@ test('validators', function (assert) {
   });
 
   andThen(() => {
-    assert.equal(page.name.errors, 'max length 15 symbols', 'name max length error');
+    assert.equal(page.name.errors, 'string.greater_then', 'name max length error');
     page.name.click().fillIn('Birthday party');
     page.participants_number.click();
   });
@@ -87,6 +88,7 @@ test('validators', function (assert) {
   andThen(() => {
     assert.equal(page.contact_email.errorsCount, 0, "no email error");
     page.submit();
+
   });
 
   andThen(() => {

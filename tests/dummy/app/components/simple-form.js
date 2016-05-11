@@ -7,24 +7,7 @@ export default FormValidation.extend({
 
   isAccordionOpened: false,
 
-  modelWasSaved: false,
-
-  /**
-   * Callback for submit passed
-   *
-   * @function
-   * @returns {undefined}
-   */
-  onSubmitDone() {
-    this.set('modelWasSaved', true);
-  },
-
-  didInsertElement() {
-    this._super(...arguments);
-    this.$().on('focus', 'input', () => { this.set('modelWasSaved', false); });
-  },
-
-  beforeValidation() {
+  validationStart() {
     const deferred = RSVP.defer();
 
     if (!this.get('isAccordionOpened')) {
@@ -41,13 +24,6 @@ export default FormValidation.extend({
     return deferred.promise;
   },
 
-  _onValidFailed: Ember.on('formValidationFailed', function () {
-
-    Ember.run.scheduleOnce('afterRender', this, () => {
-      this.$().find('.has-error:first input').focus();
-    });
-
-  }),
 
   actions: {
     toggleAccordion() {

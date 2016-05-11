@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ElementMediatorMixin from '../../../mixins/element-mediator';
+import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | element mediator');

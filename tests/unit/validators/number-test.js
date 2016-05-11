@@ -17,7 +17,7 @@ test('it works', function(assert) {
   });
 
   var messages = {
-    "not_number": "not_number"
+    "not_number": "number.not_number"
   };
 
   assert.throws(() => validate(), "Throws an error when attribute name not provided");

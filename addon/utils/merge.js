@@ -6,5 +6,5 @@ import Ember from 'ember';
   @return Object
 */
 export default function() {
-  return Ember.$.extend(...arguments);
+  return Ember.$.extend(true, ...arguments);
 }

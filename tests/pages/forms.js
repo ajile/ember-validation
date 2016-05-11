@@ -20,7 +20,7 @@ function createPage(route, elements, config={}) {
     errorsCount: count('.validation-error-list'),
     inputs: count('input'),
     inputsCount: count('input'),
-    submit: clickable('button'),
+    submit: clickable('button[type="submit"]'),
     click: clickable(),
 
     togglePanel: clickable('#panel-head'),
@@ -54,7 +54,9 @@ export var simpleForm = createPage('/examples/form', elements, {
 elements = {};
 Ember.A(['name', 'participants_number', 'contact_email']).map(name => { elements[name] = createElement('#' + name); });
 
-export var viewValidationForm = createPage('/examples/form-view-validation', elements);
+export var viewValidationForm = createPage('/examples/form-view-validation', elements, {
+  reset: clickable('[type="reset"]')
+});
 
 elements = {};
 Ember.A(['name', 'email', 'city', 'street', 'house']).map(name => { elements[name] = createElement('#' + name); });

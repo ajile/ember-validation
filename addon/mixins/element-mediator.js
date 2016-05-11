@@ -39,6 +39,8 @@ export default Ember.Mixin.create({
     }
   },
 
+  errorsName: Ember.computed.or('view.errors-name', 'attribute'),
+
   /**
    * Trigger event after view focused in
    *
@@ -47,7 +49,7 @@ export default Ember.Mixin.create({
    * @returns {undefined}
    */
   _onFocusIn() {
-    this.trigger('hideErrors', this.get('attribute'));
+    this.trigger('hideErrors', this.get('errorsName'));
   },
 
   /**
@@ -58,7 +60,7 @@ export default Ember.Mixin.create({
    * @returns {undefined}
    */
   _onFocusOut() {
-    this.trigger('showErrors', this.get('attribute'));
+    this.trigger('showErrors', this.get('errorsName'));
     this.validate();
   }
 
