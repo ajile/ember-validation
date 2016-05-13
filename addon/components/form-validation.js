@@ -2,7 +2,7 @@ import Ember from 'ember';
 import ComponentVaidation from 'ember-validation/mixins/component';
 import layout from '../templates/components/form-validation';
 
-const { RSVP } = Ember;
+const { RSVP, get } = Ember;
 
 /**
  * @module
@@ -30,7 +30,11 @@ export default Ember.Component.extend(ComponentVaidation, {
   /** @type {Boolean} */
   submitError: '',
 
-  errorClass: 'has-error',
+  /**
+   * Focus first invalid input after validaton failed
+   * @type {Boolean}
+   */
+  focusFirstInvalid: true,
 
   /**
    * Validate all form on submit
@@ -89,7 +93,28 @@ export default Ember.Component.extend(ComponentVaidation, {
   validationFailed(/*errors*/) {
     this.showAllErrors();
     Ember.run.scheduleOnce('afterRender', this, () => {
-      this.$().find('.' + this.get('errorClass') + ':first input,textarea,select').focus();
+      if (this.get('focusFirstInvalid')) {
+        let mediator = this.get('mediators').find((mediator) => {
+          let name = get(mediator, 'errorsName');
+
+          if (name && this.get('errors.' + name)) {
+            return true;
+          }
+        });
+
+        if (mediator) {
+          const view = get(mediator, 'view');
+
+          if (typeof view.focus === 'function') {
+            view.focus();
+          } else {
+            view.element.focus();
+          }
+
+          this.set('visibleErrors.' + get(mediator, 'errorsName'), true);
+        }
+
+      }
     });
   },
 
@@ -147,8 +172,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
-      let attribute = Ember.get(mediator, 'attribute');
-      attribute && this.set('visibleErrors.' + attribute, true);
+      let name = get(mediator, 'errorsName');
+      name && this.set('visibleErrors.' + name, true);
     });
   },
 
@@ -159,8 +184,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   hideAllErrors() {
-    Ember.keys(this.get('visibleErrors')).forEach((attribute) => {
-      this.set('visibleErrors.' + attribute, true);
+    Ember.keys(this.get('visibleErrors')).forEach((name) => {
+      this.set('visibleErrors.' + name, true);
     });
   },
 
