@@ -2,7 +2,7 @@ import Ember from 'ember';
 import ComponentVaidation from 'ember-validation/mixins/component';
 import layout from '../templates/components/form-validation';
 
-const { RSVP } = Ember;
+const { RSVP, get } = Ember;
 
 /**
  * @module
@@ -30,7 +30,11 @@ export default Ember.Component.extend(ComponentVaidation, {
   /** @type {Boolean} */
   submitError: '',
 
-  errorClass: 'has-error',
+  /**
+   * Focus first invalid input after validaton failed
+   * @type {Boolean}
+   */
+  focusFirstInvalid: true,
 
   /**
    * Validate all form on submit
@@ -88,6 +92,30 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   validationFailed(/*errors*/) {
     this.showAllErrors();
+    Ember.run.scheduleOnce('afterRender', this, () => {
+      if (this.get('focusFirstInvalid')) {
+        let mediator = this.get('mediators').find((mediator) => {
+          let name = get(mediator, 'errorsName');
+
+          if (name && this.get('errors.' + name)) {
+            return true;
+          }
+        });
+
+        if (mediator) {
+          const view = get(mediator, 'view');
+
+          if (typeof view.focus === 'function') {
+            view.focus();
+          } else {
+            view.element.focus();
+          }
+
+          this.set('visibleErrors.' + get(mediator, 'errorsName'), true);
+        }
+
+      }
+    });
   },
 
   /**
@@ -144,8 +172,13 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
+<<<<<<< HEAD
       let errorsName = Ember.get(mediator, 'errorsName');
       errorsName && this.set('visibleErrors.' + errorsName, true);
+=======
+      let name = get(mediator, 'errorsName');
+      name && this.set('visibleErrors.' + name, true);
+>>>>>>> form-validation.focusFirstInvalid was added
     });
   },
 
@@ -156,8 +189,13 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   hideAllErrors() {
+<<<<<<< HEAD
     Object.keys(this.get('visibleErrors')).forEach((errorsName) => {
       this.set('visibleErrors.' + errorsName, true);
+=======
+    Ember.keys(this.get('visibleErrors')).forEach((name) => {
+      this.set('visibleErrors.' + name, true);
+>>>>>>> form-validation.focusFirstInvalid was added
     });
   },
 
