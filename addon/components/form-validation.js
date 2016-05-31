@@ -159,7 +159,7 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   hideAllErrors() {
-    Ember.keys(this.get('visibleErrors')).forEach((attribute) => {
+    Object.keys(this.get('visibleErrors')).forEach((attribute) => {
       this.set('visibleErrors.' + attribute, true);
     });
   },
