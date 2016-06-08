@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Config from 'ember-validation/configuration';
 
 /**
   Method looking validator by name.
@@ -10,7 +11,7 @@ import Ember from 'ember';
   @return Validator
 */
 export function lookup(namespace, name, container) {
-  Ember.Logger.log("Lookup : <<util>> : lookup:", container);
+  Config.LOG_VALIDATION && Ember.Logger.log("Lookup : <<util>> : lookup:", container);
   let validator = null;
   Ember.assert("An application container should be provided", container);
   Ember.assert("Provide a validator name", !Ember.isEmpty(name));
@@ -27,7 +28,7 @@ export function lookup(namespace, name, container) {
   @return Validator
 */
 export function lookupValidator(name, container) {
-  Ember.Logger.log("Lookup : <<util>> : lookupValidator:", container);
+  Config.LOG_VALIDATION && Ember.Logger.log("Lookup : <<util>> : lookupValidator:", container);
   var validator = lookup("validator", name, container);
   Ember.assert(`Validator "${name}" is not found. You should put it into the validators directory.` +
                `See http://ajile.github.io/ember-validation/#/tutorial/validators/creating`,
@@ -45,7 +46,7 @@ export function lookupValidator(name, container) {
   @return Validator
 */
 export function lookupPreset(name, container) {
-  Ember.Logger.log("Lookup : <<util>> : lookupPreset:", container);
+  Config.LOG_VALIDATION && Ember.Logger.log("Lookup : <<util>> : lookupPreset:", container);
   var preset = lookup("preset", name, container);
   Ember.assert(`Preset "${name}" is not found. You should put it into the presets directory.` +
                `See http://ajile.github.io/ember-validation/#/tutorial/presets/creating`,

@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import merge from 'ember-validation/utils/merge';
+import Config from 'ember-validation/configuration';
 import { createError } from 'ember-validation/utils/error';
 
 const { Logger, RSVP: { defer }, get } = Ember;
@@ -27,7 +28,7 @@ function validate(attributeName, context, options={}) {
   const value = get(context, attributeName);
   const regexp = get(options, "regexp");
 
-  Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
+  Config.LOG_VALIDATION && Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
   if (Ember.isBlank(value)) { deferred.resolve(); return deferred.promise; }
 

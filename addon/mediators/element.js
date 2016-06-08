@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Config from 'ember-validation/configuration';
 import BaseMediator from 'ember-validation/core/mediator';
 import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 
@@ -17,7 +18,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
    */
   _validate() {
     let attribute = this.get('attribute');
-    Logger.log('Validation : <<mediator>> : Element : _validate : %s %O', attribute, this.get('view.element'));
+    Config.LOG_VALIDATION && Logger.log('Validation : <<mediator>> : Element : _validate : %s %O', attribute, this.get('view.element'));
     const promise = tryInvoke(this.get('context'), 'validateByName', [attribute]);
     if (promise) {
       const defer = RSVP.defer()

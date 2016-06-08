@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Config from 'ember-validation/configuration';
 import BaseMediator from 'ember-validation/core/mediator';
 
 const { get, RSVP } = Ember;
@@ -54,7 +55,7 @@ export default BaseMediator.extend({
           context = this.getSnapshot("context"),
           validator = this.get("validator");
 
-    Ember.Logger.log("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
+    Config.LOG_VALIDATION && Ember.Logger.log("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
 
     const promise = validator(attribute, context, options);
 
