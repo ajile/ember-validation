@@ -50,8 +50,6 @@ export default BaseMediator.extend({
   */
   _validate() {
 
-    console.log(123123123);
-
     const attribute = get(this, "attribute"),
           options = this.optionsToJSON(),
           context = this.getSnapshot("context"),
