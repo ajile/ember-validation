@@ -88,9 +88,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   validationFailed(/*errors*/) {
     this.showAllErrors();
-    Ember.run.scheduleOnce('afterRender', this, () => {
-      this.$().find('.' + this.get('errorClass') + ':first input,textarea,select').focus();
-    });
   },
 
   /**
@@ -147,8 +144,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
-      let attribute = Ember.get(mediator, 'attribute');
-      attribute && this.set('visibleErrors.' + attribute, true);
+      let errorsName = Ember.get(mediator, 'errorsName');
+      errorsName && this.set('visibleErrors.' + errorsName, true);
     });
   },
 
@@ -159,8 +156,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   hideAllErrors() {
-    Object.keys(this.get('visibleErrors')).forEach((attribute) => {
-      this.set('visibleErrors.' + attribute, true);
+    Object.keys(this.get('visibleErrors')).forEach((errorsName) => {
+      this.set('visibleErrors.' + errorsName, true);
     });
   },
 

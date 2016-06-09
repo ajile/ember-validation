@@ -37,6 +37,7 @@ export default ValidatorMediator.extend({
   getSnapshot() {
     assert("Context should be instance of the DS.Model class.", get(this, "context") instanceof DS.Model);
     const content = get(this, "context")._createSnapshot();
+    content.get = key => content.attr(key);
     return Ember.ObjectProxy.create({ content });
   }
 

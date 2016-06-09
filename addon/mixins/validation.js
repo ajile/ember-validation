@@ -2,6 +2,7 @@ import Ember from 'ember';
 import ValidatableMixin from 'ember-validation/mixins/validatable';
 import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
+import ProxyMediator from 'ember-validation/mediators/proxy';
 import Errors from 'ember-validation/core/errors';
 import Config from 'ember-validation/configuration';
 import { lookupValidator, lookupPreset } from 'ember-validation/utils/lookup';
@@ -145,7 +146,13 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       let validatorHashes = this._createValidators(attribute, validation);
 
       let options = getWithDefault(validation, "options", {});
-      let attributeMediator = this._createAttributeMediator(attribute, options);
+      let groupMediator = null;
+
+      if (options.proxy) {
+        groupMediator = ProxyMediator.extend(options).create({ context: this, attribute, options });
+      } else {
+        groupMediator = this._createGroupMediator(attribute, options);
+      }
 
       // Iterating over the attribute's validators and wrap each of them by a
       // mediator, that has the same interface then they are.
@@ -153,28 +160,32 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
         let options = get(hash, "options");
         let validator = get(hash, "validator");
         let validatorMediator = this._createValidatorMediator(attribute, validator, options);
-        attributeMediator.pushObject(validatorMediator);
+        groupMediator.pushObject(validatorMediator);
       });
 
-      attributeMediator.on("passed", () => {
+      groupMediator.on("passed", () => {
         Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : %cevent::Mediator.passed%c on attribute '%s'", "color: #090", null, attribute);
         this.get("errors").remove(attribute);
       });
 
-      attributeMediator.on("failed", (message) => {
+      groupMediator.on("failed", (message) => {
         Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
-        this.get("errors").remove(attribute);
-        this.get("errors").add(attribute, message);
-        this.get("errors").arrayContentDidChange();
+        // To prevent occurring of the inconsistent state error
+        // this.transitionTo && this.transitionTo("updated.uncommitted");
+        if (!get(message, "options.proxy")) {
+          this.get("errors").remove(attribute);
+          this.get("errors").add(attribute, message);
+          this.get("errors").arrayContentDidChange();
+        }
       });
 
-      attributeMediator.on("conditionChanged", () => {
+      groupMediator.on("conditionChanged", () => {
         Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
         this.get("errors").remove(attribute);
       });
 
-      // mediators.pushObject(attributeMediator);
-      this.addMediator(attributeMediator);
+      // mediators.pushObject(groupMediator);
+      this.addMediator(groupMediator);
     });
 
   },
@@ -357,13 +368,13 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   },
 
   /**
-    @method _createAttributeMediator
+    @method _createGroupMediator
     @param {String} attribute
     @param {Object} options
     @param {Object} context
     @return {Array}
   */
-  _createAttributeMediator(attribute, options={}, context=this) {
+  _createGroupMediator(attribute, options={}, context=this) {
     return AttributeMediator.extend(options).create({ context, attribute, options });
   },
 
