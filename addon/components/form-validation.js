@@ -172,13 +172,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
-<<<<<<< HEAD
-      let errorsName = Ember.get(mediator, 'errorsName');
-      errorsName && this.set('visibleErrors.' + errorsName, true);
-=======
       let name = get(mediator, 'errorsName');
       name && this.set('visibleErrors.' + name, true);
->>>>>>> form-validation.focusFirstInvalid was added
     });
   },
 
@@ -189,13 +184,8 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @returns {undefined}
    */
   hideAllErrors() {
-<<<<<<< HEAD
     Object.keys(this.get('visibleErrors')).forEach((errorsName) => {
       this.set('visibleErrors.' + errorsName, true);
-=======
-    Ember.keys(this.get('visibleErrors')).forEach((name) => {
-      this.set('visibleErrors.' + name, true);
->>>>>>> form-validation.focusFirstInvalid was added
     });
   },
 
