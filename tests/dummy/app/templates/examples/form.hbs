@@ -33,13 +33,13 @@
         {{input value=model.first_name class="form-control" validate-path="first_name"}}
         {{ember-validation-error-list errors=formView.errors.first_name show=formView.visibleErrors.first_name}}
       </div>
-
+      {{#wrapper-dummy}}
       <div class="form-group {{if (and formView.errors.last_name formView.visibleErrors.last_name) 'has-error'}}" id="last_name">
         <label class="control-label">Last name</label>
         {{input value=model.last_name class="form-control" validate-path="last_name"}}
         {{ember-validation-error-list errors=formView.errors.last_name show=formView.visibleErrors.last_name}}
       </div>
-
+      {{/wrapper-dummy}}
       <div class="form-group {{if (and formView.errors.phone formView.visibleErrors.phone) 'has-error'}}" id="phone">
         <label class="control-label">Phone</label>
         {{input value=model.phone class="form-control" validate-path="phone"}}
@@ -65,13 +65,13 @@
                 {{input value=model.city class="form-control" validate-path="city"}}
                 {{ember-validation-error-list errors=formView.errors.city show=formView.visibleErrors.city}}
               </div>
-
+              {{#wrapper-dummy}}
               <div class="form-group {{if (and formView.errors.street formView.visibleErrors.street) 'has-error'}}" id="street">
                 <label class="control-label">Street</label>
                 {{input value=model.street class="form-control" validate-path="street"}}
                 {{ember-validation-error-list errors=formView.errors.street show=formView.visibleErrors.street}}
               </div>
-
+              {{/wrapper-dummy}}
               <div class="form-group {{if (and formView.errors.house formView.visibleErrors.house) 'has-error'}}" id="house">
                 <label class="control-label">House number</label>
                 {{input value=model.house class="form-control" validate-path="house"}}

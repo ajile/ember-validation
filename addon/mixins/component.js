@@ -168,10 +168,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   isChild(view) {
 
-    if (this.get('childViews').indexOf(view) === -1) {
-      return;
-    }
-
     while (view.parentView) {
       if (view.parentView.get('isValidatable')) {
         return Ember.isEqual(view.parentView, this);
@@ -263,6 +259,8 @@ export default Ember.Mixin.create(ValidationMixin, {
       view.on('willDestroyElement', () => { this.removeMediator(mediator); });
       this.addMediator(mediator);
     }
+
+    view.get('childViews').forEach(this._addElementMediator.bind(this))
   },
 
   /**
