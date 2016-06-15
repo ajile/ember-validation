@@ -259,8 +259,10 @@ export default Ember.Mixin.create(ValidationMixin, {
       view.on('willDestroyElement', () => { this.removeMediator(mediator); });
       this.addMediator(mediator);
     }
+    if (!get(view, 'isValidatable')) {
+      view.get('childViews').forEach(this._addElementMediator.bind(this));
+    }
 
-    view.get('childViews').forEach(this._addElementMediator.bind(this))
   },
 
   /**
