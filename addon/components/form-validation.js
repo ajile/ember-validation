@@ -81,7 +81,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   validationPassed() {
     this.hideAllErrors();
     this.submitStart();
-    this.attrs.action(this.submitDone.bind(this), this.submitFailed.bind(this));
+    this._invokeAction();
   },
 
   /**
@@ -126,6 +126,17 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   validationEnd() {
     this.set('isValidating', false);
+  },
+
+  /**
+   * Invokes given `action`. Method can be overridden by a child to currying
+   * function's arguments.
+   *
+   * @function
+   */
+  _invokeAction() {
+    const args = [this.submitDone.bind(this), this.submitFailed.bind(this), ...arguments];
+    this.attrs.action(...args);
   },
 
   submitStart() {
