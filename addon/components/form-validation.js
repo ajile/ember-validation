@@ -54,8 +54,7 @@ export default Ember.Component.extend(ComponentVaidation, {
 
     this.validationStart()
       .then(() => {
-        this.validate()
-          .then(this.validationPassed.bind(this), this.validationFailed.bind(this));
+        this.validate().then(this.validationPassed.bind(this), this.validationFailed.bind(this));
       })
       .finally(this.validationEnd.bind(this));
 
