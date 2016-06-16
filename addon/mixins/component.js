@@ -22,7 +22,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    * @function
    * @param {String} attribute
    * @param {(Array|String)} messages
-   * @returns {undefined}
    */
   add(attribute, messages) {
     var content = this.get('_content');
@@ -41,7 +40,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    *
    * @function
    * @param {String} attribute
-   * @returns {undefined}
    */
   remove(attribute) {
     this.get('_content').removeObjects(this._messagesForAttribute(attribute));
@@ -51,7 +49,6 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    * Removes all error messages.
    *
    * @function
-   * @returns {undefined}
    */
   clear() {
     this.get('_content').clear();
@@ -107,7 +104,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Initialize errors
    *
    * @function
-   * @returns {undefined}
    */
   initErrors() {
     this.set('errors', ErrorsProxy.create({ content: this.get('validation-context.errors') || A() }));
@@ -117,7 +113,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Initialize validation
    *
    * @function
-   * @returns {undefined}
    */
   initValidation() {
 
@@ -132,7 +127,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Clear validation
    *
    * @function
-   * @returns {undefined}
    */
   clearValidation() {
     this.get('mediators').slice().forEach(this.removeMediator.bind(this));
@@ -142,7 +136,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Reset validation
    *
    * @function
-   * @returns {undefined}
    */
   resetValidation() {
     this.clearValidation();
@@ -153,7 +146,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Reset errors
    *
    * @function
-   * @returns {undefined}
    */
   resetErrors() {
     this.clearErrors();
@@ -180,7 +172,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Init validation on `didInsertElement`
    *
    * @function
-   * @returns {undefined}
    */
   _onDidInsertElement: on('didInsertElement', function () {
     this.initValidation();
@@ -190,7 +181,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Reset validation and errors on context did change
    *
    * @function
-   * @returns {undefined}
    */
   _onContextDidChange: observer('validation-context', function () {
     this.resetErrors();
@@ -202,7 +192,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {Mediator} mediator
-   * @returns {undefined}
    */
   _onMediatorDidAdd: on('mediatorDidAdd', function (mediator) {
     var selector = get(mediator, 'options.selector'),
@@ -232,7 +221,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {Mediator} mediator
-   * @returns {undefined}
    */
   _onMediatorWillDestroy: on('mediatorWillRemove', function (mediator) {
     mediator
@@ -249,7 +237,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {Ember/View} view
-   * @returns {undefined}
    */
   _addElementMediator(view) {
 
@@ -270,7 +257,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {Ember/View} view
-   * @returns {undefined}
    */
   _createElementMediator(view) {
     var attribute = get(view, 'validate-path');
@@ -288,7 +274,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {String} attribute
-   * @returns {undefined}
    */
   _showErrors(attribute) {
     attribute && this.set('visibleErrors.' + attribute, true);
@@ -300,7 +285,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {String} attribute
-   * @returns {undefined}
    */
   _hideErrors(attribute) {
     attribute && this.set('visibleErrors.' + attribute, false);
@@ -310,7 +294,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Check new rendered childs views to be registered for validation
    *
    * @function
-   * @returns {undefined}
    */
   _subscribe: on('didInsertElement', function () {
     var subscriber = Instrumentation.subscribe('render', {
@@ -332,7 +315,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * Unsubscribe from listening new rendered child nodes
    *
    * @function
-   * @returns {undefined}
    */
   _unsubscribe: Ember.on('willDestroyElement', function () {
     Instrumentation.unsubscribe(this.get('subscriber'));
@@ -344,7 +326,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    * @param {Mediator} mediator
-   * @returns {undefined}
    */
   _triggerValidatePassed(mediator) {
     let errors = this.get('errors'),
@@ -363,7 +344,6 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @function
    * @param {String} error
    * @param {Mediator} mediator
-   * @returns {undefined}
    */
   _triggerValidateFailed(error, mediator) {
     let errors = this.get('errors'),
