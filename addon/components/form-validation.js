@@ -41,7 +41,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    *
    * @function
    * @param {jQuery.Event} event
-   * @returns {undefined}
    */
   submit(event) {
 
@@ -76,7 +75,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Call given `action`
    *
    * @function
-   * @returns {undefined}
    */
   validationPassed() {
     this.hideAllErrors();
@@ -88,7 +86,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Called after validation was failed
    *
    * @function
-   * @returns {undefined}
    */
   validationFailed(/*errors*/) {
     this.showAllErrors();
@@ -122,7 +119,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Called at the end of validation
    *
    * @function
-   * @returns {undefined}
    */
   validationEnd() {
     this.set('isValidating', false);
@@ -147,7 +143,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Called when submitting done
    *
    * @function
-   * @returns {undefined}
    */
   submitDone() {
     this.set('isSubmitted', true);
@@ -158,7 +153,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Called when submitting failed
    *
    * @function
-   * @returns {undefined}
    */
   submitFailed(error) {
     this.set('submitError', error);
@@ -169,7 +163,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Called after submitting complete
    *
    * @function
-   * @returns {undefined}
    */
   submitEnd() {
     this.set('isSubmitting', false);
@@ -179,7 +172,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Make all errors visible
    *
    * @function
-   * @returns {undefined}
    */
   showAllErrors() {
     this.get('mediators').forEach((mediator) => {
@@ -192,7 +184,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Make all errors hidden
    *
    * @function
-   * @returns {undefined}
    */
   hideAllErrors() {
     Object.keys(this.get('visibleErrors')).forEach((errorsName) => {
@@ -204,7 +195,6 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Check `action` argument was given
    *
    * @function
-   * @returns {undefined}
    */
   didReceiveAttrs() {
     Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, typeof this.attrs.action === 'function');
