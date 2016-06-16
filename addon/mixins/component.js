@@ -98,7 +98,7 @@ export default Ember.Mixin.create(ValidationMixin, {
   subscriber: null,
 
   /** @type {ember/Object} */
-  'validation-context' : computed(() => {return {};}),
+  'validation-context': computed(() => {return {};}),
 
   /** @type {ember/Object} */
   visibleErrors: computed(() => {return {};}),
@@ -110,7 +110,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @returns {undefined}
    */
   initErrors() {
-    this.set('errors', ErrorsProxy.create({content: this.get('validation-context.errors') || A()}));
+    this.set('errors', ErrorsProxy.create({ content: this.get('validation-context.errors') || A() }));
   },
 
   /**
@@ -182,7 +182,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    * @function
    * @returns {undefined}
    */
-  _onDidInsertElement : on('didInsertElement', function () {
+  _onDidInsertElement: on('didInsertElement', function () {
     this.initValidation();
   }),
 
@@ -276,7 +276,7 @@ export default Ember.Mixin.create(ValidationMixin, {
     var attribute = get(view, 'validate-path');
 
     if (attribute) {
-      return ElementMediator.create({context : this.get('validation-context'), attribute, view});
+      return ElementMediator.create({ context: this.get('validation-context'), attribute, view });
     }
 
     return ElementProxyMediator.create({view});
