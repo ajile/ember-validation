@@ -131,6 +131,7 @@ export default Ember.Component.extend(ComponentVaidation, {
    */
   _invokeAction() {
     const args = [this.submitDone.bind(this), this.submitFailed.bind(this), ...arguments];
+    Ember.assert(`You must provide an 'action' action to 'form-validation'`, typeof this.attrs.action === 'function');
     this.attrs.action(...args);
   },
 
@@ -190,22 +191,12 @@ export default Ember.Component.extend(ComponentVaidation, {
     });
   },
 
-  /**
-   * Check `action` argument was given
-   *
-   * @function
-   */
-  didReceiveAttrs() {
-    Ember.assert(`You must provide an \`action\` action to \`form-validation\`.`, typeof this.attrs.action === 'function');
-  },
-
   didInsertElement() {
     this._super(...arguments);
 
     this.$().on('focusin', () => { this.set('submitError', ''); });
 
     this.$().on('change keyup', 'input, textarea, select', () => { this.set('isSubmitted', false); });
-
   },
 
   actions: {
