@@ -28,7 +28,7 @@ export function lookup(namespace, name, container) {
   @return Validator
 */
 export function lookupValidator(name, container) {
-  Config.LOG_VALIDATION && Ember.Logger.log("Lookup : <<util>> : lookupValidator:", container);
+  Config.LOG_VALIDATION && Ember.Logger.log("Lookup : <<util>> : lookupValidator:", name, container);
   var validator = lookup("validator", name, container);
   Ember.assert(`Validator "${name}" is not found. You should put it into the validators directory.` +
                `See http://ajile.github.io/ember-validation/#/tutorial/validators/creating`,
