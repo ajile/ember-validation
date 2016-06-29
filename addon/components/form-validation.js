@@ -92,8 +92,7 @@ export default Ember.Component.extend(ComponentVaidation, {
       if (this.get('focusFirstInvalid')) {
         let mediator = this.get('mediators').find((mediator) => {
           let name = get(mediator, 'errorsName');
-
-          if (name && this.get('errors.' + name)) {
+          if (name && this.get('errors.' + name + '.length')) {
             return true;
           }
         });
