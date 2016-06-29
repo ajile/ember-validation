@@ -1,7 +1,7 @@
 <h3>Form with view validation</h3>
 <div class="row">
   <div class="col-xs-6">
-    {{#event-form action=(action "saveEvent") reset=(action "reset") validation-context=model as |formView|}}
+    {{#event-form action=(action "saveEvent") reset=(action "reset") as |formView errors visibleErrors|}}
       {{#if formView.submitError}}
         Submit failed with error "{{formView.submitError}}"
       {{else if formView.isSubmitted}}
@@ -14,20 +14,20 @@
       {{else if formView.isValidating}}
         Validate form...
       {{/if}}
-      <div class="form-group {{if (and formView.errors.name formView.visibleErrors.name) 'has-error'}}" id="name">
+      <div class="form-group {{if (and errors.name visibleErrors.name) 'has-error'}}" id="name">
         <label class="control-label">Event name</label>
-        {{input value=model.name name="name" class="form-control" errors-name="name"}}
-        {{ember-validation-error-list errors=formView.errors.name show=formView.visibleErrors.name}}
+        {{input value=formView.name name="name" class="form-control" validate-path="name"}}
+        {{ember-validation-error-list errors=errors.name show=visibleErrors.name}}
       </div>
-      <div class="form-group {{if (and formView.errors.number formView.visibleErrors.number) 'has-error'}}" id="participants_number">
+      <div class="form-group {{if (and errors.number visibleErrors.number) 'has-error'}}" id="participants_number">
         <label class="control-label">Participants number</label>
-        {{input value=model.participants_number name="participants_number" class="form-control" errors-name="number"}}
-        {{ember-validation-error-list errors=formView.errors.number show=formView.visibleErrors.number}}
+        {{input value=formView.participants_number name="participants_number" class="form-control" validate-path="participants_number" errors-name="number"}}
+        {{ember-validation-error-list errors=errors.number show=visibleErrors.number}}
       </div>
-      <div class="form-group {{if (and formView.errors.email formView.visibleErrors.email) 'has-error'}}" id="contact_email">
+      <div class="form-group {{if (and errors.email visibleErrors.email) 'has-error'}}" id="contact_email">
         <label class="control-label">Contact email</label>
-        {{input value=model.contact_email name="email" class="form-control" errors-name="email"}}
-        {{ember-validation-error-list errors=formView.errors.email show=formView.visibleErrors.email}}
+        {{input value=formView.contact_email name="email" class="form-control" validate-path="contact_email" errors-name="email"}}
+        {{ember-validation-error-list errors=errors.email show=visibleErrors.email}}
       </div>
       <div class="form-group">
         <button type="reset" class="btn" {{action "reset" target=formView}}>Reset</button>

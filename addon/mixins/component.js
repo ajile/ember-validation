@@ -95,10 +95,15 @@ export default Ember.Mixin.create(ValidationMixin, {
   subscriber: null,
 
   /** @type {ember/Object} */
-  'validation-context': computed(() => {return {};}),
+  'validation-context': null,
 
   /** @type {ember/Object} */
-  visibleErrors: computed(() => {return {};}),
+  validationContext: computed('validation-context', function () {
+    return this.get('validation-context') || this;
+  }),
+
+  /** @type {ember/Object} */
+  visibleErrors: computed(() => { return {}; }),
 
   /**
    * Initialize errors
@@ -182,38 +187,9 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    */
-  _onContextDidChange: observer('validation-context', function () {
+  _onContextDidChange: observer('validationContext', function () {
     this.resetErrors();
     this.resetValidation();
-  }),
-
-  /**
-   * Do some initilaze stuffs for some types of mediators
-   *
-   * @function
-   * @param {Mediator} mediator
-   */
-  _onMediatorDidAdd: on('mediatorDidAdd', function (mediator) {
-    var selector = get(mediator, 'options.selector'),
-        bind = () => {
-          let element = this.$(selector),
-              view = this.get('container').lookup('-view-registry:main')[element.attr('id')];
-
-          if (view) {
-            Ember.mixin(mediator, ElementMediatorMixin);
-            mediator.set('view', view);
-          }
-        };
-
-    if (selector) {
-      this.get('element') ? bind() : this.on('didInsertElement', bind);
-    }
-
-    mediator
-      .on('passed', this, this._triggerValidatePassed)
-      .on('failed', this, this._triggerValidateFailed)
-      .on('showErrors', this, this._showErrors)
-      .on('hideErrors', this, this._hideErrors);
   }),
 
   /**
@@ -244,8 +220,17 @@ export default Ember.Mixin.create(ValidationMixin, {
       let mediator = this._createElementMediator(view);
 
       view.on('willDestroyElement', () => { this.removeMediator(mediator); });
+
+      mediator
+        .on('passed', this, this._triggerValidatePassed)
+        .on('failed', this, this._triggerValidateFailed)
+        .on('showErrors', this, this._showErrors)
+        .on('hideErrors', this, this._hideErrors);
+
       this.addMediator(mediator);
     }
+
+    // check non validatable component childs
     if (!get(view, 'isValidatable')) {
       view.get('childViews').forEach(this._addElementMediator.bind(this));
     }
@@ -262,11 +247,10 @@ export default Ember.Mixin.create(ValidationMixin, {
     var attribute = get(view, 'validate-path');
 
     if (attribute) {
-      return ElementMediator.create({ context: this.get('validation-context'), attribute, view });
+      return ElementMediator.create({ context: this.get('validationContext'), 'validate-path': attribute, view });
     }
 
     return ElementProxyMediator.create({view});
-
   },
 
   /**
@@ -278,7 +262,6 @@ export default Ember.Mixin.create(ValidationMixin, {
   _showErrors(attribute) {
     attribute && this.set('visibleErrors.' + attribute, true);
   },
-
 
   /**
    * Hide errors for for given attribute
@@ -316,7 +299,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    */
-  _unsubscribe: Ember.on('willDestroyElement', function () {
+  _unsubscribe: on('willDestroyElement', function () {
     Instrumentation.unsubscribe(this.get('subscriber'));
     this.clearValidation();
   }),

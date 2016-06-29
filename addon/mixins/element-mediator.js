@@ -5,6 +5,8 @@ export default Ember.Mixin.create({
   /** @type {Ember/Component} */
   view : null,
 
+  'validate-path': '',
+
   /**
    * Attach event listeners to view
    *
@@ -12,7 +14,7 @@ export default Ember.Mixin.create({
    * @returns {undefined}
    */
   viewDidChange: Ember.on('init', Ember.observer('view', function () {
-    let view = this.get('view');
+    const view = this.get('view');
 
     if (view) {
       view
@@ -39,7 +41,7 @@ export default Ember.Mixin.create({
     }
   },
 
-  errorsName: Ember.computed.or('view.errors-name', 'attribute'),
+  errorsName: Ember.computed.or('view.errors-name', 'validate-path'),
 
   /**
    * Trigger event after view focused in

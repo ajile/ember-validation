@@ -202,7 +202,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
     const attrName = get(mediator, "attribute");
     this.get("mediators").pushObject(mediator);
     this.trigger('mediatorDidAdd', mediator);
-    Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : addMediator %o for '%s'", mediator, attrName);
+    Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : addMediator %o for '%s'", mediator, attrName || get(mediator, "validate-path"), get(mediator, 'view.element') );
   },
 
   /**
