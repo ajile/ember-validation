@@ -33,8 +33,9 @@ export default Ember.Component.extend(ComponentVaidation, {
   /**
    * Focus first invalid input after validaton failed
    * @type {Boolean}
+   * @default false
    */
-  focusFirstInvalid: true,
+  focusFirstInvalid: false,
 
   /**
    * Validate all form on submit
