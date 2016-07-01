@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import Config from 'ember-validation/configuration';
 import BaseMediator from 'ember-validation/core/mediator';
+import { lookupValidator } from 'ember-validation/utils/lookup';
+import { createError } from 'ember-validation/utils/error';
 
 const { get, RSVP } = Ember;
 
@@ -61,6 +63,14 @@ export default BaseMediator.extend({
     }
 
     const isValidatable = attributeValue.get("isValidatable");
+
+    if (options.required) {
+      if (!attributeValue.get("content")) {
+        let error = createError("required", attributeValue, "required");
+        return RSVP.reject(error.set("options", options));
+      }
+      return RSVP.resolve();
+    }
 
     Ember.assert("The proxy mediator working with validatable objects only", isValidatable);
 
