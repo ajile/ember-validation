@@ -1,6 +1,6 @@
 {
   "name": "ember-validation",
-  "version": "1.0.4",
+  "version": "v1.0.4",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
