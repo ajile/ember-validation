@@ -1,1 +1,1 @@
-Ember.libraries.register('Ember Validation', '1.0.4');
+Ember.libraries.register('Ember Validation', 'v1.0.4');
