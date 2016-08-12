@@ -14,7 +14,9 @@ const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 var ErrorsProxy = Ember.ArrayProxy.extend({
 
   /** @type {Array}  */
-  _content: Ember.A(),
+  _content: Ember.computed(function () {
+    return Ember.A();
+  }),
 
   /**
    * Adds error messages to a given attribute.
@@ -110,8 +112,9 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    */
-  initErrors() {
+  initErrors() {console.log('initErrors', this.get('validation-context'))
     this.set('errors', ErrorsProxy.create({ content: this.get('validation-context.errors') || A() }));
+    console.log('----->', Ember.guidFor(this.get('errors')), this.get('errors'))
   },
 
   /**
