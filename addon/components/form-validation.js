@@ -197,6 +197,8 @@ export default Ember.Component.extend(ComponentVaidation, {
     this.$().on('input', () => { this.get('submitError') && Ember.run.later(this, () => { this.set('submitError', ''); }, 300); });
 
     this.$().on('change keyup', 'input, textarea, select', () => { this.set('isSubmitted', false); });
+
+    this.check();
   },
 
   actions: {
