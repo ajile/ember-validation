@@ -112,9 +112,8 @@ export default Ember.Mixin.create(ValidationMixin, {
    *
    * @function
    */
-  initErrors() {console.log('initErrors', this.get('validation-context'))
+  initErrors() {
     this.set('errors', ErrorsProxy.create({ content: this.get('validation-context.errors') || A() }));
-    console.log('----->', Ember.guidFor(this.get('errors')), this.get('errors'))
   },
 
   /**

@@ -38,6 +38,13 @@ export default Ember.Component.extend(ComponentVaidation, {
   focusFirstInvalid: false,
 
   /**
+   * Call check() method on didInsertElement
+   * @type {Boolean}
+   * @default false
+   */
+  checkFirst: false,
+
+  /**
    * Validate all form on submit
    *
    * @function
@@ -104,7 +111,11 @@ export default Ember.Component.extend(ComponentVaidation, {
           if (typeof view.focus === 'function') {
             view.focus();
           } else {
-            view.element.focus();
+            if (/INPUT|TEXTAREA|SELECT/.test(view.element.nodeName)) {
+              view.element.focus();
+            } else {
+              view.$('input,textarea,select').filter(':first').focus();
+            }
           }
 
           this.set('visibleErrors.' + get(mediator, 'errorsName'), true);
@@ -198,7 +209,9 @@ export default Ember.Component.extend(ComponentVaidation, {
 
     this.$().on('change keyup', 'input, textarea, select', () => { this.set('isSubmitted', false); });
 
-    this.check();
+    if (this.get('checkFirst')) {
+      this.check();
+    }
   },
 
   actions: {
