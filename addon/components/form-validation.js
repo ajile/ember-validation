@@ -12,6 +12,13 @@ export default Ember.Component.extend(ComponentVaidation, {
 
   validationScheme: {},
 
+  /**
+   * @type {String}
+   * @todo: This property with direct path should be removed, but when you try
+   *        do it validation somehow become broken. For temporary solution in
+   *        components that extended from this component should set this
+   *        property to `null` like so: `layoutName: null`.
+   */
   layoutName: "components/form-validation",
 
   /** @type {String} */
