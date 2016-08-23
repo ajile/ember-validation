@@ -1,7 +1,4 @@
-import Ember from "ember";
 import FormValidation from "ember-validation/components/form-validation";
-
-const { computed } = Ember;
 
 export default FormValidation.extend({
 
@@ -41,8 +38,6 @@ export default FormValidation.extend({
   didInsertElement() {
     this._super(...arguments);
     this.$().on('focus', 'input', () => { this.set('modelWasSaved', false); });
-    // this.validate(['name'])
-    console.log(this.get('mediators'))
   },
 
   /**

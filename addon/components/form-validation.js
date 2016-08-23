@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import ComponentVaidation from 'ember-validation/mixins/component';
-import layout from '../templates/components/form-validation';
 
 const { RSVP, get } = Ember;
 
@@ -13,7 +12,7 @@ export default Ember.Component.extend(ComponentVaidation, {
 
   validationScheme: {},
 
-  layout: layout,
+  layoutName: "components/form-validation",
 
   /** @type {String} */
   tagName: 'form',
