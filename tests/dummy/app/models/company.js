@@ -1,5 +1,5 @@
 import DS from "ember-data";
-import ValidationMixin from "ember-validation/mixins/model";
+import ValidationMixin from "ember-validation/mixins/validation";
 
 const { attr } = DS;
 
