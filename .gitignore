@@ -19,3 +19,6 @@
 npm-debug.log
 testem.log
 *.swp
+/coverage.html
+/coverage.json
+/lcov.dat
