@@ -92,7 +92,13 @@ export default Ember.Component.extend(ComponentVaidation, {
   validationPassed() {
     this.hideAllErrors();
     this.submitStart();
-    this._invokeAction();
+    if (Ember.typeOf(this._invokeAction) === "function") {
+      Ember.deprecate(`Method '_invokeAction' of the 'form-validation' component is deprecated.` +
+                      `You should use 'invokeAction' instead.`, false, { id: "ember-validation._invokeAction" });
+      this._invokeAction();
+    } else {
+      this.invokeAction();
+    }
   },
 
   /**
@@ -144,12 +150,15 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Invokes given `action`. Method can be overridden by a child to currying
    * function's arguments.
    *
-   * @function
+   * @method
+   * @param {*} Arguments is passed to the action
+   * @return {Any}
    */
-  _invokeAction() {
-    const args = [this.submitDone.bind(this), this.submitFailed.bind(this), ...arguments];
-    Ember.assert(`You must provide an 'action' action to 'form-validation'`, typeof this.attrs.action === 'function');
-    this.attrs.action(...args);
+  invokeAction(...args) {
+    const action = this.attrs.action;
+    const isExists = typeof action === 'function';
+    Ember.assert(`You must provide an 'action' action to 'form-validation'`, isExists);
+    return action(...args, this.submitDone.bind(this), this.submitFailed.bind(this));
   },
 
   submitStart() {
@@ -162,6 +171,7 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @function
    */
   submitDone() {
+    this.trigger("done");
     this.set('isSubmitted', true);
     this.submitEnd();
   },
@@ -172,6 +182,7 @@ export default Ember.Component.extend(ComponentVaidation, {
    * @function
    */
   submitFailed(error) {
+    this.trigger("failed");
     this.set('submitError', error);
     this.submitEnd();
   },
