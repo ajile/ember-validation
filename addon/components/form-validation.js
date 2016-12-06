@@ -4,9 +4,10 @@ import ComponentVaidation from 'ember-validation/mixins/component';
 const { RSVP, get } = Ember;
 
 /**
- * @module
- * @augments ember/Component
- * @augments ember-validation/mixins/component
+ * @module ember-validation/components/form-validation
+ * @augments ember.Component
+ * @augments module:ember-validation/mixins/component
+ * @public
  */
 export default Ember.Component.extend(ComponentVaidation, {
 
