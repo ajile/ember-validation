@@ -92,13 +92,7 @@ export default Ember.Component.extend(ComponentVaidation, {
   validationPassed() {
     this.hideAllErrors();
     this.submitStart();
-    if (Ember.typeOf(this._invokeAction) === "function") {
-      Ember.deprecate(`Method '_invokeAction' of the 'form-validation' component is deprecated.` +
-                      `You should use 'invokeAction' instead.`, false, { id: "ember-validation._invokeAction" });
-      this._invokeAction();
-    } else {
-      this.invokeAction();
-    }
+    this._invokeAction();
   },
 
   /**
@@ -150,15 +144,15 @@ export default Ember.Component.extend(ComponentVaidation, {
    * Invokes given `action`. Method can be overridden by a child to currying
    * function's arguments.
    *
-   * @method
-   * @param {*} Arguments is passed to the action
-   * @return {Any}
+   * @function
+   * @todo: Should not be private. It need to be renamed to `invokeAction`.
+   * @todo: It should not send callbacks into `action`. Instead of it, the the
+   *        logic should be based on a returned promise.
    */
-  invokeAction(...args) {
-    const action = this.attrs.action;
-    const isExists = typeof action === 'function';
-    Ember.assert(`You must provide an 'action' action to 'form-validation'`, isExists);
-    return action(...args, this.submitDone.bind(this), this.submitFailed.bind(this));
+  _invokeAction() {
+    const args = [this.submitDone.bind(this), this.submitFailed.bind(this), ...arguments];
+    Ember.assert(`You must provide an 'action' action to 'form-validation'`, typeof this.attrs.action === 'function');
+    this.attrs.action(...args);
   },
 
   submitStart() {
