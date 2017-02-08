@@ -17,12 +17,12 @@ export default BaseMediator.extend(ElementMediatorMixin, {
    * @returns {RSVP.Promise}
    */
   _validate() {
-    let attribute = this.get('validate-path');
+    const attribute = this.get('validate-path');
     Config.LOG_VALIDATION && Logger.log('Validation : <<mediator>> : Element : _validate : %s %O', attribute, this.get('view.element'));
-    const promise = tryInvoke(this.get('context'), 'validateByName', [attribute]);
+    const promise = tryInvoke(this.get('context'), 'validateByName', [ attribute ]);
     if (promise) {
       const defer = RSVP.defer()
-      promise.then(() => {defer.resolve();}, (errors) => { defer.reject(errors.shift()); });
+      promise.then(() => { defer.resolve(); }, errors => { defer.reject(errors.shift()); });
 
       return defer.promise;
     }
