@@ -77,7 +77,15 @@ export default BaseMediator.extend({
     Config.LOG_VALIDATION && Ember.Logger.log("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
 
     const promise = attributeValue.validate();
-    return promise.catch(error => RSVP.reject(error.set("options", options)));
+    return promise.catch(errors => {
+
+      errors.forEach(errors => {
+        errors.forEach(error => {
+          error.set("options", options);
+        });
+      });
+      return RSVP.reject(errors);
+    });
   }
 
 });
