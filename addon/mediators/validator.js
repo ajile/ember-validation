@@ -59,7 +59,11 @@ export default BaseMediator.extend({
 
     const promise = validator(attribute, context, options);
 
-    return promise.catch(error => RSVP.reject(error.set("options", options)));
+    return promise.catch(error => {
+      error.set("options", options);
+      error.set("attribute", attribute);
+      return RSVP.reject(error);
+    });
 
   }
 
