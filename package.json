@@ -55,7 +55,11 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.3",
-    "ember-cli-htmlbars": "0.7.9"
+    "ember-cli-htmlbars": "0.7.9",
+    "ember-logging": "ssh://git@github.com/ajile/ember-logging#master"
+  },
+  "peerDependencies": {
+    "raven-js": "^3.10.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",

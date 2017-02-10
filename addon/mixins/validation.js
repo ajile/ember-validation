@@ -6,6 +6,9 @@ import ProxyMediator from 'ember-validation/mediators/proxy';
 import Errors from 'ember-validation/core/errors';
 import Config from 'ember-validation/configuration';
 import { lookupValidator, lookupPreset } from 'ember-validation/utils/lookup';
+import { getLogger } from 'ember-logging/utils/logging';
+
+const logger = getLogger("ember-validation.mixins.validation");
 
 const { RSVP, computed, get, assert, Logger, getWithDefault, getProperties, tryInvoke } = Ember;
 
@@ -68,6 +71,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   validationScheme: computed(() => { return {}; }),
 
   init() {
+    logger.debug("initiation");
     this.initErrors();
     this.initValidation();
     this.initStates();
