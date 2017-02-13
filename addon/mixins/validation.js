@@ -179,10 +179,11 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
         }
       });
 
-      groupMediator.on("conditionChanged", () => {
-        Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
-        this.get("errors").remove(attribute);
-      });
+      // @todo: It's broken for proxy validation.
+      // groupMediator.on("conditionChanged", () => {
+      //   Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : event::Mediator.conditionChanged on attribute '%s'", attribute);
+      //   this.get("errors").remove(attribute);
+      // });
 
       // mediators.pushObject(groupMediator);
       this.addMediator(groupMediator);
