@@ -1,9 +1,8 @@
 {
-  "name": "ember-validation",
-  "version": "1.0.13",
+  "name": "@wheely/ember-validation",
+  "version": "1.0.14",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
-    "doc": "doc",
     "test": "tests"
   },
   "scripts": {
@@ -13,7 +12,10 @@
     "docs": "ember ember-cli-jsdoc",
     "run-docs-server": "http-server docs"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajile/ember-validation.git"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -62,5 +64,10 @@
     "after": [
       "ember-validation"
     ]
-  }
+  },
+  "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/ajile/ember-validation/issues"
+  },
+  "homepage": "https://github.com/ajile/ember-validation#readme"
 }
