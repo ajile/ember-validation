@@ -172,7 +172,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
         Config.LOG_VALIDATION && Logger.log("Validation : <<mixin>> : Validation : %cevent::Mediator.failed%c on attribute '%s' with errors %o", "color: #900", null, attribute, message);
         // To prevent occurring of the inconsistent state error
         // this.transitionTo && this.transitionTo("updated.uncommitted");
-        if (!get(message, "options.proxy")) {
+        if (!get(message, "options.proxy") || (get(message, "options.proxy") && get(message, "options.required"))) {
           this.get("errors").remove(attribute);
           this.get("errors").add(attribute, message);
           this.get("errors").arrayContentDidChange();
