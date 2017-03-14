@@ -1,7 +1,7 @@
 {
   "name": "@wheely/ember-validation",
   "version": "1.0.15-rc.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "An ember addon for validation",
   "directories": {
     "test": "tests"
   },
