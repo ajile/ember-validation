@@ -6,7 +6,7 @@ module.exports = {
   name: 'ember-validation',
 
   isDevelopingAddon: function() {
-    return true;
+    return !!process.env.EMBER_DEVELOPING;
   },
 
   included: function(app) {
