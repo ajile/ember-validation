@@ -1,11 +1,8 @@
 import DS from 'ember-data';
 
 /**
- * Base error list.
- *
  * The list contains validation object errors.
- *
- * @module
- * @augments module:ember-data/Errors
+ * @module ember-validation/core/errors
+ * @augments DS.Errors
  */
 export default DS.Errors.extend();

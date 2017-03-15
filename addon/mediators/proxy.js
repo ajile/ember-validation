@@ -7,10 +7,9 @@ import { createError } from 'ember-validation/utils/error';
 const { get, RSVP } = Ember;
 
 /**
-  @module
-  @augments module:addon/core/mediator
-  @public
-*/
+ * @module ember-validation/mediators/proxy
+ * @extends module:ember-validation/core/mediator
+ */
 export default BaseMediator.extend({
 
   /**

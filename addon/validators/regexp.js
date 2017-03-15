@@ -3,6 +3,11 @@ import merge from 'ember-validation/utils/merge';
 import Config from 'ember-validation/configuration';
 import { createError } from 'ember-validation/utils/error';
 
+/**
+ * @module ember-validation/validators/regexp
+ * @todo Cover this module by doc-comments
+ */
+
 const { Logger, RSVP: { defer }, get } = Ember;
 
 const VALIDATOR_NAME = "regexp";
@@ -13,15 +18,6 @@ const defaultOptions = {
   }
 };
 
-/**
-* @function
-* @param {String} attributeName
-* @param {Object} context
-* @param {Object} options
-* @returns {ember/RSVP.defer}
-* @module
-* @public
-*/
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const deferred = defer();

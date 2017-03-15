@@ -3,6 +3,11 @@ import merge from 'ember-validation/utils/merge';
 import Config from 'ember-validation/configuration';
 import { createError } from 'ember-validation/utils/error';
 
+/**
+ * @module ember-validation/validators/reguired
+ * @todo Cover this module by doc-comments
+ */
+
 const { Logger, RSVP: { resolve, reject }, get, isBlank } = Ember;
 
 const VALIDATOR_NAME = "required";
@@ -13,10 +18,6 @@ const defaultOptions = {
   }
 };
 
-/**
-  @module
-  @public
-*/
 function validate(attributeName, context, options={}) {
   options = merge({}, defaultOptions, options);
   const value = get(context, attributeName);

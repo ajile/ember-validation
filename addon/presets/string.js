@@ -1,10 +1,8 @@
-import Ember from "ember";
 import BasePreset from 'ember-validation/core/preset';
 
 /**
- * @module
- * @augments module:addon/core/preset
- * @public
+ * @module ember-validation/presets/string
+ * @extends module:ember-validation/core/preset
  */
 export default BasePreset.extend({
 

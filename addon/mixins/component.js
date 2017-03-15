@@ -6,11 +6,6 @@ import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 
 const { get, computed, observer, A, isArray, Instrumentation, on } = Ember;
 
-/**
-* @module
-* @augments module:ember/ArrayProxy
-* @public
-*/
 var ErrorsProxy = Ember.ArrayProxy.extend({
 
   /** @type {Array}  */
@@ -86,25 +81,24 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
 });
 
 /**
- * @module
- * @mixin
- * @augments ember/Mixin
- * @mixes ember-validation/mixins/validation
+ * @module ember-validation/mixins/component
+ * @extends Ember.Mixin
+ * @augments module:ember-validation/mixins/validation
  */
 export default Ember.Mixin.create(ValidationMixin, {
 
   /** @type {Object} */
   subscriber: null,
 
-  /** @type {ember/Object} */
+  /** @type {Object} */
   'validation-context': null,
 
-  /** @type {ember/Object} */
+  /** @type {Object} */
   validationContext: computed('validation-context', function () {
     return this.get('validation-context') || this;
   }),
 
-  /** @type {ember/Object} */
+  /** @type {Object} */
   visibleErrors: computed(() => { return {}; }),
 
   /**

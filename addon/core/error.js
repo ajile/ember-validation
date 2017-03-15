@@ -3,10 +3,8 @@ import Ember from 'ember';
 const { getProperties } = Ember;
 
 /**
- * Error class.
- *
- * @module
- * @augments module:ember/Object
+ * @module ember-validation/core/error
+ * @extends Ember.Object
  */
 export default Ember.Object.extend({
 

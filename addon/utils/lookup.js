@@ -2,8 +2,11 @@ import Ember from 'ember';
 import Config from 'ember-validation/configuration';
 
 /**
+ * @module ember-validation/utils/lookup
+ */
+
+/**
   Method looking validator by name.
-  @module
   @function lookup
   @param {String} namespace
   @param {String} name

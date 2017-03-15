@@ -5,18 +5,18 @@ import ValidatableMixin from 'ember-validation/mixins/validatable';
 const { RSVP, observer } = Ember;
 
 /**
- * @module
- * @augments module:ember/Object
- * @augments module:ember/Evented
- * @augments module:addon/mixins/validatable
- * @public
+ * @module ember-validation/core/mediator
+ * @extends Ember.Object
+ * @augments Ember.Evented
+ * @augments module:ember-validation/mixins/validatable
  */
 export default Ember.Object.extend(ValidatableMixin, Ember.Evented, {
 
   /**
    * An object contains attribute, for which mediator has been created. Wrapped
-   * [validatable object]{@link module:addon/mixins/validatable} calling with an attribute name and
-   * context. The object gets a value for validation from the context by provided name of attribute.
+   * [validatable object]{@link module:ember-validation/mixins/validatable} calling with an
+   * attribute name and context. The object gets a value for validation from the context by
+   * provided name of attribute.
    * @type {Object}
    */
   context: Ember.Object.create(),

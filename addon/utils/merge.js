@@ -1,10 +1,13 @@
 import Ember from 'ember';
 
 /**
-  @module
-  @function merge
-  @return Object
-*/
+ * @module ember-validation/utils/lookup
+ */
+
+/**
+ * @function
+ * @return {Object}
+ */
 export default function() {
   return Ember.$.extend(true, ...arguments);
 }

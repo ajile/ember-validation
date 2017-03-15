@@ -1,8 +1,12 @@
 import Ember from 'ember';
 
+/**
+ * @module ember-validation/mixins/element-mediator
+ * @extends Ember.Mixin
+ */
 export default Ember.Mixin.create({
 
-  /** @type {Ember/Component} */
+  /** @type {Ember.Component} */
   view : null,
 
   'validate-path': '',

@@ -3,9 +3,9 @@ import Ember from 'ember';
 const { computed } = Ember;
 
 /**
-  @module
-  @public
-*/
+ * @module ember-validation/mixins/validatable
+ * @extends Ember.Mixin
+ */
 export default Ember.Mixin.create({
 
   /**

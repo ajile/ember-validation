@@ -24,11 +24,11 @@ var findMediators = function(...names) {
 
 
 /**
-  @module
-  @augments module:ember/Mixin
-  @augments module:addon/mixins/validatable
-  @public
-*/
+ * @module ember-validation/mixins/validation
+ * @extends Ember.Mixin
+ * @augmented Ember.Evented
+ * @augmented module:ember-validation/mixins/validatable
+ */
 export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
 
   /**

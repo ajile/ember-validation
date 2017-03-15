@@ -3,9 +3,8 @@ import Ember from "ember";
 const { get } = Ember;
 
 /**
- * @module
- * @augments Ember.Object
- * @public
+ * @module ember-validation/core/preset
+ * @extends Ember.Object
  */
 export default Ember.Object.extend({
 

@@ -13,11 +13,10 @@ export function objectAt(content, idx) {
 }
 
 /**
-  @module
-  @augments module:addon/core/mediator
-  @uses Ember.MutableArray
-  @public
-*/
+ * @module ember-validation/mediators/attribute
+ * @extends module:ember-validation/core/mediator
+ * @augmented Ember.MutableArray
+ */
 export default BaseMediator.extend(Ember.MutableArray, {
 
   /**

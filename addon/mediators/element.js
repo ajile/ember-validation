@@ -6,9 +6,10 @@ import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 const { RSVP, tryInvoke, Logger } = Ember;
 
 /**
-* @module
-* @augments ember-validation/BaseMediator
-*/
+ * @module ember-validation/mediators/element
+ * @extends module:ember-validation/core/mediator
+ * @augmented module:ember-validation/mixins/element-mediator
+ */
 export default BaseMediator.extend(ElementMediatorMixin, {
 
   /**
