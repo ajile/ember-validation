@@ -3,6 +3,6 @@
 module.exports = function(/* environment, appConfig */) {
   return {
     baseURL: process.env.BASE_URL || '/',
-    LOG_VALIDATION: true
+    LOG_VALIDATION: false
   };
 };
