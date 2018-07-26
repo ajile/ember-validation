@@ -7,7 +7,7 @@ import Errors from 'ember-validation/core/errors';
 import Config from 'ember-validation/configuration';
 import { lookupValidator, lookupPreset } from 'ember-validation/utils/lookup';
 
-const { RSVP, computed, get, assert, Logger, getWithDefault, getProperties, tryInvoke } = Ember;
+const { RSVP, computed, get, assert, Logger, getWithDefault, tryInvoke } = Ember;
 
 var findMediators = function(...names) {
     assert("You should provide at least one attribute name", !Ember.isEmpty(names));
@@ -362,8 +362,11 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
   */
   _createValidators(attribute, validation) {
     return Ember.A( get(validation, "validators") ).map((description) => {
-      const { name, options } = getProperties(description, ["name", "options"]);
-      const validator = lookupValidator(name, get(this, "container"));
+      const name = get(description, "name");
+      const options = get(description, "options");
+      const validate = get(description, "validate");
+      Ember.assert("Validator in the schema should contain 'name' or 'validate'", !!(name || validate));
+      const validator = validate || lookupValidator(name, get(this, "container"));
       return { options, validator };
     });
   },
