@@ -365,6 +365,7 @@ export default Ember.Mixin.create(ValidatableMixin, Ember.Evented, {
       const name = get(description, "name");
       const options = get(description, "options");
       const validate = get(description, "validate");
+      Ember.assert("Validator in the schema should contain 'name' or 'validate'", !!(name || validate));
       const validator = validate || lookupValidator(name, get(this, "container"));
       return { options, validator };
     });
