@@ -5,6 +5,7 @@ import ValidatorMediator from 'ember-validation/mediators/validator';
 import Errors from 'ember-validation/core/errors';
 import startApp from '../../helpers/start-app';
 import { failValidator } from '../../helpers/validators';
+import { createError } from 'ember-validation/utils/error';
 import { module, test } from 'qunit';
 
 const { RSVP } = Ember;
@@ -297,3 +298,40 @@ test('it\'s inheritable', function(assert) {
   assert.equal(kidMediators.get("length"), 2, "The kid has 2 mediators");
 });
 
+
+test('it accept schema with validation function in it', function(assert) {
+
+  expect(4);
+
+  const app = this.app;
+  const container = app.__container__;
+
+  var ValidationObject = Ember.Object.extend(ValidationMixin, {
+    container: container,
+    validationScheme: {
+      someAttributeName: {
+        validators: [
+          { "name": "required" },
+          {
+            "validate": function() {
+              return Ember.RSVP.reject(createError("error-code", "value", "validator-name"));
+            }
+          }
+        ]
+      }
+    },
+    someAttributeName: ""
+  });
+
+  var subject = ValidationObject.create();
+
+  assert.equal(subject.get("errors").get("length"), 0, "Subject doesn't have errors before validation");
+
+  subject.validate().catch(() => {
+    const errors = subject.get("errors");
+    assert.equal(Ember.get(errors, "length"), 2, "Subject has 2 errors");
+    assert.ok(errors.findBy("message.key", "error-code"), "Subject's errors contain error from validate function");
+    assert.notOk(errors.findBy("message.key", "foo"), "Subject's errors don't contain nonexistent error");
+  });
+
+});
