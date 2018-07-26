@@ -229,7 +229,8 @@ export default Ember.Component.extend(ComponentVaidation, {
   actions: {
     reset() {
       typeof this.attrs.reset === 'function' && this.attrs.reset();
-      return true;
+      this.clearErrors();
+      this.set('submitError', '');
     }
   }
 
