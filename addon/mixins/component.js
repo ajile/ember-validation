@@ -151,7 +151,7 @@ export default Ember.Mixin.create(ValidationMixin, {
    */
   clearErrors() {
     this._super(...arguments);
-    this.set('visibleErrors', Ember.A());
+    this.set('visibleErrors', {});
 
     this.get('childViews').forEach(view => {
       Ember.tryInvoke(view, 'clearErrors');
