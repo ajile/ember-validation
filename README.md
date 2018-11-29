@@ -33,7 +33,11 @@ validationScheme: {
   ATTRIBUTE_NAME: {
     options: ATTRIBUTE_OPTIONS,
     validators: [
-      { name: VALIDATOR_NAME, options: VALIDATOR_OPTIONS }
+      {
+        name: VALIDATOR_NAME,
+        validate: VALIDATE_FUNCTION,
+        options: VALIDATOR_OPTIONS
+      }
     ]
   }
 }
@@ -42,6 +46,7 @@ validationScheme: {
 * ATTRIBUTE_NAME - имя аттрибута обеъекта, оно будет передаваться в валидатор вместе с контектом.
 * MEDIATOR_OPTIONS - хеш, который миксуется в медиатор аттрибута
 * VALIDATOR_NAME - имя валидатора, по нему lookuping класс валидатора в `validators:VALIDATOR_NAME`
+* VALIDATE_FUNCTION -  функция реализующая валидацию используется вместо `name`
 * VALIDATOR_OPTIONS - хеш, который миксуется в медиатор валидатора
 
 Структура создаваемая по схеме:

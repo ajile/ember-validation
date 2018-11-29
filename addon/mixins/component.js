@@ -49,6 +49,7 @@ var ErrorsProxy = Ember.ArrayProxy.extend({
    */
   clear() {
     this.get('_content').clear();
+    this.get('content').clear();
     this._super();
   },
 
@@ -141,6 +142,20 @@ export default Ember.Mixin.create(ValidationMixin, {
   resetValidation() {
     this.clearValidation();
     this.initValidation();
+  },
+
+  /**
+   * Clear errors
+   *
+   * @function
+   */
+  clearErrors() {
+    this._super(...arguments);
+    this.set('visibleErrors', {});
+
+    this.get('childViews').forEach(view => {
+      Ember.tryInvoke(view, 'clearErrors');
+    });
   },
 
   /**
