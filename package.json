@@ -1,6 +1,6 @@
 {
   "name": "@wheely/ember-validation",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "An ember addon for validation",
   "directories": {
     "test": "tests"
