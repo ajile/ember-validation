@@ -5,7 +5,7 @@ module.exports = {
       dependencies: { }
     },
     {
-      name: 'ember-release',
+      name: 'wheely-projects-1',
       dependencies: {
         'ember': 'components/ember#1.13.13'
       },
@@ -14,21 +14,12 @@ module.exports = {
       }
     },
     {
-      name: 'wheely-partners',
+      name: 'wheely-projects-2',
       dependencies: {
-        'ember': 'components/ember#1.11.1'
+        'ember': 'components/ember#2.0.0'
       },
       resolutions: {
-        'ember': '1.11.1'
-      }
-    },
-    {
-      name: 'wheely-business',
-      dependencies: {
-        'ember': 'components/ember#1.13.7'
-      },
-      resolutions: {
-        'ember': '1.13.7'
+        'ember': '2.0.0'
       }
     }
   ]

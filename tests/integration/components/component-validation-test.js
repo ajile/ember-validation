@@ -13,7 +13,7 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{component-validation}}`);
 
-  assert.equal(this.$().text().trim(), 'No Block Specified', 'no block');
+  assert.equal(this.$().text().trim(), '', 'no block');
 
   // Template block usage:
   this.render(hbs`
