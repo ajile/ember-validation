@@ -1,2 +1,2 @@
 /* globals Ember */
-Ember.libraries.register('Ember Validation', '1.0.16');
+Ember.libraries.register('Ember Validation', '1.0.17');

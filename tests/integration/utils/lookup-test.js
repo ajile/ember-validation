@@ -26,8 +26,6 @@ test('lookupValidator works', function(assert) {
   assert.throws(() => lookup.lookupValidator("aaaa", "Throws an error when name wrong and no container"));
   assert.throws(() => lookup.lookupValidator("imaginary-validator", container), "Throws an error when validator not found");
 
-  console.log("lookup.lookupValidator", lookup.lookupValidator);
-
   const name = "test";
   const validatorFunction = () => {};
   container._registry.register(`validator:${name}`, validatorFunction);
