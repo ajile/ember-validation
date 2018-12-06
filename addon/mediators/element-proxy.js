@@ -3,7 +3,7 @@ import Config from 'ember-validation/configuration';
 import BaseMediator from 'ember-validation/core/mediator';
 import ElementMediatorMixin from 'ember-validation/mixins/element-mediator';
 
-const { RSVP, computed, tryInvoke, Logger } = Ember;
+const { RSVP, computed, tryInvoke, Logger, get } = Ember;
 
 /**
  * @module ember-validation/mediators/element-proxy
@@ -51,7 +51,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
       Ember.run.scheduleOnce('afterRender', this, () => {
         const view = this.get('view');
 
-        if (!(view.$().is(':focus') || view.$(':focus').length)) {
+        if (get(view, 'element') && !(view.$().is(':focus') || view.$(':focus').length)) {
           this.validate();
         }
       });
