@@ -73,7 +73,7 @@ export default BaseMediator.extend({
 
     Ember.assert("The proxy mediator working with validatable objects only", isValidatable);
 
-    Config.LOG_VALIDATION && Ember.Logger.log("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
+    Config.LOG_VALIDATION && console.log("Validation : <<mediator>> : Validate : _validate '%s'", this.get('attribute'));
 
     const promise = attributeValue.validate();
     return promise.catch(errors => {

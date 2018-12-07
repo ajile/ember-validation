@@ -1,5 +1,5 @@
-export function initialize(container, application) {
-  container.optionsForType('validator', { instantiate: false });
+export function initialize(app) {
+  app.registerOptionsForType('validator', { instantiate: false });
 }
 
 export default {

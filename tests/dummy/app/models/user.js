@@ -1,8 +1,7 @@
-import Ember from "ember";
 import DS from "ember-data";
+import { computed } from '@ember/object';
 import ValidationMixin from "ember-validation/mixins/validation";
 
-const { computed } = Ember;
 const { attr } = DS;
 
 const GENDERS = {
@@ -19,7 +18,7 @@ export default DS.Model.extend(ValidationMixin, {
     @protected
     @final
   */
-  validationScheme: {
+  validationScheme: computed(() => ({
 
     first_name: {
       validators: [
@@ -86,7 +85,7 @@ export default DS.Model.extend(ValidationMixin, {
       ]
     },
     city: {
-      options: { condition: computed.or('context.street', 'context.house') },
+      options: { condition: computed.or('context.{street,house}') },
       validators: [
         {
           name: 'required',
@@ -95,7 +94,7 @@ export default DS.Model.extend(ValidationMixin, {
       ]
     },
     street: {
-      options: { condition: computed.or('context.city', 'context.house') },
+      options: { condition: computed.or('context.{city,house}') },
       validators: [
         {
           name: 'required',
@@ -104,7 +103,7 @@ export default DS.Model.extend(ValidationMixin, {
       ]
     },
     house: {
-      options: { condition: computed.or('context.city', 'context.street') },
+      options: { condition: computed.or('context.{city,street}') },
       validators: [
         {
           name: 'required',
@@ -112,7 +111,7 @@ export default DS.Model.extend(ValidationMixin, {
         }
       ]
     },
-  },
+  })),
 
   testValue: "THE TEST VALUE",
 

@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 /**
- * @module ember-validation/utils/lookup
+ * @module ember-validation/utils/merge
  */
 
 /**

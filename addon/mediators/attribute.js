@@ -72,7 +72,7 @@ export default BaseMediator.extend(Ember.MutableArray, {
 
     const deferred = RSVP.defer();
 
-    Config.LOG_VALIDATION && Ember.Logger.log("Validation : <<mediator>> : Attribute : _validate '%s'", this.get('attribute'));
+    Config.LOG_VALIDATION && console.log("Validation : <<mediator>> : Attribute : _validate '%s'", this.get('attribute'));
 
     const promises = get(this, "content").map((validator) => {
       return validator.validate();

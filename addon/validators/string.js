@@ -27,7 +27,7 @@ function validate(attributeName, context, options={}) {
   const value = get(context, attributeName);
   const { min, max, equal } = getProperties(options, "min", "max", "equal");
 
-  Config.LOG_VALIDATION && Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
+  Config.LOG_VALIDATION && console.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
   if (Ember.isBlank(value)) { return resolve(); }
 

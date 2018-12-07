@@ -1,3 +1,4 @@
+import { computed } from '@ember/object';
 import FormValidation from "ember-validation/components/form-validation";
 
 export default FormValidation.extend({
@@ -10,7 +11,7 @@ export default FormValidation.extend({
 
   contact_email: '',
 
-  validationScheme: {
+  validationScheme: computed(() => ({
     name: {
       // options : {selector : '[name="name"]'},
       validators : [
@@ -33,7 +34,7 @@ export default FormValidation.extend({
         {name: 'email', options: {messages:{default: 'must_be_valid_email'}}}
       ]
     }
-  },
+  })),
 
   didInsertElement() {
     this._super(...arguments);

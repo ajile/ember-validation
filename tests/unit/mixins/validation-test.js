@@ -1,4 +1,9 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import RSVP from 'rsvp';
+import { run } from '@ember/runloop';
+import EmberObject from '@ember/object';
+import { typeOf } from '@ember/utils';
+import { get } from '@ember/object';
 import ValidationMixin from 'ember-validation/mixins/validation';
 import AttributeMediator from 'ember-validation/mediators/attribute';
 import ValidatorMediator from 'ember-validation/mediators/validator';
@@ -8,37 +13,35 @@ import { failValidator } from '../../helpers/validators';
 import { createError } from 'ember-validation/utils/error';
 import { module, test } from 'qunit';
 
-const { RSVP } = Ember;
-
 module('Unit | Mixin | validation', {
   integration: true,
   beforeEach: function () {
     this.app = startApp();
-    this.app.__container__._registry.register("validator:fail", failValidator);
+    this.app.register("validator:fail", failValidator);
   },
   afterEach: function () {
-    Ember.run(this.app, 'destroy');
+    run(this.app, 'destroy');
   }
 });
 
 test('it works', function(assert) {
-  var ValidationObject = Ember.Object.extend(ValidationMixin);
+  var ValidationObject = EmberObject.extend(ValidationMixin);
   var subject = ValidationObject.create();
   assert.ok(subject);
 });
 
 test('it has interface', function(assert) {
-  var ValidationObject = Ember.Object.extend(ValidationMixin);
+  var ValidationObject = EmberObject.extend(ValidationMixin);
   var subject = ValidationObject.create();
 
   assert.ok(subject.get("isValidatable"), "It's validatable");
-  assert.ok(Ember.typeOf(subject.validateByName) === "function", "It can run validation on attribute");
-  assert.ok(Ember.typeOf(subject.check) === "function", "It can run check on object");
-  assert.ok(Ember.typeOf(subject.checkByName) === "function", "It can run check on attribute");
+  assert.ok(typeOf(subject.validateByName) === "function", "It can run validation on attribute");
+  assert.ok(typeOf(subject.check) === "function", "It can run check on object");
+  assert.ok(typeOf(subject.checkByName) === "function", "It can run check on attribute");
 });
 
 test('is can run validation on attribute', function(assert) {
-  var ValidationObject = Ember.Object.extend(ValidationMixin);
+  var ValidationObject = EmberObject.extend(ValidationMixin);
   var subject = ValidationObject.create();
 
   assert.throws(() => subject.validateByName(), "Throws an error when attribute name is not provided");
@@ -48,9 +51,9 @@ test('is can run validation on attribute', function(assert) {
 test('is creates mediators', function(assert) {
   const app = this.app;
   const container = app.__container__;
-  const ValidationObject = Ember.Object.extend(ValidationMixin, {
-    container: container,
-    validationScheme: {
+  const ValidationObject = EmberObject.extend(ValidationMixin, {
+    "container": container,
+    "validationScheme": computed(() => ({
       number: {
         options: {
           testOption: true
@@ -60,7 +63,7 @@ test('is creates mediators', function(assert) {
           { "name": "number", options: { testOption: true } }
         ]
       }
-    }
+    }))
   });
   const subject = ValidationObject.create();
   const mediators = subject.get("mediators");
@@ -74,7 +77,7 @@ test('is creates mediators', function(assert) {
   assert.ok(attributeMediator.get("attribute"), "Attribute mediator should have attribute name");
 
   assert.ok(attributeMediator.get("testOption"), "The object declared in the attr `options` of the validationScheme should be mixed into the attribute mediator");
-  assert.equal(Ember.typeOf(attributeMediator.pushObject), "function", "Attribute mediator should be enum object");
+  assert.equal(typeOf(attributeMediator.pushObject), "function", "Attribute mediator should be enum object");
   assert.ok(attributeMediator.get("content"), "Attribute mediator should have content");
   assert.equal(attributeMediator.get("length"), 2, "Attribute mediator should contain exactly 2 validators");
 
@@ -88,7 +91,7 @@ test('is creates mediators', function(assert) {
   assert.ok(validatorMediator.get("testOption"), "The object declared in the validator `options` of the validationScheme should be mixed into the validator mediator");
 
 
-  const ValidationObject_1 = Ember.Object.extend(ValidationMixin, {
+  const ValidationObject_1 = EmberObject.extend(ValidationMixin, {
     container: container
   });
 
@@ -106,16 +109,16 @@ test('it works with object\'s errors', function(assert) {
   const app = this.app;
   const container = app.__container__;
 
-  var ValidationObject = Ember.Object.extend(ValidationMixin, {
+  var ValidationObject = EmberObject.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       someAttributeName: {
         validators: [
           { "name": "required" },
           { "name": "fail" }
         ]
       }
-    },
+    })),
     attribute: ""
   });
 
@@ -145,9 +148,9 @@ test('it validates', function(assert) {
   const app = this.app;
   const container = app.__container__;
   // let validationCounter = 0;
-  // const ValidationObjectFails = Ember.Object.extend(ValidationMixin, {
+  // const ValidationObjectFails = EmberObject.extend(ValidationMixin, {
   //   container: container,
-  //   validationScheme: {
+  //   validationScheme: computed(() => ({
   //     name: {
   //       validators: [
   //         { "name": "required" },
@@ -159,7 +162,7 @@ test('it validates', function(assert) {
   //         { "name": "number" }
   //       ]
   //     }
-  //   },
+  //   })),
   //   _createAttributeMediator() {
   //     const mediator = this._super(...arguments);
   //     mediator.reopen({
@@ -185,9 +188,9 @@ test('it validates', function(assert) {
   // });
 
 
-  const ValidationObjectPasses = Ember.Object.extend(ValidationMixin, {
+  const ValidationObjectPasses = EmberObject.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       name: {
         validators: [
           { "name": "required" },
@@ -198,7 +201,7 @@ test('it validates', function(assert) {
           { "name": "required" },
         ]
       }
-    },
+    })),
     name: "Has value",
     number: "Has value"
   });
@@ -228,9 +231,9 @@ test('it validates', function(assert) {
 test('it\'s inheritable', function(assert) {
   const app = this.app;
   const container = app.__container__;
-  const User = Ember.Object.extend(ValidationMixin, {
+  const User = EmberObject.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       name: {
         validators: [
           { "name": "required" }
@@ -241,44 +244,44 @@ test('it\'s inheritable', function(assert) {
           { "name": "required" }
         ]
       }
-    },
+    })),
     name: ""
   });
 
   const Driver = User.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       phone: {
         validators: [
           { "name": "required" }
         ]
       }
-    },
+    })),
     phone: ""
   });
 
 
   const Kid = User.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       age: {
         validators: [
           { "name": "number", "options": { max: 18 } }
         ]
       }
-    },
+    })),
   });
 
 
   const Employee = User.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       age: {
         validators: [
           { "name": "number", "options": { min: 18 } }
         ]
       }
-    },
+    })),
   });
 
 
@@ -306,20 +309,20 @@ test('it accept schema with validation function in it', function(assert) {
   const app = this.app;
   const container = app.__container__;
 
-  var ValidationObject = Ember.Object.extend(ValidationMixin, {
+  var ValidationObject = EmberObject.extend(ValidationMixin, {
     container: container,
-    validationScheme: {
+    validationScheme: computed(() => ({
       someAttributeName: {
         validators: [
           { "name": "required" },
           {
             "validate": function() {
-              return Ember.RSVP.reject(createError("error-code", "value", "validator-name"));
+              return RSVP.reject(createError("error-code", "value", "validator-name"));
             }
           }
         ]
       }
-    },
+    })),
     someAttributeName: ""
   });
 
@@ -329,7 +332,7 @@ test('it accept schema with validation function in it', function(assert) {
 
   subject.validate().catch(() => {
     const errors = subject.get("errors");
-    assert.equal(Ember.get(errors, "length"), 2, "Subject has 2 errors");
+    assert.equal(get(errors, "length"), 2, "Subject has 2 errors");
     assert.ok(errors.findBy("message.key", "error-code"), "Subject's errors contain error from validate function");
     assert.notOk(errors.findBy("message.key", "foo"), "Subject's errors don't contain nonexistent error");
   });

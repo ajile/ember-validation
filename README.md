@@ -222,7 +222,7 @@ var User = DS.Model.extend(ModelValidationMixin, {
 
 * Создать форк репы
 * Склонироть её к себе
-* Поставить зависимости командами: `npm install` и `bower install`
+* Поставить зависимости командами: `npm install`
 * Для разработки UI/UX нужно запустить сервер `ember server`, сайт станет доступен по адресу http://0.0.0.0:2000 (тесты соотв. http://0.0.0.0:2000/tests)
 * Если требуется работать только над тестами, то можно запустить тестовый сервер отдельно: `ember test --server --launch="Chrome,Chrome Canary,Firefox,Safari,Opera,PhantomJS"`
 

@@ -25,3 +25,7 @@
 .no-focus:focus {
   outline:none !important;
 }
+
+.navbar {
+  margin-bottom: 20px;
+}

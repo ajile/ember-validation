@@ -1,12 +1,12 @@
-import Ember from "ember";
+import { computed } from '@ember/object';
+import Route from '@ember/routing/route';
 import DS from "ember-data";
 import ValidationMixin from "ember-validation/mixins/validation";
 
-const { computed } = Ember;
 const { attr } = DS;
 
 export var Model1 = DS.Model.extend(ValidationMixin, {
-  validationScheme: {
+  validationScheme: computed(() => ({
     age: {
       options: {
         condition: computed.bool("context.validateAge")
@@ -16,13 +16,13 @@ export var Model1 = DS.Model.extend(ValidationMixin, {
         { name: "number" }
       ]
     },
-  },
+  })),
   age: attr("number"),
   validateAge: attr('boolean', { defaultValue: false })
 });
 
 export var Model2 = DS.Model.extend(ValidationMixin, {
-  validationScheme: {
+  validationScheme: computed(() => ({
     age: {
       validators: [
         { name: "required" },
@@ -30,12 +30,12 @@ export var Model2 = DS.Model.extend(ValidationMixin, {
         { name: "number", options: { condition: computed.equal("context.gender", "female"), min: 15, max: 25 } },
       ]
     },
-  },
+  })),
   age: attr("number", { defaultValue: 12 }),
   gender: attr("string", { defaultValue: "male" })
 });
 
-export default Ember.Route.extend({
+export default Route.extend({
 
   beforeModel() {
     this.container._registry.register("model:model-1", Model1);

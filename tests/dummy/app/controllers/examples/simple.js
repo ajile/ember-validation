@@ -1,24 +1,25 @@
-import Ember from "ember";
+import Controller from '@ember/controller';
+import { computed } from '@ember/object';
+import { tryInvoke } from '@ember/utils';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 
-  validationResult: "Unknown",
+  user: computed(function() {
+    return this.store.createRecord("user");
+  }),
 
-  user: Ember.computed(function() { return this.store.createRecord("user"); }),
-  company: Ember.computed(function() { return this.store.createRecord("company"); }),
+  company: computed(function() {
+    return this.store.createRecord("company");
+  }),
 
   actions: {
 
     validate() {
-      const promise = Ember.tryInvoke(this.get("user"), "validate");
-      promise.then(
-        () => { this.set("validationResult", "Model is validated - it's valid"); },
-        () => { this.set("validationResult", "Model is validated - it's invalid"); }
-      );
+      tryInvoke(this.get("user"), "validate");
     },
 
     validateCompany() {
-      Ember.tryInvoke(this.get("company"), "validate");
+      tryInvoke(this.get("company"), "validate");
     },
 
     validateField(name) {
@@ -26,11 +27,7 @@ export default Ember.Controller.extend({
     },
 
     check() {
-      const promise = Ember.tryInvoke(this.get("user"), "check");
-      promise.then(
-        () => { this.set("validationResult", "Model is checked - it's valid"); },
-        () => { this.set("validationResult", "Model is checked - it's invalid"); }
-      );
+      tryInvoke(this.get("user"), "check");
     },
 
     setGender(gender) {

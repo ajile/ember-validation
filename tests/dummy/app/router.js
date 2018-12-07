@@ -1,17 +1,18 @@
-import Ember from 'ember';
+import EmberRouter from '@ember/routing/router';
+import { scheduleOnce } from '@ember/runloop';
 import config from './config/environment';
 
-var Router = Ember.Router.extend({
+var Router = EmberRouter.extend({
   location: config.locationType,
   didTransition() {
     this._super(...arguments);
 
     if (window.Prism) {
-      Ember.run.scheduleOnce("afterRender", window.Prism, () => {
+      scheduleOnce("afterRender", window.Prism, () => {
         try {
           window.Prism.highlightAll();
           window.Prism.fileHighlight();
-        } catch(e) {}
+        } catch(e) {}  // eslint-disable-line no-empty
       });
     }
   }

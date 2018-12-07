@@ -1,52 +1,48 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Validation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      {{#link-to 'index' class="navbar-brand"}}Ember Validation{{/link-to}}
-    </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  {{#link-to 'index' class="navbar-brand"}}Ember Validation{{/link-to}}
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li>{{#link-to 'quick-start'}}Quick Start{{/link-to}}</li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tutorial <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li>{{#link-to 'tutorial.validators'}}Validators{{/link-to}}</li>
-            <li>{{#link-to 'tutorial.mediators'}}Mediators{{/link-to}}</li>
-            <li>{{#link-to 'tutorial.presets'}}Presets{{/link-to}}</li>
-            <li>{{#link-to 'tutorial.errors'}}Errors{{/link-to}}</li>
-            <li>{{#link-to 'tutorial.components'}}Components{{/link-to}}</li>
-            <li>{{#link-to 'tutorial.mixins'}}Mixins{{/link-to}}</li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Examples <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li>{{#link-to 'examples.simple'}}Simple validation{{/link-to}}</li>
-            <li>{{#link-to 'examples.conditional'}}Partial/Conditional validation{{/link-to}}</li>
-            <li>{{#link-to 'examples.composition'}}Композиционная валидация{{/link-to}}</li>
-            <li><a href="#">Добавление и удаление валидаторов на лету</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Валидация связанной модели</a></li>
-            <li><a href="#">Собственная валидация</a></li>
-            <li><a href="#">Смешанная валидация</a></li>
-            <li><a href="#">Рекурсивный вызов вылидации</a></li>
-            <li><a href="#">Эскалация и аккумуляция ошибок</a></li>
-            <li role="separator" class="divider"></li>
-            <li>{{#link-to 'examples.form'}}Simple form{{/link-to}}</li>
-            <li>{{#link-to 'examples.form-view-validation'}}Form with view validation{{/link-to}}</li>
-            <li>{{#link-to 'examples.form-nested-validation'}}Form with nested validation component{{/link-to}}</li>
-          </ul>
-        </li>
-        <li><a href="docs/index.html">API</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+  <div class="collapse navbar-collapse" id="navbarColor03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        {{#link-to 'quick-start' class="nav-link"}}Быстрый старт{{/link-to}}
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Учебник</a>
+        <div class="dropdown-menu">
+          {{#link-to 'tutorial.validators' class='dropdown-item'}}Validators{{/link-to}}
+          {{#link-to 'tutorial.mediators' class='dropdown-item'}}Mediators{{/link-to}}
+          {{#link-to 'tutorial.presets' class='dropdown-item'}}Presets{{/link-to}}
+          {{#link-to 'tutorial.errors' class='dropdown-item'}}Errors{{/link-to}}
+          {{#link-to 'tutorial.components' class='dropdown-item'}}Components{{/link-to}}
+          <div class="dropdown-divider"></div>
+          {{#link-to 'tutorial.mixins' class='dropdown-item'}}Mixins{{/link-to}}
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Примеры</a>
+        <div class="dropdown-menu">
+          {{#link-to 'examples.simple' class='dropdown-item'}}Простая валидация{{/link-to}}
+          {{#link-to 'examples.conditional' class='dropdown-item'}}Условная валидация{{/link-to}}
+          {{#link-to 'examples.composition' class='dropdown-item'}}Композиционная валидация{{/link-to}}
+          <a href="#" class='dropdown-item'>Добавление и удаление валидаторов на лету</a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class='dropdown-item'>Валидация связанной модели</a>
+          <a href="#" class='dropdown-item'>Собственная валидация</a>
+          <a href="#" class='dropdown-item'>Смешанная валидация</a>
+          <a href="#" class='dropdown-item'>Рекурсивный вызов вылидации</a>
+          <a href="#" class='dropdown-item'>Эскалация и аккумуляция ошибок</a>
+          <div class="dropdown-divider"></div>
+          {{#link-to 'examples.form' class='dropdown-item'}}Простая форма{{/link-to}}
+          {{#link-to 'examples.form-view-validation' class='dropdown-item'}}Форма с подформой{{/link-to}}
+          {{#link-to 'examples.form-nested-validation' class='dropdown-item'}}Форма с блоком валидации{{/link-to}}
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="docs/index.html" class="nav-link">API</a>
+      </li>
+    </ul>
+  </div>
 </nav>

@@ -1,4 +1,4 @@
-import Ember from "ember";
+import { run } from '@ember/runloop';
 import { module } from 'qunit';
 import startApp from './start-app';
 
@@ -14,7 +14,7 @@ export default function(name, options = {}) {
     },
 
     afterEach() {
-      Ember.run(this.application, 'destroy');
+      run(this.application, 'destroy');
     }
   });
 }

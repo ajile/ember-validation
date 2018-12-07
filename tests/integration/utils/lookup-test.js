@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import { typeOf } from '@ember/utils';
+
 import { module, test } from 'qunit';
 import lookup from '../../../utils/lookup';
 import startApp from '../../helpers/start-app';
-import { setupTest } from 'ember-qunit';
 
 module('Integration | Utility | lookup', {
   integration: true,
@@ -10,7 +11,7 @@ module('Integration | Utility | lookup', {
     this.app = startApp();
   },
   afterEach: function () {
-    Ember.run(this.app, 'destroy');
+    run(this.app, 'destroy');
   }
 });
 
@@ -29,8 +30,8 @@ test('lookupValidator works', function(assert) {
 
   const name = "test";
   const validatorFunction = () => {};
-  container._registry.register(`validator:${name}`, validatorFunction);
+  app.register(`validator:${name}`, validatorFunction);
   let validator = lookup.lookupValidator(name, container);
 
-  assert.ok(Ember.typeOf(validator) === "function", "Function returns validator from registry by name");
+  assert.ok(typeOf(validator) === "function", "Function returns validator from registry by name");
 });

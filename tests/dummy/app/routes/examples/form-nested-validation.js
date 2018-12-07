@@ -1,15 +1,17 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import Route from '@ember/routing/route';
+import EmberObject from '@ember/object';
 import ValidationMixin from "ember-validation/mixins/validation";
 
 
 
-export default Ember.Route.extend({
+export default Route.extend({
 
   model() {
     var container = this.get('container');
 
-    var User = Ember.Object.extend(ValidationMixin, {
-      validationScheme: {
+    var User = EmberObject.extend(ValidationMixin, {
+      validationScheme: computed(() => ({
 
         name: {
           validators: [
@@ -24,14 +26,14 @@ export default Ember.Route.extend({
           ]
         },
 
-      },
+      })),
       name: '',
       email: '',
       address: null
     });
 
-    var Address = Ember.Object.extend(ValidationMixin, {
-        validationScheme: {
+    var Address = EmberObject.extend(ValidationMixin, {
+        validationScheme: computed(() => ({
           city: {
             validators: [{ name: "required", options: { messages: {default: "city_required"} } }]
           },
@@ -41,15 +43,15 @@ export default Ember.Route.extend({
           house: {
             validators: [{ name: "required", options: { messages: {default: "house_number_required"} } }]
           }
-        },
+        })),
         city:'',
         street:'',
         house: ''
       });
 
 
-    var Credentials = Ember.Object.extend(ValidationMixin, {
-      validationScheme: {
+    var Credentials = EmberObject.extend(ValidationMixin, {
+      validationScheme: computed(() => ({
         login: {
           validators: [
             { name: "required", options: { messages: {default: "login_required"} } },
@@ -62,7 +64,7 @@ export default Ember.Route.extend({
             { name: "regexp", options: {regexp: /^[\d\w]{8,24}$/, messages: {default: "pasword must contains from 8 till 24 alphanum symbols"}}}
           ]
         },
-      },
+      })),
       login: '',
       password: ''
     });

@@ -64,7 +64,7 @@ export default BaseMediator.extend(ElementMediatorMixin, {
    * @returns {RSVP.Promise}
    */
   _validate() {
-    Config.LOG_VALIDATION && Logger.log('Validation : <<mediator>> : ElementProxy : _validate : %s %O', this.get('attribute'), this.get('view.element'));
+    Config.LOG_VALIDATION && console.log('Validation : <<mediator>> : ElementProxy : _validate : %s %O', this.get('attribute'), this.get('view.element'));
 
     const promise = tryInvoke(this.get('view'), 'validate');
 

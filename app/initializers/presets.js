@@ -1,5 +1,5 @@
-export function initialize(container, application) {
-  container.optionsForType('preset', { instantiate: false });
+export function initialize(app) {
+  app.registerOptionsForType('preset', { instantiate: false });
 }
 
 export default {

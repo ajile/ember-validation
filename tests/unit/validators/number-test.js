@@ -1,4 +1,4 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import validate from 'ember-validation/validators/number';
 
 const checkError = (err, key) => err.key === key;

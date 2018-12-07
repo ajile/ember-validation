@@ -1,7 +1,6 @@
-import Ember from 'ember';
+import RSVP from 'rsvp';
+import { scheduleOnce } from '@ember/runloop';
 import FormValidation from "ember-validation/components/form-validation";
-
-const { RSVP } = Ember;
 
 export default FormValidation.extend({
 
@@ -12,7 +11,7 @@ export default FormValidation.extend({
 
     if (!this.get('isAccordionOpened')) {
       this.toggleProperty('isAccordionOpened');
-      Ember.run.scheduleOnce('afterRender', this, () => { deferred.resolve(); });
+      scheduleOnce('afterRender', this, () => { deferred.resolve(); });
       this.one('validationEnd', () => {
         if (!(this.get('errors.city') || this.get('errors.street') || this.get('errors.house'))) {
           this.toggleProperty('isAccordionOpened');
