@@ -3,6 +3,8 @@ import merge from 'ember-validation/utils/merge';
 import Config from 'ember-validation/configuration';
 import { createError } from 'ember-validation/utils/error';
 
+export var isNumber = (data) => !isNaN(parseFloat(data));
+
 /**
  * @module ember-validation/validators/number
  * @todo Cover this module by doc-comments
@@ -30,7 +32,7 @@ function validate(attributeName, context, options={}) {
 
   Config.LOG_VALIDATION && Logger.log(`Validation : <<validator>> : '${VALIDATOR_NAME}' called on %s with options %o`, attributeName, options);
 
-  if (Ember.isBlank(value)) { return resolve(); }
+  if (Ember.isBlank(value)) { return resolve(true); }
 
   if (!isNumber(value)) {
     return reject( createError(get(options, "messages.default"), value, VALIDATOR_NAME) );
@@ -48,10 +50,7 @@ function validate(attributeName, context, options={}) {
     return reject( createError(get(options, "messages.greater_then"), value, VALIDATOR_NAME) );
   }
 
-  return resolve();
+  return resolve(true);
 }
 
-var isNumber = (data) => !isNaN(parseFloat(data));
-
 export default validate;
-export var isNumber;
