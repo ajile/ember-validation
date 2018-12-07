@@ -7,7 +7,7 @@ module('Unit | Validator | number');
 
 test('it works', function(assert) {
 
-  expect(7);
+  assert.expect(7);
 
   var user = Ember.Object.create({
     empty: "",
