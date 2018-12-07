@@ -3,6 +3,8 @@ import merge from 'ember-validation/utils/merge';
 import Config from 'ember-validation/configuration';
 import { createError } from 'ember-validation/utils/error';
 
+export var isNumber = (data) => !isNaN(parseFloat(data));
+
 /**
  * @module ember-validation/validators/number
  * @todo Cover this module by doc-comments
@@ -51,7 +53,4 @@ function validate(attributeName, context, options={}) {
   return resolve(true);
 }
 
-var isNumber = (data) => !isNaN(parseFloat(data));
-
 export default validate;
-export var isNumber;
