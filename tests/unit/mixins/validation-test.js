@@ -12,11 +12,11 @@ const { RSVP } = Ember;
 
 module('Unit | Mixin | validation', {
   integration: true,
-  setup: function () {
+  beforeEach: function () {
     this.app = startApp();
     this.app.__container__._registry.register("validator:fail", failValidator);
   },
-  teardown: function () {
+  afterEach: function () {
     Ember.run(this.app, 'destroy');
   }
 });
@@ -101,7 +101,7 @@ test('is creates mediators', function(assert) {
 
 test('it works with object\'s errors', function(assert) {
 
-  expect(7);
+  assert.expect(7);
 
   const app = this.app;
   const container = app.__container__;
@@ -141,7 +141,7 @@ test('it works with object\'s errors', function(assert) {
 });
 
 test('it validates', function(assert) {
-  expect(3);
+  assert.expect(3);
   const app = this.app;
   const container = app.__container__;
   // let validationCounter = 0;
@@ -301,7 +301,7 @@ test('it\'s inheritable', function(assert) {
 
 test('it accept schema with validation function in it', function(assert) {
 
-  expect(4);
+  assert.expect(4);
 
   const app = this.app;
   const container = app.__container__;

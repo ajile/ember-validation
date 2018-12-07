@@ -2,13 +2,14 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import lookup from '../../../utils/lookup';
 import startApp from '../../helpers/start-app';
+import { setupTest } from 'ember-qunit';
 
 module('Integration | Utility | lookup', {
   integration: true,
-  setup: function () {
+  beforeEach: function () {
     this.app = startApp();
   },
-  teardown: function () {
+  afterEach: function () {
     Ember.run(this.app, 'destroy');
   }
 });

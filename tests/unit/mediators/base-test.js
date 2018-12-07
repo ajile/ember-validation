@@ -25,7 +25,7 @@ test('it has interface', function(assert) {
 
 test('it fires events', function(assert) {
 
-  expect(3);
+  assert.expect(3);
 
   Ember.run(function() {
     var Mediator = BaseMediator.extend();
@@ -59,7 +59,7 @@ test('it fires events', function(assert) {
 
 test('it returns promise', function(assert) {
 
-  expect(5);
+  assert.expect(5);
 
   assert.ok(BaseMediator.create().validate() instanceof Ember.RSVP.Promise, "Mediators returns a promise");
   assert.ok(BaseMediator.create().validate()._state === 1, "The validate method returns resolved promise as default");
@@ -89,4 +89,3 @@ test('it returns promise', function(assert) {
   });
 
 });
-
