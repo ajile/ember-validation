@@ -1,12 +1,23 @@
 {
   "framework": "qunit",
-  "test_page": "tests/index.html",
-  "disable_watching": true,
+  "test_page": "tests/index.html?hidepassed",
   "launch_in_ci": [
-    "PhantomJS"
+    "Chrome"
   ],
   "launch_in_dev": [
-    "PhantomJS",
-    "Chrome"
-  ]
+    "Chrome",
+    "Chrome Canary",
+    "Opera",
+    "Safari",
+    "Safari Technology Preview",
+    "Firefox"
+  ],
+  "browser_args": {
+    "Chrome": [
+      "--headless",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--remote-debugging-port=9222"
+    ]
+  }
 }
